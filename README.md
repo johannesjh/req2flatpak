@@ -22,12 +22,12 @@ Alternatively, you can clone the git repository and run the script there.
 You can use req2flatpak's commandline interface to generate a `flatpak-builder` build module like this:
 
 ```bash
-req2flatpak.py --requirements-file requirements.txt --target-platforms 310-x86_64 310-aarch64
+./req2flatpak.py --requirements-file requirements.txt --target-platforms 310-x86_64 310-aarch64
 ```
 
 When invoked like this, req2flatpak will read the requirements file, query pypi about available downloads, choose appropriate downloads for the specified target platforms, and generate a flatpak-builder build module.
 
-Note that req2flatpak will not resolve transitive dependencies or freeze dependency versions. Use other tools like [pip-compile](https://pypi.org/project/pip-tools/) or [poetry](https://pypi.org/project/poetry/) for this purpose and generate/export a full resolved requirements.txt file using these tools.
+Note that req2flatpak will not resolve transitive dependencies or freeze dependency versions. Use other tools like [pip-compile](https://pypi.org/project/pip-tools/) or [poetry](https://pypi.org/project/poetry/) for this purpose and generate/export a fully resolved requirements.txt file using these tools.
 
 Run `req2flatpak.py --help` to learn more about available commandline options.
 
@@ -62,7 +62,7 @@ Both scripts basically do the same thing, and this project took a lot of inspira
 In fact, this project was created when we discussed feature request [#296](https://github.com/flatpak/flatpak-builder-tools/issues/296) in flatpak-pip-generator.
 A prototype followed from this feature request, and since it was written from scratch, the prototype became this separate project.
 
-Comparison between `flatpak-pip-generator` and `req2flatpak.py`: Each of the two project likely has its own benefits and a comparison between the two will likely change over time. As in Oct, 2022, in my personal opinion (johannesjh), I see the following differences:
+Comparison between `flatpak-pip-generator` and `req2flatpak.py`: Each of the two project likely has its own benefits and a comparison between the two will likely change over time. As in Oct, 2022, in my personal opinion (johannesjh), I see the following similarities and differences:
 
 - Both projects generate build modules for flatpak-builder.
 - Both projects consist of a single script file with minimal dependencies, and are thus very easy to install.
