@@ -57,9 +57,10 @@ All contributions are greatly appreciated... pull requests are welcome, and so a
 
 ## Related Work
 
-The [flatpak-pip-generator](https://github.com/flatpak/flatpak-builder-tools/blob/master/pip/flatpak-pip-generator) script is part of a larger suite of [flatpak-builder-tools](https://github.com/flatpak/flatpak-builder-tools).
-The `flatpak-pip-generator` script is very similar to this project - both scripts basically do the same thing, and this project took a lot of inspiration from flatpak-pip-generator.
-In fact, this project was created when we discussed a feature request [#296](https://github.com/flatpak/flatpak-builder-tools/issues/296) in flatpak-pip-generator and when I (johannesjh) decided to re-implement a new prototype from scratch.
+The [flatpak-pip-generator](https://github.com/flatpak/flatpak-builder-tools/blob/master/pip/flatpak-pip-generator) script is very similar to this project.
+Both scripts basically do the same thing, and this project took a lot of inspiration from flatpak-pip-generator.
+In fact, this project was created when we discussed feature request [#296](https://github.com/flatpak/flatpak-builder-tools/issues/296) in flatpak-pip-generator.
+A prototype followed from this feature request, and since it was written from scratch, the prototype became this separate project.
 
 Comparison between `flatpak-pip-generator` and `req2flatpak.py`: Each of the two project likely has its own benefits and a comparison between the two will likely change over time. As in Oct, 2022, in my personal opinion (johannesjh), I see the following differences:
 
