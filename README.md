@@ -36,8 +36,8 @@ Run `req2flatpak.py --help` to learn more about available commandline options.
 You can write a custom python script to tweak and tune the behavior as needed. You can have a look at how the `main()` method is implemented, it is really not that complicated. The workflow basically boils down to:
 
 ```python3
-requirements = RequirementsParser.parse_file("requirements.txt")
 platforms = [PlatformFactory.from_string("310-x86_64")]
+requirements = RequirementsParser.parse_file("requirements.txt")
 releases = PypiClient.get_releases(requirements)
 downloads = {
     DownloadChooser.wheel_or_sdist(release, platform)
