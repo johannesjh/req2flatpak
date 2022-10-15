@@ -17,9 +17,9 @@ The simplest installation method is to download the `req2flatpak.py` script and 
 
 Alternatively, you can clone the git repository and run the script there.
 
-## Commandline Interface
+## Using the Commandline Interface
 
-You can generate a `flatpak-builder` build module like this:
+You can use req2flatpak's commandline interface to generate a `flatpak-builder` build module like this:
 
 ```bash
 req2flatpak.py --requirements-file requirements.txt --target-platforms 310-x86_64 310-aarch64
@@ -31,7 +31,7 @@ Note that req2flatpak will not resolve transitive dependencies or freeze depende
 
 Run `req2flatpak.py --help` to learn more about available commandline options.
 
-## Advanced Usage
+## Using the Python APIs
 
 You can write a custom python script to tweak and tune the behavior as needed. You can have a look at how the `main()` method is implemented, it is really not that complicated. The workflow basically boils down to:
 
