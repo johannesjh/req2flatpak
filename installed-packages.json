@@ -1,0 +1,35 @@
+/* Flatpak build manifest for running `req2flatpak --installed-packages` on flatpak target platforms.  */
+{
+  "app-id": "io.github.johannesjh.req2flatpak.installedpackages",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "43",
+  "sdk": "org.gnome.Sdk",
+  "command": "installed-packages",
+  "modules": [
+    {
+      "name": "python-packaging",
+      "buildsystem": "simple",
+      "build-options": {
+        "build-args": ["--share=network"]
+      },
+      "build-commands": [
+        "pip3 install --verbose --exists-action=i --prefix=${FLATPAK_DEST} --no-build-isolation packaging"
+      ]
+    },
+    {
+      "name": "installedpackages",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -D req2flatpak.py /app/bin/req2flatpak.py",
+        "echo '/usr/bin/env python3 /app/bin/req2flatpak.py --installed-packages' > /app/bin/installed-packages",
+        "chmod +x /app/bin/installed-packages"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "req2flatpak.py"
+        }
+      ]
+    }
+  ]
+}
