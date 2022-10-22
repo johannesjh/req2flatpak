@@ -52,7 +52,7 @@ downloads = {
 manifest = FlatpakGenerator.manifest(requirements, downloads)
 ```
 
-Writing a custom script gives you all the freedom to modify each of these steps as you see fit. For example, in your custom script, you may want to query other package indices instead of pypi. You may prefer wheels or sdists for certain packages. You may want to exclude specific packages. All of this can be freely implemented in a custom script. Of course, you can also fork and modify req2flatpak, feel free to modify.
+Writing a custom script gives you all the freedom to modify each of these steps as you see fit. For example, in your custom script, you may want to query other package indices instead of pypi. You may prefer wheels or sdists for certain packages. You may want to exclude specific packages. All of this can be freely implemented in a custom script. Of course, you can also fork and modify req2flatpak. If you feel that your modifications would benefit others, feel free to discuss them as a potential contribution to the original req2flatpak project.
 
 ## Contributing
 
