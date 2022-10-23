@@ -1,0 +1,63 @@
+"""Automated tests for :class:req2flatpak.PlatformFactory."""
+
+import json
+import re
+import unittest
+from dataclasses import asdict, dataclass
+from pathlib import Path
+from typing import Iterable, Union
+
+from req2flatpak import PlatformFactory
+
+
+@dataclass(kw_only=True, frozen=True)
+class RegressionTestData:
+    minor_version: int
+    architecture: str
+    platforminfo_file: Union[str, Path]
+
+
+class RegressionTest(unittest.TestCase):
+
+    platform_pattern = r"^(?:py|cp)?(\d)(\d+)-(.*)$"
+    filename_pattern = r"^(?:py|cp)?(\d)(\d+)-(.*)\.platforminfo.json$"
+
+    @staticmethod
+    def _load_platform_tags_from_file(filename: Union[Path, str]) -> list[str]:
+        """Returns the list of platform tags from a platforminfo .json file."""
+        with open(filename, "r") as f:
+            data = json.load(f)
+        return data["python_tags"]
+
+    @classmethod
+    def _testdata(cls, path=".") -> Iterable[RegressionTestData]:
+        """Yields testdata for subtests"""
+        platforminfo_files = [
+            entry
+            for entry in Path(path).iterdir()
+            if entry.is_file() and re.match(cls.filename_pattern, entry.name)
+        ]
+        for file in platforminfo_files:
+            platform_string = re.match(r"(.*)\.platforminfo\.json", file.name).group(1)
+            major, minor, arch = re.match(
+                cls.platform_pattern, platform_string
+            ).groups()
+            assert major == "3"
+            yield RegressionTestData(
+                minor_version=minor, architecture=arch, platforminfo_file=file
+            )
+
+    def test(self):
+        for data in self._testdata():
+            with self.subTest(platforminfo=data.platforminfo_file):
+                expected_tags = self._load_platform_tags_from_file(
+                    data.platforminfo_file
+                )
+                generated_tags = PlatformFactory.from_python_version_and_arch(
+                    minor_version=int(data.minor_version), arch=data.architecture
+                ).python_tags
+                assert expected_tags == generated_tags
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

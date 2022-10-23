@@ -197,16 +197,15 @@ class PlatformFactory:
             logger.warning(f"Could not parse platform string {platform_string}")
 
     @staticmethod
-    def from_python_version_and_arch(minor_version=None, arch="x86_64"):
+    def from_python_version_and_arch(minor_version: int = None, arch="x86_64"):
         """
         Returns a platform object that roughly describes a cpython installation on linux.
 
         The tags in the platform object are a rough approximation, trying to match what
         `packaging.tags.sys_tags` would return if invoked on a linux system with cpython.
 
-        Arguments:
-        * minor_version: the python 3 minor version
-        * arch: either "x86_64" or "aarch64"
+        :param minor_version: the python 3 minor version, specified as int.
+        :param arch: either "x86_64" or "aarch64".
         """
         assert minor_version is not None
         assert arch in ["x86_64", "aarch64"]
