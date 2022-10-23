@@ -22,6 +22,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+"""
+req2flatpak converts python package requirements to flatpak build manifests.
+
+The script takes python package requirements as input, e.g., as
+requirements.txt file. It allows to specify the target platform's python
+version and system architecture. The script outputs an automatically
+generated flatpak-builder build module. The build module, if included
+into a flatpak build manifest, will install the python packages using
+pip.
+"""
 
 import argparse
 import json
@@ -52,6 +62,7 @@ try:
     from packaging.utils import parse_wheel_filename
 
     def tags_from_wheel_filename(filename: str) -> list[str]:
+        """Parse a wheel filename into a list of compatible platform tags."""
         _, _, _, tags = parse_wheel_filename(filename)
         return [str(tag) for tag in tags]
 
@@ -59,6 +70,7 @@ except ModuleNotFoundError:
     # fall back to a local implementation
     # that is heavily inspired by / almost vendored from the `packaging` package:
     def tags_from_wheel_filename(filename: str) -> list[str]:
+        """Parse a wheel filename into a list of compatible platform tags."""
         InvalidWheelFilename = Exception
         Tag = lambda *args: tuple(args)
 
@@ -98,33 +110,41 @@ except ModuleNotFoundError:
 
 @dataclass(frozen=True, kw_only=True)
 class Platform:
+    """Represents a target platform for python package installations."""
+
     python_version: list[str]
     python_tags: list[str]
 
 
 @dataclass(frozen=True, kw_only=True)
 class Requirement:
+    """Represents a python package requirement."""
+
     package: str
     version: str
 
 
 @dataclass(frozen=True, kw_only=True)
 class Download:
+    """Represents a python package download."""
+
     filename: str
     url: str
     sha256: str
 
     @cached_property
     def is_wheel(self):
+        """True if this download is a wheel."""
         return self.filename.endswith(".whl")
 
     @cached_property
     def is_sdist(self):
+        """True if this download is a source distribution."""
         return not self.is_wheel and not self.filename.endswith(".egg")
 
     @cached_property
     def tags(self) -> list[str]:
-        """Returns a list of tags that this download is compatible for"""
+        """Returns a list of tags that this download is compatible for."""
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_wheel_filename
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_sdist_filename
         if self.is_sdist:
@@ -146,6 +166,8 @@ class Download:
 
 @dataclass(frozen=True, kw_only=True)
 class Release(Requirement):
+    """Represents a python package release as package name, version, and list of available downloads."""
+
     package: str
     version: str
     downloads: List[Download] = field(default_factory=list)
@@ -161,7 +183,7 @@ class PlatformFactory:
 
     @staticmethod
     def from_current_interpreter() -> Platform:
-        """Returns a platform object that describes the current python interpreter and system."""
+        """Returns a platform object that describes the current interpreter and system."""
 
         def get_python_version() -> list[str]:
             return list(platform.python_version_tuple())
@@ -186,7 +208,7 @@ class PlatformFactory:
     def from_string(cls, platform_string: str):
         """
         Returns a platform object by parsing a platform string like '39-x86_64'.
-        The string format is "{major}{minor}-{platform.machine}"
+        The string format is "{python_version}-{system_architecture}".
         """
         try:
             major, minor, arch = re.match(
@@ -283,9 +305,10 @@ class PlatformFactory:
 
 class RequirementsParser:
     """
-    Parses requirements.txt files in a very simple way:
-    It expects all versions to be pinned.
-    And it does not resolve dependencies.
+    Parses requirements.txt files in a very simple way.
+
+    This methods expects all versions to be pinned, and it does not
+    resolve dependencies.
     """
 
     # based on: https://stackoverflow.com/a/59971236
@@ -298,7 +321,7 @@ class RequirementsParser:
         def validate_requirement(req: pkg_resources.Requirement) -> None:
             assert (
                 len(req.specs) == 1
-            ), "Error parsing requirements: A single version numer must be specified."
+            ), "Error parsing requirements: A single version number must be specified."
             assert (
                 req.specs[0][0] == "=="
             ), "Error parsing requirements: The exact version must specified as 'package==version'."
@@ -327,16 +350,18 @@ Cache = Union[dict, shelve.Shelf]  # type: TypeAlias
 
 
 class PypiClient:
-    """Provides methods for querying package information from the PyPi package index."""
+    """Queries package information from the PyPi package index."""
 
     _cache: Cache = {}
 
     @property
     def cache(self) -> Cache:
+        """Returns the cache object used by this class."""
         return type(self)._cache
 
     @cache.setter
     def cache(self, val: Cache):
+        """Allows to set the cache object used by this class."""
         type(self)._cache = val
 
     @classmethod
@@ -356,7 +381,11 @@ class PypiClient:
 
     @classmethod
     def get_release(cls, req: Requirement) -> Release:
-        """Queries pypi regarding available downloads for this requirement. Returns a release object."""
+        """
+        Queries pypi regarding available downloads for this requirement.
+
+        Returns a release object.
+        """
         url = f"https://pypi.org/pypi/{req.package}/{req.version}/json"
         json_string = cls._query(url)
         json_dict = json.loads(json_string)
@@ -381,13 +410,15 @@ class PypiClient:
 
 class DownloadChooser:
     """
-    Provides methods for choosing package downloads for installing a specific package release
-    on a specific target platform.
+    Provides methods for choosing package downloads.
+
+    This class implements logic for filtering wheel and sdist downloads
+    that are compatible with a given target platform.
     """
 
     @classmethod
     def matches(cls, download: Download, platform_tag: str) -> bool:
-        """Returns True if the tags encoded in the download's filename match a target platform tag."""
+        """Returns whether a download is compatible with a target platform tag."""
         if download.is_sdist:
             return True
 
@@ -403,8 +434,9 @@ class DownloadChooser:
     ) -> Iterator[Download]:
         """
         Yields suitable downloads for a specific platform.
-        The order of downloads matches the order of platform tags,
-        i.e., preferred downloads are returned first.
+
+        The order of downloads matches the order of platform tags, i.e.,
+        preferred downloads are returned first.
         """
         cache = set()
         for (platform_tag, download) in product(
@@ -426,7 +458,7 @@ class DownloadChooser:
         release: Release,
         platform: Platform,
     ) -> Optional[Download]:
-        """Returns the preferred wheel download for this release, for a specific python platform"""
+        """Returns the preferred wheel download for this release."""
         try:
             return next(cls.downloads(release, platform, wheels_only=True))
         except StopIteration:
@@ -434,7 +466,7 @@ class DownloadChooser:
 
     @classmethod
     def sdist(cls, release: Release) -> Optional[Download]:
-        """Returns the source package download for this release"""
+        """Returns the source package download for this release."""
         try:
             return next(filter(lambda d: d.is_sdist, release.downloads))
         except StopIteration:
@@ -460,7 +492,9 @@ class FlatpakGenerator:
         downloads: Iterable[Download],
         module_name="python3-package-installation",
         pip_install_template: str = 'pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation ',
-    ):
+    ) -> dict:
+        """Generates a module for a flatpak-builder build manifest."""
+
         def source(download: Download) -> dict:
             source = {"type": "file", "url": download.url, "sha256": download.sha256}
             if download.arch:
@@ -483,11 +517,12 @@ class FlatpakGenerator:
 
 
 def main():
-    """ "
-    The req2flatpak script generates a flatpak build manifest from python requirements.
+    """
+    Generates a flatpak build manifest from python package requirements.
+
     It comes with a simple commandline interface for basic usage.
-    Advanced usage and customizations/tweaks are possible by invoking the script
-    through its python API.
+    Advanced usage and customizations/tweaks are possible by invoking
+    the script through its python API.
     """
 
     parser = argparse.ArgumentParser(description=main.__doc__)

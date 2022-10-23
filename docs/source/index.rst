@@ -1,14 +1,17 @@
-.. req2flatpak documentation master file, created by
-   sphinx-quickstart on Sun Oct 23 09:16:44 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. req2flatpak documentation master file
 
-Welcome to req2flatpak's documentation!
-=======================================
+req2flatpak Documentation
+=========================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   introduction
+   cli
+   api
+   development
+
 
 
 

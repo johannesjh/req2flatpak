@@ -15,3 +15,17 @@ repos:
     rev: "v2.7.1"
     hooks:
       - id: prettier
+
+  - repo: https://github.com/rstcheck/rstcheck
+    rev: "v6.1.0"
+    hooks:
+      - id: rstcheck
+        additional_dependencies: [sphinx]
+        args: ["--config", "docs/rstcheck.cfg"]
+
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.1.1
+    hooks:
+      - id: pydocstyle
+        additional_dependencies: [toml]
+        args: ["--ignore=D202,D203,D205,D401,D212"]
