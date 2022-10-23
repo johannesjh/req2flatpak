@@ -516,16 +516,11 @@ class FlatpakGenerator:
 # =============================================================================
 
 
-def main():
-    """
-    Generates a flatpak build manifest from python package requirements.
-
-    It comes with a simple commandline interface for basic usage.
-    Advanced usage and customizations/tweaks are possible by invoking
-    the script through its python API.
-    """
-
-    parser = argparse.ArgumentParser(description=main.__doc__)
+def cli_parser() -> argparse.ArgumentParser:
+    """Returns the req2flatpak commandline interface parser."""
+    parser = argparse.ArgumentParser(
+        description="req2flatpak generates a flatpak build manifest for installing required python packages."
+    )
     parser.add_argument(
         "--requirements",
         nargs="*",
@@ -570,8 +565,14 @@ def main():
         default=False,
         help="Prints installed packages in requirements.txt format.",
     )
+    return parser
 
-    # parse commandline arguments
+
+def main():
+    """Main function that provides req2flatpak's commandline interface."""
+
+    # process commandline arguments
+    parser = cli_parser()
     options = parser.parse_args()
 
     # print platform info if requested, and exit

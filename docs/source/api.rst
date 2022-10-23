@@ -33,11 +33,3 @@ For example, in your custom script...
 
 All of this can be freely implemented in a custom script. Of
 course, it is also possible to fork and modify req2flatpak.
-
-
-API documentation
------------------
-
-.. automodule:: req2flatpak
-    :members:
-    :undoc-members:
