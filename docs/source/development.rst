@@ -4,13 +4,15 @@ Development
 Setting up a Development Environment
 ------------------------------------
 
-Simply clone this project in the IDE of your choice.
+Simply clone this project in the python IDE of your choice.
+
 
 Dependencies
 ------------
 
 req2flatpak depends on very few other software packages, and all of
 these dependencies are optional, see ``pyproject.toml``.
+
 
 Code quality
 ------------

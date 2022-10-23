@@ -113,7 +113,10 @@ class Platform:
     """Represents a target platform for python package installations."""
 
     python_version: list[str]
+    """A list of python version numbers, similar to ``platform.python_version_tuple()``."""
+
     python_tags: list[str]
+    """A list of platform tags, similar to ``packaging.tags.sys_tags()``."""
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -121,7 +124,10 @@ class Requirement:
     """Represents a python package requirement."""
 
     package: str
+    """A python package name."""
+
     version: str
+    """The exact version of the package."""
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -352,17 +358,8 @@ Cache = Union[dict, shelve.Shelf]  # type: TypeAlias
 class PypiClient:
     """Queries package information from the PyPi package index."""
 
-    _cache: Cache = {}
-
-    @property
-    def cache(self) -> Cache:
-        """Returns the cache object used by this class."""
-        return type(self)._cache
-
-    @cache.setter
-    def cache(self, val: Cache):
-        """Allows to set the cache object used by this class."""
-        type(self)._cache = val
+    cache: Cache = {}
+    """A dict-like object for caching responses from PyPi."""
 
     @classmethod
     def _query(cls, url) -> str:
@@ -381,11 +378,7 @@ class PypiClient:
 
     @classmethod
     def get_release(cls, req: Requirement) -> Release:
-        """
-        Queries pypi regarding available downloads for this requirement.
-
-        Returns a release object.
-        """
+        """Queries pypi regarding available releases for this requirement."""
         url = f"https://pypi.org/pypi/{req.package}/{req.version}/json"
         json_string = cls._query(url)
         json_dict = json.loads(json_string)
@@ -404,7 +397,7 @@ class PypiClient:
 
     @classmethod
     def get_releases(cls, reqs: Iterable[Requirement]) -> List[Release]:
-        """Queries release information from a package index."""
+        """Queries pypi regarding available releases for these requirements."""
         return [cls.get_release(req) for req in reqs]
 
 
