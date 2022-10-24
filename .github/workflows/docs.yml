@@ -1,0 +1,45 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    tags:
+      - "*"
+  pull_request:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Avoid git conflicts when tag and branch pushed at same time
+        if: startsWith(github.ref, 'refs/tags')
+        run: sleep 60
+
+      - name: Poetry install
+        run: |
+          python3 -m pip install --user pipx
+          python3 -m pipx ensurepath
+          pipx install poetry
+          poetry install --with dev
+
+      - name: Build docs
+        run: poetry run make -C docs/ html
+
+      - name: Move docs to versioned directory
+        run: mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
+
+      - name: Write versions.txt
+        run: poetry run sphinx_rtd_theme_github_versions .github/pages
+
+      - name: Publish Docs to gh-pages
+        if: github.event_name == 'push'
+        # We pin to the SHA, not the tag, for security reasons.
+        # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+        uses: peaceiris/actions-gh-pages@de7ea6f8efb354206b205ef54722213d99067935 # v3.9.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .github/pages
+          keep_files: true
