@@ -20,14 +20,14 @@
       "name": "installedpackages",
       "buildsystem": "simple",
       "build-commands": [
-        "install -D req2flatpak.py /app/bin/req2flatpak.py",
+        "install -D req2flatpak/req2flatpak.py /app/bin/req2flatpak.py",
         "echo '/usr/bin/env python3 /app/bin/req2flatpak.py --installed-packages' > /app/bin/installed-packages",
         "chmod +x /app/bin/installed-packages"
       ],
       "sources": [
         {
           "type": "file",
-          "path": "req2flatpak.py"
+          "path": "req2flatpak/req2flatpak.py"
         }
       ]
     }

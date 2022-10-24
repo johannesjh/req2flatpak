@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 def example_usage():
     """Example showing how to use req2flatpak in your own script."""
-    from req2flatpak import (
+    from req2flatpak.req2flatpak import (
         DownloadChooser,
         FlatpakGenerator,
         PlatformFactory,
@@ -31,7 +31,7 @@ class ExampleUsageTest(unittest.TestCase):
 
     def test(self):
         """Regression test to ensure that the example code above keeps working."""
-        from req2flatpak import RequirementsParser
+        from req2flatpak.req2flatpak import RequirementsParser
 
         with patch.object(
             RequirementsParser,
