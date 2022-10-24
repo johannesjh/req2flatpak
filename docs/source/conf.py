@@ -45,4 +45,4 @@ exclude_patterns = []
 # =============================================================================
 
 html_theme = "sphinx_rtd_theme_github_versions"
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
