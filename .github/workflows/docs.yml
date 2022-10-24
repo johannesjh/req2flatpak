@@ -33,7 +33,9 @@ jobs:
           poetry install --with dev
 
       - name: Build docs
-        run: poetry run make -C docs/ html
+        run: |
+          poetry run make -C docs/ html
+          cat /tmp/sphinx-err-lflgvpwn.log
 
       - name: Move docs to versioned directory
         run: mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
