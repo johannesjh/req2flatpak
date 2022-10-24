@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Generates a flatpak build manifest to install python packages defined in requirements.txt files."
 authors = ["johannesjh <johannesjh@users.noreply.github.com>"]
 license = "MIT"
-readme = "README.md"
+readme = "README.rst"
 
 [tool.poetry.scripts]
 req2flatpak = 'req2flatpak:main'
