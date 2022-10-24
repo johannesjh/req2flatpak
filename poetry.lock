@@ -203,6 +203,34 @@ sphinx = ">=1.2.0"
 markdown = ["CommonMark (>=0.5.6)"]
 
 [[package]]
+name = "sphinx-rtd-theme"
+version = "0.5.1"
+description = "Read the Docs theme for Sphinx"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+sphinx = "*"
+
+[package.extras]
+dev = ["bump2version", "sphinxcontrib-httpdomain", "transifex-client"]
+
+[[package]]
+name = "sphinx-rtd-theme-github-versions"
+version = "1.1"
+description = "Sphinx readthedocs theme with support for documentation versions from github.io"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+sphinx-rtd-theme = "*"
+
+[package.extras]
+dev = ["black (==21.9b0)", "flake8-isort", "isort (>5.0)", "mypy", "pre-commit", "pytest-cov", "types-docutils"]
+
+[[package]]
 name = "sphinxcontrib-applehelp"
 version = "1.0.2"
 description = "sphinxcontrib-applehelp is a sphinx extension which outputs Apple help books"
@@ -292,7 +320,7 @@ packaging = ["packaging"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ab0a0b4575787f4ad57572fa96da6700a03b5caa2a0c68e5aa39f6d46257aad5"
+content-hash = "93e0a2ba0ec22ed7c0b91e49c2ecc304af28619235cc7edc21f83df61ecd94ff"
 
 [metadata.files]
 alabaster = [
@@ -404,6 +432,14 @@ Sphinx = [
 sphinx-argparse = [
     {file = "sphinx-argparse-0.3.2.tar.gz", hash = "sha256:e54ad6c8f895ac6bb9d0dd9fa07e47e137a2a42ae18a714515262e86b4cc4bab"},
     {file = "sphinx_argparse-0.3.2-py3-none-any.whl", hash = "sha256:499afb62d19966651e1e5d601ac912ca2bdfb43f5dad491305d84bef4414f4f4"},
+]
+sphinx-rtd-theme = [
+    {file = "sphinx_rtd_theme-0.5.1-py2.py3-none-any.whl", hash = "sha256:fa6bebd5ab9a73da8e102509a86f3fcc36dec04a0b52ea80e5a033b2aba00113"},
+    {file = "sphinx_rtd_theme-0.5.1.tar.gz", hash = "sha256:eda689eda0c7301a80cf122dad28b1861e5605cbf455558f3775e1e8200e83a5"},
+]
+sphinx-rtd-theme-github-versions = [
+    {file = "sphinx_rtd_theme_github_versions-1.1-py3-none-any.whl", hash = "sha256:23018e51a5d27ef4f69dd86314f73b19088f2cfd91c74a24db1517832233dc07"},
+    {file = "sphinx_rtd_theme_github_versions-1.1.tar.gz", hash = "sha256:7f67ba75cac8ddd51326f0b2f314bf653e72b4c96a5adc6e779acc8c01da81ab"},
 ]
 sphinxcontrib-applehelp = [
     {file = "sphinxcontrib-applehelp-1.0.2.tar.gz", hash = "sha256:a072735ec80e7675e3f432fcae8610ecf509c5f1869d17e2eecff44389cdbc58"},
