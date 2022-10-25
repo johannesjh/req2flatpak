@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Union
 
-from req2flatpak.req2flatpak import PlatformFactory
+from req2flatpak import PlatformFactory
 
 
 @dataclass(kw_only=True, frozen=True)
