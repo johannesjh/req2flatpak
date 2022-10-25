@@ -44,6 +44,7 @@ jobs:
 
       - name: Move docs to versioned directory
         run: |
+          mkdir -p .github/pages/
           mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
 
       - name: Write versions.txt
