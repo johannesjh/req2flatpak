@@ -1,0 +1,61 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+      - main
+      - docs
+    tags:
+      - "*"
+  pull_request:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Avoid git conflicts when tag and branch pushed at same time
+        if: startsWith(github.ref, 'refs/tags')
+        run: sleep 60
+
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "poetry"
+
+      - name: Install project dependencies
+        run: |
+          poetry env use python3.10
+          poetry about
+          poetry install --with dev
+
+      - name: Build docs
+        run: |
+          poetry run sphinx-build -v -b html docs/source docs/build/html
+          ls -la docs/build/html
+
+      - name: Move docs to versioned directory
+        run: |
+          mkdir -p .github/pages/
+          mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
+
+      - name: Write versions.txt
+        run: poetry run sphinx_rtd_theme_github_versions .github/pages
+
+      - name: Publish Docs to gh-pages
+        if: github.event_name == 'push'
+        # We pin to the github action's SHA, not the tag, for security reasons.
+        # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+        uses: peaceiris/actions-gh-pages@de7ea6f8efb354206b205ef54722213d99067935 # v3.9.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .github/pages
+          keep_files: true

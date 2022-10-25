@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Generates a flatpak build manifest to install python packages defined in requirements.txt files."
 authors = ["johannesjh <johannesjh@users.noreply.github.com>"]
 license = "MIT"
-readme = "README.md"
+readme = "README.rst"
 
 [tool.poetry.scripts]
 req2flatpak = 'req2flatpak:main'
@@ -16,6 +16,7 @@ packaging = "^21.3"
 [tool.poetry.group.dev.dependencies]
 sphinx = "^5.3.0"
 sphinx-argparse = "^0.3.2"
+sphinx-rtd-theme-github-versions = "^1.1"
 
 [tool.poetry.extras]
 packaging = ["packaging"]

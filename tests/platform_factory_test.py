@@ -3,7 +3,7 @@
 import json
 import re
 import unittest
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Union
 
@@ -12,12 +12,15 @@ from req2flatpak import PlatformFactory
 
 @dataclass(kw_only=True, frozen=True)
 class RegressionTestData:
+    """Represents a target platform (minor_version, architecture) and saved platform info."""
+
     minor_version: int
     architecture: str
     platforminfo_file: Union[str, Path]
 
 
 class RegressionTest(unittest.TestCase):
+    """Regression test to verify that req2flatpak's platform factory returns correct platform tags."""
 
     platform_pattern = r"^(?:py|cp)?(\d)(\d+)-(.*)$"
     filename_pattern = r"^(?:py|cp)?(\d)(\d+)-(.*)\.platforminfo.json$"
@@ -31,7 +34,7 @@ class RegressionTest(unittest.TestCase):
 
     @classmethod
     def _testdata(cls, path=".") -> Iterable[RegressionTestData]:
-        """Yields testdata for subtests"""
+        """Yields testdata for subtests."""
         platforminfo_files = [
             entry
             for entry in Path(path).iterdir()
@@ -48,6 +51,8 @@ class RegressionTest(unittest.TestCase):
             )
 
     def test(self):
+        """Runs the test case."""
+
         for data in self._testdata():
             with self.subTest(platforminfo=data.platforminfo_file):
                 expected_tags = self._load_platform_tags_from_file(

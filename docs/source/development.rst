@@ -1,6 +1,28 @@
 Development
 ===========
 
+Design Goals
+------------
+
+A simple python script, just one file:
+req2flatpak is provided as a distribution of just one python module,
+i.e., it consists of just a single python file.
+This is similar to
+`other popular python packages <https://softwareengineering.stackexchange.com/a/243045>`__
+like `six <https://pypi.python.org/pypi/six>`__
+that also consist of a a single file only.
+The benefit is that this file can easily be copy-pasted
+as an alternative installation method.
+
+Minimal dependencies:
+req2flatpak only needs optional dependencies
+(see req2flatpak's ``pyproject.toml`` file for details).
+The benefit is that the script runs on a variety of systems.
+
+Do one thing well:
+req2flatpak does not resolve dependencies, nor does it freeze aka dependency version.
+
+
 Setting up a Development Environment
 ------------------------------------
 
