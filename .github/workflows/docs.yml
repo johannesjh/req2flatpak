@@ -31,6 +31,7 @@ jobs:
       - name: Poetry install
         run: |
           pipx install poetry
+          poetry env use python3.10
           poetry install --with dev
 
       - name: Build docs
