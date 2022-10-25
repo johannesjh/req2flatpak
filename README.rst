@@ -56,6 +56,12 @@ allowing you to tweak the desired behavior in many ways.
 See req2flatpak's documentation for code examples and api documentation.
 
 
+Documentation
+-------------
+
+See https://johannesjh.github.io/req2flatpak/
+
+
 Contributing
 ------------
 

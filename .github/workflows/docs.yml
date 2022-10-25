@@ -46,6 +46,9 @@ jobs:
         run: |
           mkdir -p .github/pages/
           mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
+          ls -la .github/pages
+          echo ".github/pages/${GITHUB_REF##*/}"
+          ls -la ".github/pages/${GITHUB_REF##*/}"
 
       - name: Write versions.txt
         run: poetry run sphinx_rtd_theme_github_versions .github/pages
