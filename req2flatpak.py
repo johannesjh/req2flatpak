@@ -61,7 +61,7 @@ try:
     # use packaging.tags functionality if available
     from packaging.utils import parse_wheel_filename
 
-    def tags_from_wheel_filename(filename: str) -> list[str]:
+    def tags_from_wheel_filename(filename: str) -> List[str]:
         """Parse a wheel filename into a list of compatible platform tags."""
         _, _, _, tags = parse_wheel_filename(filename)
         return [str(tag) for tag in tags]
@@ -69,7 +69,7 @@ try:
 except ModuleNotFoundError:
     # fall back to a local implementation
     # that is heavily inspired by / almost vendored from the `packaging` package:
-    def tags_from_wheel_filename(filename: str) -> list[str]:
+    def tags_from_wheel_filename(filename: str) -> List[str]:
         """Parse a wheel filename into a list of compatible platform tags."""
         InvalidWheelFilename = Exception
         Tag = lambda *args: tuple(args)
@@ -86,7 +86,7 @@ except ModuleNotFoundError:
             return frozenset(tags)
 
         # the following code is based on packaging.utils.parse_wheel_filename:
-        def parse_wheel_filename(wheel_filename: str) -> list[tuple]:
+        def parse_wheel_filename(wheel_filename: str) -> List[tuple]:
             if not wheel_filename.endswith(".whl"):
                 raise InvalidWheelFilename(
                     f"Error parsing wheel filename: Invalid wheel filename (extension must be '.whl'): {wheel_filename}"
@@ -112,10 +112,10 @@ except ModuleNotFoundError:
 class Platform:
     """Represents a target platform for python package installations."""
 
-    python_version: list[str]
+    python_version: List[str]
     """A list of python version numbers, similar to ``platform.python_version_tuple()``."""
 
-    python_tags: list[str]
+    python_tags: List[str]
     """A list of platform tags, similar to ``packaging.tags.sys_tags()``."""
 
 
@@ -149,7 +149,7 @@ class Download:
         return not self.is_wheel and not self.filename.endswith(".egg")
 
     @cached_property
-    def tags(self) -> list[str]:
+    def tags(self) -> List[str]:
         """Returns a list of tags that this download is compatible for."""
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_wheel_filename
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_sdist_filename
@@ -191,10 +191,10 @@ class PlatformFactory:
     def from_current_interpreter() -> Platform:
         """Returns a platform object that describes the current interpreter and system."""
 
-        def get_python_version() -> list[str]:
+        def get_python_version() -> List[str]:
             return list(platform.python_version_tuple())
 
-        def get_python_tags() -> Optional[list[str]]:
+        def get_python_tags() -> Optional[List[str]]:
             try:
                 import packaging.tags
 
