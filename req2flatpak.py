@@ -620,7 +620,7 @@ def main():
         )
 
     # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
-    with shelve.open("../pypi_cache") if options.cache else nullcontext() as cache:
+    with shelve.open("pypi_cache") if options.cache else nullcontext() as cache:
         PypiClient.cache = cache or {}
         releases = PypiClient.get_releases(requirements)
 
