@@ -34,17 +34,18 @@ jobs:
       - name: Install project dependencies
         run: |
           poetry env use python3.10
+          poetry about
           poetry install --with dev
 
       - name: Build docs
         run: |
-          python --version
-          poetry --version
-          poetry about
           poetry run sphinx-build -v -b html docs/source docs/build
 
       - name: Move docs to versioned directory
-        run: mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
+        run: |
+          ls -la docs/build
+          ls -la docs/build/html
+          mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
 
       - name: Write versions.txt
         run: poetry run sphinx_rtd_theme_github_versions .github/pages
