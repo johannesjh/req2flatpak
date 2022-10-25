@@ -52,7 +52,7 @@ jobs:
 
       - name: Publish Docs to gh-pages
         if: github.event_name == 'push'
-        # We pin to the SHA, not the tag, for security reasons.
+        # We pin to the github action's SHA, not the tag, for security reasons.
         # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
         uses: peaceiris/actions-gh-pages@de7ea6f8efb354206b205ef54722213d99067935 # v3.9.0
         with:
