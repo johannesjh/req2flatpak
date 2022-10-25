@@ -33,7 +33,11 @@ jobs:
           poetry install --with dev
 
       - name: Build docs
-        run: poetry run sphinx-build -v -b html docs/source docs/build
+        run: |
+          python --version
+          poetry --version
+          poetry about
+          poetry run sphinx-build -v -b html docs/source docs/build
 
       - name: Move docs to versioned directory
         run: mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
