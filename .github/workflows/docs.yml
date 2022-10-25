@@ -39,12 +39,11 @@ jobs:
 
       - name: Build docs
         run: |
-          poetry run sphinx-build -v -b html docs/source docs/build
+          poetry run sphinx-build -v -b html docs/source docs/build/html
+          ls -la docs/build/html
 
       - name: Move docs to versioned directory
         run: |
-          ls -la docs/build
-          ls -la docs/build/html
           mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
 
       - name: Write versions.txt
