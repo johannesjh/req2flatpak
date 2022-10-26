@@ -41,7 +41,7 @@ As a result, req2flatpak will include these packages in the generated build mani
 
 It is important to note that req2flatpak expects all package versions to be fully specified.
 For example, req2flatpak will not accept a package version specification such as ``requests >= 2.0``.
-Instead, req2flatpak expects all versions to be pinned using the ``==`` operator, such as, e.g., s``requests == 2.0``.
+Instead, req2flatpak expects all versions to be pinned using the ``==`` operator, such as, e.g., ``requests == 2.0``.
 
 The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
 You can use other tools like

@@ -246,11 +246,11 @@ This allows to programmatically tweak and tune your script’s behavior as neede
 </div>
 <p>The benefit of writing a custom script is:
 You have all the freedom in the world to modify each step as you see fit.
-For example, in your custom script…</p>
+For example, in your custom script:</p>
 <ul class="simple">
-<li><p>You may want to query other package indices instead of pypi.</p></li>
-<li><p>You may prefer wheels or sdists for certain packages.</p></li>
-<li><p>You may want to exclude specific packages.</p></li>
+<li><p>you may want to query other package indices instead of pypi,</p></li>
+<li><p>you may prefer wheels or sdists for certain packages, or</p></li>
+<li><p>you may want to exclude specific packages.</p></li>
 </ul>
 <p>All of this can be freely implemented in a custom script.
 Of course, it is also possible to fork and modify req2flatpak.</p>
@@ -350,7 +350,7 @@ Acceptable values are the same as in
 </section>
 <section id="specifying-package-requirements">
 <h2>Specifying Package Requirements<a class="headerlink" href="#specifying-package-requirements" title="Permalink to this heading">¶</a></h2>
-<p>A package requirement describes the name and exact version
+<p>A requirement describes the name and exact version
 of a python package that shall be installed.</p>
 <section id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">¶</a></h3>
@@ -392,13 +392,13 @@ resolve dependencies.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.RequirementsParser.parse_file">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.RequirementsParser.parse_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses a requirements.txt file into a list of Release objects.</p>
+<dd><p>Parses a requirements.txt file into a list of Requirement objects.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.RequirementsParser.parse_string">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements_txt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.RequirementsParser.parse_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses requirements.txt string content into a list of Release objects.</p>
+<dd><p>Parses requirements.txt string content into a list of Requirement objects.</p>
 </dd></dl>
 
 </dd></dl>
@@ -489,8 +489,8 @@ To improve caching, you can use a persistent cache as follows:</p>
 </div>
 <p>The above code instantiates a persistent <code class="docutils literal notranslate"><span class="pre">shelve.Shelf</span></code> cache, using <code class="docutils literal notranslate"><span class="pre">pypi_cache.tmp</span></code> as filename.
 Prior to querying pypi, the code then configures the PypiClient class to use the shelf for caching.</p>
-<p>Other packages instead of Pypi are not directly supported in req2flatpak.
-You are free, of course, to write your own client for other package indices.</p>
+<p>Clients for other package indices instead of Pypi are not included in req2flatpak.
+You are free, of course, to implement your own client for another package index in you own script.</p>
 </section>
 </section>
 <section id="choosing-compatible-downloads">
@@ -504,15 +504,14 @@ For example, a release may contain wheels for older python interpreters
 or different system architectures.</p>
 <p>In python packaging, the compatibility requirements of any download
 are encoded in the filename as a set of “tags”, as explained, for example,
-in the <code class="docutils literal notranslate"><span class="pre">packaging.utils.parse_wheel_filename</span></code> function
-of PyPa’s packaging package.
+in <a class="reference external" href="https://packaging.pypa.io/en/latest/tags.html">pypa’s packaging documentation about tags</a>.
 A download is compatible with a target platform if (at least) one of the
 package tags equals one of the target platform’s system tags.</p>
-<p>Choosing the “best” compatible download is important because multiple downloads
-may be compatible, but only one download is needed.
-Python packaging solves this problem by ranking platform tags in preferential order.
-In consequence, the “best” download is one that matches the highest-ranked platform tag.</p>
-<p>Multiple implementations for choosing the best compatible download exist in related work.</p>
+<p>Choosing the “best” compatible download is important because multiple downloads may be compatible,
+but only one download is needed for installing a package.
+Pip’s algorithm for choosing the best download uses ranked platform tags;
+the best download is the one that matches the highest-ranked platform tag.</p>
+<p>Multiple implementations exist in related work for choosing the best compatible download:</p>
 <ul class="simple">
 <li><p>Pip’s internal behavior is the official reference implementation,
 but pip recommends against accessing internal pip apis from outside packages,

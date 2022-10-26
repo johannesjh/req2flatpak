@@ -17,11 +17,11 @@ You can use the following code example to get started with your script.
 
 The benefit of writing a custom script is:
 You have all the freedom in the world to modify each step as you see fit.
-For example, in your custom script...
+For example, in your custom script:
 
-* You may want to query other package indices instead of pypi.
-* You may prefer wheels or sdists for certain packages.
-* You may want to exclude specific packages.
+* you may want to query other package indices instead of pypi,
+* you may prefer wheels or sdists for certain packages, or
+* you may want to exclude specific packages.
 
 All of this can be freely implemented in a custom script.
 Of course, it is also possible to fork and modify req2flatpak.
@@ -73,7 +73,7 @@ Documentation of all methods provided by the ``PlatformFactory`` class:
 Specifying Package Requirements
 -------------------------------
 
-A package requirement describes the name and exact version
+A requirement describes the name and exact version
 of a python package that shall be installed.
 
 Requirements
@@ -161,8 +161,8 @@ To improve caching, you can use a persistent cache as follows:
 The above code instantiates a persistent ``shelve.Shelf`` cache, using ``pypi_cache.tmp`` as filename.
 Prior to querying pypi, the code then configures the PypiClient class to use the shelf for caching.
 
-Other packages instead of Pypi are not directly supported in req2flatpak.
-You are free, of course, to write your own client for other package indices.
+Clients for other package indices instead of Pypi are not included in req2flatpak.
+You are free, of course, to implement your own client for another package index in you own script.
 
 
 Choosing Compatible Downloads
@@ -180,17 +180,16 @@ or different system architectures.
 
 In python packaging, the compatibility requirements of any download
 are encoded in the filename as a set of "tags", as explained, for example,
-in the ``packaging.utils.parse_wheel_filename`` function
-of PyPa's packaging package.
+in `pypa's packaging documentation about tags <https://packaging.pypa.io/en/latest/tags.html>`__.
 A download is compatible with a target platform if (at least) one of the
 package tags equals one of the target platform's system tags.
 
-Choosing the "best" compatible download is important because multiple downloads
-may be compatible, but only one download is needed.
-Python packaging solves this problem by ranking platform tags in preferential order.
-In consequence, the "best" download is one that matches the highest-ranked platform tag.
+Choosing the "best" compatible download is important because multiple downloads may be compatible,
+but only one download is needed for installing a package.
+Pip's algorithm for choosing the best download uses ranked platform tags;
+the best download is the one that matches the highest-ranked platform tag.
 
-Multiple implementations for choosing the best compatible download exist in related work.
+Multiple implementations exist in related work for choosing the best compatible download:
 
 - Pip's internal behavior is the official reference implementation,
   but pip recommends against accessing internal pip apis from outside packages,
