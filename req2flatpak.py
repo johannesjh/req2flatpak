@@ -255,7 +255,9 @@ class PlatformFactory:
             return None
 
     @classmethod
-    def from_python_version_and_arch(cls, minor_version: int = None, arch="x86_64") -> Platform:
+    def from_python_version_and_arch(
+        cls, minor_version: int = None, arch="x86_64"
+    ) -> Platform:
         """
         Returns a platform object that roughly describes a cpython installation on linux.
 
@@ -272,13 +274,18 @@ class PlatformFactory:
         assert arch in ["x86_64", "aarch64"]
         return Platform(
             python_version=["3", str(minor_version)],
-            python_tags=list(cls._cp3_linux_tags()),
+            python_tags=list(
+                cls._cp3_linux_tags(minor_version=minor_version, arch=arch)
+            ),
         )
 
     @classmethod
     def _cp3_linux_tags(cls, minor_version: int = None, arch="x86_64"):
         """Yields python platform tags for cpython3 on linux."""
         # pylint: disable=too-many-branches
+
+        assert minor_version is not None
+        assert arch in ["x86_64", "aarch64"]
 
         def seq(start: int, end: int) -> Iterable[int]:
             """Returns a range of numbers, from start to end, in steps of +/- 1."""

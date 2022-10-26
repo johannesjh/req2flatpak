@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # setup
+
       - name: Avoid git conflicts when tag and branch pushed at same time
         if: startsWith(github.ref, 'refs/tags')
         run: sleep 60
@@ -23,7 +25,7 @@ jobs:
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
 
       - name: Install poetry
-        run: pipx install poetry
+        run: pipx install poetry pre-commit
 
       - name: setup python
         uses: actions/setup-python@v4
@@ -37,9 +39,29 @@ jobs:
           poetry about
           poetry install --with dev
 
+      # lint using pre-commit
+
+      - name: Set PY variable
+        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+      - name: Configure Caching for Pre-Commit
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: pre-commit
+        run: make lint
+
+      # run tests
+
+      - name: test
+        run: make test
+
+      # build docs
+
       - name: Build docs
         run: |
-          poetry run sphinx-build -v -b html docs/source docs/build/html
+          make docs
           ls -la docs/build/html
 
       - name: Move docs to versioned directory
