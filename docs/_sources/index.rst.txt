@@ -8,6 +8,7 @@ req2flatpak Documentation
    :caption: Contents:
 
    introduction
+   installation
    cli
    api
    development
