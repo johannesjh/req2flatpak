@@ -18,17 +18,11 @@ python version and architecture. The script outputs an automatically
 generated ``flatpak-builder`` build module. The manifest, if included
 into a flatpak build, will install the python packages using pip.
 
-Installation
-------------
+Getting Started
+---------------
 
-The simplest installation method is to download the ``req2flatpak.py``
-script and to run it on your computer.
-
-Alternatively, you can clone the git repository and run the script
-there.
-
-Usage
------
+Run ``pip install git+https://github.com/johannesjh/req2flatpak``
+to install the latest development version of req2flatpak.
 
 It is possible to use req2flatpak from the commandline,
 as well as programmatically from a python script.
@@ -41,19 +35,24 @@ from given python package requirements:
 
    ./req2flatpak.py --requirements-file requirements.txt --target-platforms 310-x86_64 310-aarch64
 
-When invoked like this, req2flatpak will read the requirements file,
-query pypi about available downloads, choose appropriate downloads for
-the specified target platforms, and generate a flatpak-builder build
-module.
+When invoked like this, req2flatpak will
+read the requirements file,
+query pypi about available downloads for the requirements,
+choose appropriate downloads for the specified target platforms,
+and generate a flatpak-builder build module.
+The module, if included in a flatpak-builder build manifest,
+will install the required packages using pip.
 
-Note that target platform strings are defined as ``<pythonversion>-<architecture>``.
+The commandline option to define target platforms uses the format ``<pythonversion>-<architecture>``.
 To learn more about available commandline options,
 run ``req2flatpak.py --help``.
 
 Programmatic usage is also possible.
 This means you can invoke functionality from req2flatpak in your own python script,
 allowing you to tweak the desired behavior in many ways.
-See req2flatpak's documentation for code examples and api documentation.
+The `documentation <https://johannesjh.github.io/req2flatpak/>`__
+describes req2flatpak's python api and includes code examples
+to help you get started quickly.
 
 
 Documentation
@@ -88,10 +87,10 @@ request, and since it was written from scratch, the prototype became
 this separate project.
 
 Comparison between ``flatpak-pip-generator`` and ``req2flatpak.py``:
-Each of the two project likely has its own benefits and a comparison
-between the two will likely change over time. As in Oct, 2022, in my
-personal opinion (johannesjh), I see the following similarities and
-differences:
+Each of the two projects has its own benefits.
+A comparison will likely change over time.
+As in Oct, 2022, in my personal opinion (johannesjh),
+I see the following similarities and differences:
 
 -  Both projects generate build modules for flatpak-builder.
 -  Both projects consist of a single script file with minimal
@@ -99,7 +98,8 @@ differences:
 -  ``flatpak-pip-generator`` resolves dependencies and freezes
    dependency versions, whereas ``req2flatpak.py`` asks the user to
    provide a fully resolved list of dependencies with frozen dependency
-   versions.
+   versions. Various tools exist which make this easy, e.g.,
+   pip, pip-compile and poetry.
 -  ``flatpak-pip-generator`` is older and thus likely to be more mature.
    It supports more commandline options and probably has a more complete
    feature set.
