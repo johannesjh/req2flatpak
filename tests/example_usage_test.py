@@ -1,20 +1,20 @@
 """Example usage demo, with a regression test to make sure the demo keeps working."""
 
-
 import unittest
 from unittest.mock import patch
 
+from req2flatpak import (
+    DownloadChooser,
+    FlatpakGenerator,
+    PlatformFactory,
+    PypiClient,
+    RequirementsParser,
+)
 
+
+# pylint: disable=duplicate-code
 def example_usage():
     """Example showing how to use req2flatpak in your own script."""
-    from req2flatpak import (
-        DownloadChooser,
-        FlatpakGenerator,
-        PlatformFactory,
-        PypiClient,
-        RequirementsParser,
-    )
-
     platforms = [PlatformFactory.from_string("cp310-x86_64")]
     requirements = RequirementsParser.parse_file("requirements.txt")
     releases = PypiClient.get_releases(requirements)
@@ -23,7 +23,7 @@ def example_usage():
         for release in releases
         for platform in platforms
     }
-    return FlatpakGenerator.manifest(requirements, downloads)
+    return FlatpakGenerator.build_module(requirements, downloads)
 
 
 class ExampleUsageTest(unittest.TestCase):
@@ -31,11 +31,10 @@ class ExampleUsageTest(unittest.TestCase):
 
     requirements_txt = "requests == 2.28.1"
     pypi_url = "https://pypi.org/pypi/requests/2.28.1/json"
-    pypi_response = '{"info":{"author":"Kenneth Reitz","author_email":"me@kennethreitz.org","home_page":"https://requests.readthedocs.io","license":"Apache 2.0","name":"requests","package_url":"https://pypi.org/project/requests/","project_url":"https://pypi.org/project/requests/","summary":"Python HTTP for Humans.","version":"2.28.1"},"urls":[{"digests":{"md5":"d18f682863389367f878339e288817f2","sha256":"8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},"filename":"requests-2.28.1-py3-none-any.whl","packagetype":"bdist_wheel","url":"https://files.pythonhosted.org/packages/ca/91/6d9b8ccacd0412c08820f72cebaa4f0c0441b5cda699c90f618b6f8a1b42/requests-2.28.1-py3-none-any.whl"},{"digests":{"md5":"796ea875cdae283529c03b9203d9c454","sha256":"7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},"filename":"requests-2.28.1.tar.gz","packagetype":"sdist","url":"https://files.pythonhosted.org/packages/a5/61/a867851fd5ab77277495a8709ddda0861b28163c4613b011bc00228cc724/requests-2.28.1.tar.gz"}]}'
+    pypi_response = '{"info":{"author":"Kenneth Reitz","author_email":"me@kennethreitz.org","home_page":"https://requests.readthedocs.io","license":"Apache 2.0","name":"requests","package_url":"https://pypi.org/project/requests/","project_url":"https://pypi.org/project/requests/","summary":"Python HTTP for Humans.","version":"2.28.1"},"urls":[{"digests":{"md5":"d18f682863389367f878339e288817f2","sha256":"8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},"filename":"requests-2.28.1-py3-none-any.whl","packagetype":"bdist_wheel","url":"https://files.pythonhosted.org/packages/ca/91/6d9b8ccacd0412c08820f72cebaa4f0c0441b5cda699c90f618b6f8a1b42/requests-2.28.1-py3-none-any.whl"},{"digests":{"md5":"796ea875cdae283529c03b9203d9c454","sha256":"7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},"filename":"requests-2.28.1.tar.gz","packagetype":"sdist","url":"https://files.pythonhosted.org/packages/a5/61/a867851fd5ab77277495a8709ddda0861b28163c4613b011bc00228cc724/requests-2.28.1.tar.gz"}]}'  # pylint: disable=line-too-long
 
     def test(self):
         """Regression test to ensure that the example code above keeps working."""
-        from req2flatpak import PypiClient, RequirementsParser
 
         # mock the requirements.txt file:
         with patch.object(

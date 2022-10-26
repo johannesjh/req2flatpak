@@ -1,12 +1,14 @@
 """Sphinx Configuration File."""
 
+# pylint: disable=invalid-name
+
 # =============================================================================
 # Project information
 # see https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 # =============================================================================
 
 project = "req2flatpak"
-copyright = "2022, johannesjh"
+copyright = "2022, johannesjh"  # pylint: disable=redefined-builtin
 author = "johannesjh"
 release = "0.0.1"
 
