@@ -47,12 +47,16 @@ Target platforms are represented in req2flatpak as a dataclass, as follows.
    :members:
    :undoc-members:
 
+There are many options how to create platform objects.
+You can create platform objects manually in your script.
+And you can use functionality from req2flatpak, as described below.
+
+
 PlatformFactory
 ^^^^^^^^^^^^^^^
 
-There are many options how to create platform objects.
-You can create platform objects manually, e.g., based on lists of known platform tags.
-Or you can use functionality from req2flatpak's ``PlatformFactory`` class.
+The PlatformFactory provides methods for creating platform objects.
+
 For example:
 
 .. code-block:: python

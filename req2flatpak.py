@@ -189,7 +189,18 @@ class PlatformFactory:
 
     @staticmethod
     def from_current_interpreter() -> Platform:
-        """Returns a platform object that describes the current interpreter and system."""
+        """
+        Returns a platform object that describes the current interpreter and system.
+
+        This method requires the ``packaging`` package to be installed
+        because functionality from this package is used to generate the list of
+        tags that are supported by the current platform.
+
+        The platform object returned by this method obviously depends on the
+        specific python interpreter and system architecture used to run the
+        req2flatpak script. The reason why is that this method reads platform
+        properties from the current interpreter and system.
+        """
 
         def get_python_version() -> List[str]:
             return list(platform.python_version_tuple())
@@ -211,10 +222,16 @@ class PlatformFactory:
         )
 
     @classmethod
-    def from_string(cls, platform_string: str):
+    def from_string(cls, platform_string: str) -> Platform:
         """
-        Returns a platform object by parsing a platform string like '39-x86_64'.
-        The string format is "{python_version}-{system_architecture}".
+        Returns a platform object by parsing a platform string.
+
+        :param platform_string: A string specifying python version and system
+          architecture. The string format is
+          "{python_version}-{system_architecture}".
+          For example: "cp39-x86_64" or "cp310-aarch64".
+          Acceptable values are the same as in
+          :py:meth:`~req2flatpak.PlatformFactory.from_python_version_and_arch`.
         """
         try:
             major, minor, arch = re.match(
@@ -225,12 +242,15 @@ class PlatformFactory:
             logger.warning(f"Could not parse platform string {platform_string}")
 
     @staticmethod
-    def from_python_version_and_arch(minor_version: int = None, arch="x86_64"):
+    def from_python_version_and_arch(
+        minor_version: int = None, arch="x86_64"
+    ) -> Platform:
         """
         Returns a platform object that roughly describes a cpython installation on linux.
 
         The tags in the platform object are a rough approximation, trying to match what
         `packaging.tags.sys_tags` would return if invoked on a linux system with cpython.
+        No guarantees are made about how closely this approximation matches a real system.
 
         :param minor_version: the python 3 minor version, specified as int.
         :param arch: either "x86_64" or "aarch64".
