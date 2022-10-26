@@ -19,6 +19,7 @@ extensions = []
 
 # automatically generated api docs
 extensions += ["sphinx.ext.autodoc"]
+extensions += ["sphinx_rtd_theme"]
 
 # automatically generated argparse commandline docs
 extensions += ["sphinxarg.ext"]

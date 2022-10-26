@@ -55,6 +55,12 @@ describes req2flatpak's python api and includes code examples
 to help you get started quickly.
 
 
+Documentation
+-------------
+
+See https://johannesjh.github.io/req2flatpak/
+
+
 Contributing
 ------------
 

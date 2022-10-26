@@ -342,7 +342,7 @@ class RequirementsParser:
 
     @classmethod
     def parse_string(cls, requirements_txt: str) -> List[Requirement]:
-        """Parses requirements.txt string content into a list of Release objects."""
+        """Parses requirements.txt string content into a list of Requirement objects."""
 
         def validate_requirement(req: pkg_resources.Requirement) -> None:
             assert (
@@ -361,7 +361,7 @@ class RequirementsParser:
 
     @classmethod
     def parse_file(cls, file) -> List[Requirement]:
-        """Parses a requirements.txt file into a list of Release objects."""
+        """Parses a requirements.txt file into a list of Requirement objects."""
         if hasattr(file, "read"):
             req_txt = file.read()
         else:
