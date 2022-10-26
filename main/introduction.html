@@ -44,7 +44,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using the Commandline Interface" href="cli.html" />
+    <link rel="next" title="Installation" href="installation.html" />
     <link rel="prev" title="req2flatpak Documentation" href="index.html" /> 
 </head>
 
@@ -94,14 +94,14 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#intended-use">Intended Use</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#related-work">Related Work</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -186,15 +186,10 @@ python version and architecture. The script outputs an automatically
 generated <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code> build module. The manifest, if included
 into a flatpak build, will install the python packages using pip.</p>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
-<p>The simplest installation method is to download the <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code>
-script and to run it on your computer.</p>
-<p>Alternatively, you can clone the git repository and run the script
-there.</p>
-</section>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h2>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/johannesjh/req2flatpak</span></code>
+to install the latest development version of req2flatpak.</p>
 <p>It is possible to use req2flatpak from the commandline,
 as well as programmatically from a python script.</p>
 <p>Commandline usage means you can invoke req2flatpak’s commandline interface
@@ -203,17 +198,22 @@ from given python package requirements:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py --requirements-file requirements.txt --target-platforms <span class="m">310</span>-x86_64 <span class="m">310</span>-aarch64
 </pre></div>
 </div>
-<p>When invoked like this, req2flatpak will read the requirements file,
-query pypi about available downloads, choose appropriate downloads for
-the specified target platforms, and generate a flatpak-builder build
-module.</p>
-<p>Note that target platform strings are defined as <code class="docutils literal notranslate"><span class="pre">&lt;pythonversion&gt;-&lt;architecture&gt;</span></code>.
+<p>When invoked like this, req2flatpak will
+read the requirements file,
+query pypi about available downloads for the requirements,
+choose appropriate downloads for the specified target platforms,
+and generate a flatpak-builder build module.
+The module, if included in a flatpak-builder build manifest,
+will install the required packages using pip.</p>
+<p>The commandline option to define target platforms uses the format <code class="docutils literal notranslate"><span class="pre">&lt;pythonversion&gt;-&lt;architecture&gt;</span></code>.
 To learn more about available commandline options,
 run <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span> <span class="pre">--help</span></code>.</p>
 <p>Programmatic usage is also possible.
 This means you can invoke functionality from req2flatpak in your own python script,
 allowing you to tweak the desired behavior in many ways.
-See req2flatpak’s documentation for code examples and api documentation.</p>
+The <a class="reference external" href="https://johannesjh.github.io/req2flatpak/">documentation</a>
+describes req2flatpak’s python api and includes code examples
+to help you get started quickly.</p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading">¶</a></h2>
@@ -241,10 +241,10 @@ in flatpak-pip-generator. A prototype followed from this feature
 request, and since it was written from scratch, the prototype became
 this separate project.</p>
 <p>Comparison between <code class="docutils literal notranslate"><span class="pre">flatpak-pip-generator</span></code> and <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code>:
-Each of the two project likely has its own benefits and a comparison
-between the two will likely change over time. As in Oct, 2022, in my
-personal opinion (johannesjh), I see the following similarities and
-differences:</p>
+Each of the two projects has its own benefits.
+A comparison will likely change over time.
+As in Oct, 2022, in my personal opinion (johannesjh),
+I see the following similarities and differences:</p>
 <ul class="simple">
 <li><p>Both projects generate build modules for flatpak-builder.</p></li>
 <li><p>Both projects consist of a single script file with minimal
@@ -252,7 +252,8 @@ dependencies, and are thus very easy to install.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">flatpak-pip-generator</span></code> resolves dependencies and freezes
 dependency versions, whereas <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> asks the user to
 provide a fully resolved list of dependencies with frozen dependency
-versions.</p></li>
+versions. Various tools exist which make this easy, e.g.,
+pip, pip-compile and poetry.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">flatpak-pip-generator</span></code> is older and thus likely to be more mature.
 It supports more commandline options and probably has a more complete
 feature set.</p></li>
@@ -282,7 +283,7 @@ downloads to match a given target platform.</p></li>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cli.html" class="btn btn-neutral float-right" title="Using the Commandline Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="index.html" class="btn btn-neutral float-left" title="req2flatpak Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

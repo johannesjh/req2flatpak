@@ -93,6 +93,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Python API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
@@ -282,13 +283,13 @@ when choosing package downloads to install on this platform.</p>
 </dd></dl>
 
 <p>There are many options how to create platform objects.
-You can create platform objects in your own script, e.g., based on lists of known platform tags.
-Or you can use functionality from req2flatpak’s <code class="docutils literal notranslate"><span class="pre">PlatformFactory</span></code> class.</p>
+You can create platform objects manually in your script.
+And you can use functionality from req2flatpak, as described below.</p>
 </section>
 <section id="platformfactory">
 <h3>PlatformFactory<a class="headerlink" href="#platformfactory" title="Permalink to this heading">¶</a></h3>
-<p>The PlatformFactory class allows to create platform objects.
-For example:</p>
+<p>The PlatformFactory provides methods for creating platform objects.</p>
+<p>For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platform</span> <span class="o">=</span> <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -301,14 +302,22 @@ For example:</p>
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_current_interpreter">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_current_interpreter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_current_interpreter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a platform object that describes the current interpreter and system.</p>
+<p>This method requires the <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package to be installed
+because functionality from this package is used to generate the list of
+tags that are supported by the current platform.</p>
+<p>The platform object returned by this method obviously depends on the
+specific python interpreter and system architecture used to run the
+req2flatpak script. The reason why is that this method reads platform
+properties from the current interpreter and system.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_python_version_and_arch">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_python_version_and_arch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minor_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x86_64'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_python_version_and_arch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minor_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x86_64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a platform object that roughly describes a cpython installation on linux.</p>
 <p>The tags in the platform object are a rough approximation, trying to match what
-<cite>packaging.tags.sys_tags</cite> would return if invoked on a linux system with cpython.</p>
+<cite>packaging.tags.sys_tags</cite> would return if invoked on a linux system with cpython.
+No guarantees are made about how closely this approximation matches a real system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -321,9 +330,18 @@ For example:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_string">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_string" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a platform object by parsing a platform string like ‘39-x86_64’.
-The string format is “{python_version}-{system_architecture}”.</p>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a platform object by parsing a platform string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>platform_string</strong> – A string specifying python version and system
+architecture. The string format is
+“{python_version}-{system_architecture}”.
+For example: “cp39-x86_64” or “cp310-aarch64”.
+Acceptable values are the same as in
+<a class="reference internal" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="req2flatpak.PlatformFactory.from_python_version_and_arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_python_version_and_arch()</span></code></a>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
