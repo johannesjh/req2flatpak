@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Using the Commandline Interface &mdash; req2flatpak 0.0.1 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Using the Python API" href="api.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> req2flatpak
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Commandline Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-of-commandline-options">Documentation of Commandline Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#specifying-python-package-requirements">Specifying Python Package Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specifying-target-platforms">Specifying Target Platforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-information-about-the-current-platform">Querying Information about the Current Platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#querying-installed-python-packages">Querying Installed Python Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">req2flatpak</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Using the Commandline Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/cli.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="using-the-commandline-interface">
+<h1>Using the Commandline Interface<a class="headerlink" href="#using-the-commandline-interface" title="Permalink to this heading">¶</a></h1>
+<p>req2flatpak comes with a simple commandline interface
+that covers basic usage
+and makes it easy to get started.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<p>You can, for example, invoke req2flatpak’s commandline interface like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py --requirements-file requirements.txt --target-platforms cp310-x86_64 cp310-aarch64
+</pre></div>
+</div>
+<p>When invoked like this, req2flatpak will read the requirements file,
+query pypi about available downloads, choose appropriate downloads for
+the specified target platforms, and generate a flatpak-builder build
+module.</p>
+</section>
+<section id="documentation-of-commandline-options">
+<h2>Documentation of Commandline Options<a class="headerlink" href="#documentation-of-commandline-options" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak’s commandline interface supports the following commands and options.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">req2flatpak</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">requirements</span> <span class="p">[</span><span class="n">REQUIREMENTS</span> <span class="o">...</span><span class="p">]]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">requirements</span><span class="o">-</span><span class="n">file</span> <span class="p">[</span><span class="n">REQUIREMENTS_FILE</span><span class="p">]]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">target</span><span class="o">-</span><span class="n">platforms</span> <span class="n">TARGET_PLATFORMS</span> <span class="p">[</span><span class="n">TARGET_PLATFORMS</span> <span class="o">...</span><span class="p">]]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
+</pre></div>
+</div>
+<section id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this heading">¶</a></h3>
+<dl class="option-list">
+<dt><kbd>--requirements</kbd></dt>
+<dd><p>One or more requirements can be specified as commandline arguments, e.g., ‘pandas==1.4.4’.</p>
+</dd>
+<dt><kbd>--requirements-file, -r</kbd></dt>
+<dd><p>Requirements can be read from a specified requirements.txt file or from stdin.</p>
+<p>Default: &lt;_io.TextIOWrapper name=’&lt;stdin&gt;’ mode=’r’ encoding=’utf-8’&gt;</p>
+</dd>
+<dt><kbd>--target-platforms, -t</kbd></dt>
+<dd><p>Target platforms can be specified as, e.g., ‘39-x86_64’ or ‘310-aarch64’.</p>
+</dd>
+<dt><kbd>--cache, --no-cache</kbd></dt>
+<dd><p>Uses a persistent cache when querying pypi. (default: False)</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--outfile, -o</kbd></dt>
+<dd><p>Default: &lt;_io.TextIOWrapper name=’&lt;stdout&gt;’ mode=’w’ encoding=’utf-8’&gt;</p>
+</dd>
+<dt><kbd>--platform-info, --no-platform-info</kbd></dt>
+<dd><p>Prints information about the current platform. (default: False)</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--installed-packages, --no-installed-packages</kbd></dt>
+<dd><p>Prints installed packages in requirements.txt format. (default: False)</p>
+<p>Default: False</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="specifying-python-package-requirements">
+<h2>Specifying Python Package Requirements<a class="headerlink" href="#specifying-python-package-requirements" title="Permalink to this heading">¶</a></h2>
+<p>You can specify python packages as individual commandline arguments or by providing a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file.
+As a result, req2flatpak will include these packages in the generated build manifest.</p>
+<p>It is important to note that req2flatpak expects all package versions to be fully specified.
+For example, req2flatpak will not accept a package version specification such as <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">&gt;=</span> <span class="pre">2.0</span></code>.
+Instead, req2flatpak expects all versions to be pinned using the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator, such as, e.g., <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">==</span> <span class="pre">2.0</span></code>.</p>
+<p>The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
+You can use other tools like
+<a class="reference external" href="https://pypi.org/project/pip-tools/">pip-compile</a> or
+<a class="reference external" href="https://pypi.org/project/poetry/">poetry export</a>
+to resolve and freeze dependencies and to export them into a requirements.txt file.</p>
+</section>
+<section id="specifying-target-platforms">
+<h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading">¶</a></h2>
+<p>One or more target platforms can be specified in a simple string format
+that includes the python version and system architecture.</p>
+<p>As a result, req2flatpak will include suitable package downloads
+for each of the specified target platforms
+in the flatpak builder manifest that it generates.</p>
+<p>The string format for specifying target platforms is <code class="docutils literal notranslate"><span class="pre">&lt;python_version&gt;-&lt;system-architecture&gt;</span></code>:</p>
+<ul class="simple">
+<li><p>The python version is specified as, e.g., <code class="docutils literal notranslate"><span class="pre">cp39</span></code> for cpython 3.9 or <code class="docutils literal notranslate"><span class="pre">cp310</span></code> for cpython 3.10, and so on.
+Other python interpreters instead of cpython are not supported.</p></li>
+<li><p>The system architecture can either be <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> or <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>.</p></li>
+</ul>
+</section>
+<section id="querying-information-about-the-current-platform">
+<h2>Querying Information about the Current Platform<a class="headerlink" href="#querying-information-about-the-current-platform" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak provides a <code class="docutils literal notranslate"><span class="pre">platform-info</span></code> command for querying information
+about the current platform, i.e., about the python interpreter and system
+architecture used to run the req2flatpak script.</p>
+<p>You can run the <code class="docutils literal notranslate"><span class="pre">platform-info</span></code> command on your target platform to save
+information about this platform. You can later use the information about your
+target platform when generating a flatpak build module using req2flatpak’s
+python apis by reading the platform information from a file and by creating
+a platform object from it.</p>
+<p>Example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py --platform-info
+</pre></div>
+</div>
+<p>This will generate output like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;python_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;3&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;6&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">],</span><span class="w"></span>
+<span class="w">    </span><span class="nt">&quot;python_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_35_x86_64&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_34_x86_64&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_33_x86_64&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">     </span><span class="s2">&quot;...&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="p">]</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>...note that the list of tags has been shortened in the above output
+because the list of tags is about 700 lines long.</p>
+</section>
+<section id="querying-installed-python-packages">
+<h2>Querying Installed Python Packages<a class="headerlink" href="#querying-installed-python-packages" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak provides a command <code class="docutils literal notranslate"><span class="pre">installed-packages</span></code> which allows to  query
+currently installed python packages.</p>
+<p>You can run the <code class="docutils literal notranslate"><span class="pre">installed-packages</span></code> command on your target platform to find
+out which packages are already installed on this platform. You can later use
+this information when resolving and pinning python packages in your python
+application or library, e.g., when using pip, pip-compile or poetry, in order
+to make sure that your package versions are compatible with your target platform.</p>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="Using the Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, johannesjh.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+  
+   
+  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Other Versions</span>
+      
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl id="other-versions-dl"/>
+    </div>
+  </div>
+  <script>
+    function addVersion(name) {
+      var dd = document.createElement("dd");
+      var a = document.createElement("a");
+      a.href = "../" + name;
+      a.innerText = name;
+      dd.appendChild(a);
+      document.getElementById('other-versions-dl').appendChild(dd);
+    }
+    // Get versions.txt and add a version for each line
+    fetch("../versions.txt").then(response => {
+      if (response.ok) {
+        document.getElementById('other-versions-div').style.visibility = "visible";
+        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
+      }
+    });
+  </script>
+
+
+</body>
+</html>
