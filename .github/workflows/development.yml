@@ -1,0 +1,56 @@
+name: Development
+
+on:
+  push:
+  pull_request:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup
+
+      - name: Install pre-commit
+        run: pipx install pre-commit
+      - name: Set PY variable
+        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+      - name: Configure Caching for Pre-Commit
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Run linters
+        run: make lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup
+
+      - name: Run Tests
+        run: make test
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup
+
+      - name: Build docs
+        run: make docs
