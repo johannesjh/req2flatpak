@@ -37,7 +37,6 @@ import argparse
 import json
 import logging
 import pathlib
-import platform
 import re
 import shelve
 import sys
@@ -46,7 +45,7 @@ from contextlib import nullcontext, suppress
 from dataclasses import asdict, dataclass, field
 from functools import cached_property
 from itertools import product
-from typing import FrozenSet, Hashable, Iterable, Iterator, List, Optional, Tuple, Union
+from typing import FrozenSet, Hashable, Iterable, Iterator, List, Optional, Union
 
 import pkg_resources
 
@@ -72,7 +71,7 @@ except ModuleNotFoundError:
     def tags_from_wheel_filename(filename: str) -> List[str]:
         """Parse a wheel filename into a list of compatible platform tags."""
         InvalidWheelFilename = Exception
-        Tag = lambda *args: tuple(args)
+        Tag = lambda *args: tuple(args)  # pylint: disable=C3001,C0103
 
         # the following code is based on packaging.tags.parse_tag,
         # it is needed for the parse_wheel_filename function:
@@ -85,17 +84,22 @@ except ModuleNotFoundError:
                         tags.add(Tag(interpreter, abi, platform_))
             return frozenset(tags)
 
-        # the following code is based on packaging.utils.parse_wheel_filename:
+        # the following code is based on packaging.utils.parse_wheel_filename.
+        # pylint: disable=redefined-outer-name
         def parse_wheel_filename(wheel_filename: str) -> List[tuple]:
             if not wheel_filename.endswith(".whl"):
                 raise InvalidWheelFilename(
-                    f"Error parsing wheel filename: Invalid wheel filename (extension must be '.whl'): {wheel_filename}"
+                    "Error parsing wheel filename: "
+                    "Invalid wheel filename (extension must be '.whl'): "
+                    f"{wheel_filename}"
                 )
             wheel_filename = wheel_filename[:-4]
             dashes = wheel_filename.count("-")
             if dashes not in (4, 5):
                 raise InvalidWheelFilename(
-                    f"Error parsing wheel filename: Invalid wheel filename (wrong number of parts): {wheel_filename}"
+                    "Error parsing wheel filename: "
+                    "Invalid wheel filename (wrong number of parts): "
+                    f"{wheel_filename}"
                 )
             parts = wheel_filename.split("-", dashes - 2)
             return parse_tag(parts[-1])
@@ -157,22 +161,24 @@ class Download:
             return []
         if self.filename.endswith(".whl"):
             return tags_from_wheel_filename(self.filename)
+        return None
 
     @cached_property
     def arch(self) -> Optional[str]:
         """Returns a wheel's target architecture, and None for sdists."""
         if self.is_sdist:
             return None
-        elif self.is_wheel:
-            if any([tag.endswith("x86_64") for tag in self.tags]):
+        if self.is_wheel:
+            if any(tag.endswith("x86_64") for tag in self.tags):
                 return "x86_64"
-            if any([tag.endswith("aarch64") for tag in self.tags]):
+            if any(tag.endswith("aarch64") for tag in self.tags):
                 return "aarch64"
+        return None
 
 
 @dataclass(frozen=True, kw_only=True)
 class Release(Requirement):
-    """Represents a python package release as package name, version, and list of available downloads."""
+    """Represents a package release as name, version, and downloads."""
 
     package: str
     version: str
@@ -188,7 +194,28 @@ class PlatformFactory:
     """Provides methods for creating platform objects."""
 
     @staticmethod
-    def from_current_interpreter() -> Platform:
+    def _get_current_python_version() -> List[str]:
+        # pylint: disable=import-outside-toplevel
+        import platform
+
+        return list(platform.python_version_tuple())
+
+    @staticmethod
+    def _get_current_python_tags() -> Optional[List[str]]:
+        try:
+            # pylint: disable=import-outside-toplevel
+            import packaging.tags
+
+            tags = [str(tag) for tag in packaging.tags.sys_tags()]
+            return tags
+        except ModuleNotFoundError as e:
+            logger.warning(
+                'Error trying to import the "packaging" package.', exc_info=e
+            )
+            return None
+
+    @classmethod
+    def from_current_interpreter(cls) -> Platform:
         """
         Returns a platform object that describes the current interpreter and system.
 
@@ -201,28 +228,13 @@ class PlatformFactory:
         req2flatpak script. The reason why is that this method reads platform
         properties from the current interpreter and system.
         """
-
-        def get_python_version() -> List[str]:
-            return list(platform.python_version_tuple())
-
-        def get_python_tags() -> Optional[List[str]]:
-            try:
-                import packaging.tags
-
-                tags = [str(tag) for tag in packaging.tags.sys_tags()]
-            except Exception as e:
-                logger.warning(
-                    "Python platform tags could not be determined.", exc_info=e
-                )
-                return None
-            return tags
-
         return Platform(
-            python_version=get_python_version(), python_tags=get_python_tags()
+            python_version=cls._get_current_python_version(),
+            python_tags=cls._get_current_python_tags(),
         )
 
     @classmethod
-    def from_string(cls, platform_string: str) -> Platform:
+    def from_string(cls, platform_string: str) -> Optional[Platform]:
         """
         Returns a platform object by parsing a platform string.
 
@@ -234,16 +246,17 @@ class PlatformFactory:
           :py:meth:`~req2flatpak.PlatformFactory.from_python_version_and_arch`.
         """
         try:
-            major, minor, arch = re.match(
+            _, minor, arch = re.match(
                 r"^(?:py|cp)?(\d)(\d+)-(.*)$", platform_string
             ).groups()
             return cls.from_python_version_and_arch(minor_version=int(minor), arch=arch)
-        except AttributeError as e:
-            logger.warning(f"Could not parse platform string {platform_string}")
+        except AttributeError:
+            logger.warning("Could not parse platform string %s", platform_string)
+            return None
 
-    @staticmethod
+    @classmethod
     def from_python_version_and_arch(
-        minor_version: int = None, arch="x86_64"
+        cls, minor_version: int = None, arch="x86_64"
     ) -> Platform:
         """
         Returns a platform object that roughly describes a cpython installation on linux.
@@ -253,8 +266,24 @@ class PlatformFactory:
         No guarantees are made about how closely this approximation matches a real system.
 
         :param minor_version: the python 3 minor version, specified as int.
+          Defaults to the current python version.
         :param arch: either "x86_64" or "aarch64".
         """
+        if not minor_version:
+            minor_version = int(cls._get_current_python_version()[1])
+        assert arch in ["x86_64", "aarch64"]
+        return Platform(
+            python_version=["3", str(minor_version)],
+            python_tags=list(
+                cls._cp3_linux_tags(minor_version=minor_version, arch=arch)
+            ),
+        )
+
+    @classmethod
+    def _cp3_linux_tags(cls, minor_version: int = None, arch="x86_64"):
+        """Yields python platform tags for cpython3 on linux."""
+        # pylint: disable=too-many-branches
+
         assert minor_version is not None
         assert arch in ["x86_64", "aarch64"]
 
@@ -263,70 +292,64 @@ class PlatformFactory:
             step = 1 if start < end else -1
             return range(start, end + step, step)
 
-        def tags():
-            cache = set()
+        cache = set()
 
-            def dedup(obj: Hashable):
-                if obj in cache:
-                    return
-                else:
-                    cache.add(obj)
-                    return obj
+        def dedup(obj: Hashable):
+            if obj in cache:
+                return None
+            cache.add(obj)
+            return obj
 
-            platforms = [f"manylinux_2_{v}" for v in seq(35, 17)] + ["manylinux2014"]
-            if arch == "x86_64":
-                platforms += (
-                    [f"manylinux_2_{v}" for v in seq(16, 12)]
-                    + ["manylinux2010"]
-                    + [f"manylinux_2_{v}" for v in seq(11, 5)]
-                    + ["manylinux1"]
-                )
-            platforms += ["linux"]
-            platform_tags = [f"{platform}_{arch}" for platform in platforms]
+        platforms = [f"manylinux_2_{v}" for v in seq(35, 17)] + ["manylinux2014"]
+        if arch == "x86_64":
+            platforms += (
+                [f"manylinux_2_{v}" for v in seq(16, 12)]
+                + ["manylinux2010"]
+                + [f"manylinux_2_{v}" for v in seq(11, 5)]
+                + ["manylinux1"]
+            )
+        platforms += ["linux"]
+        platform_tags = [f"{platform}_{arch}" for platform in platforms]
 
-            # current cpython version, all abis, all platforms:
-            for py in [f"cp3{minor_version}"]:
-                for abi in [f"cp3{minor_version}", "abi3", "none"]:
-                    for platform in platform_tags:
-                        yield dedup(f"{py}-{abi}-{platform}")
+        # current cpython version, all abis, all platforms:
+        for py in [f"cp3{minor_version}"]:
+            for abi in [f"cp3{minor_version}", "abi3", "none"]:
+                for platform in platform_tags:
+                    yield dedup(f"{py}-{abi}-{platform}")
 
-            # older cpython versions, abi3, all platforms:
-            for py in [f"cp3{v}" for v in seq(minor_version - 1, 2)]:
-                for abi in ["abi3"]:
-                    for platform in platform_tags:
-                        yield dedup(f"{py}-{abi}-{platform}")
+        # older cpython versions, abi3, all platforms:
+        for py in [f"cp3{v}" for v in seq(minor_version - 1, 2)]:
+            for abi in ["abi3"]:
+                for platform in platform_tags:
+                    yield dedup(f"{py}-{abi}-{platform}")
 
-            # current python version, abi=none, all platforms:
-            for py in [f"py3{minor_version}"]:
-                for abi in ["none"]:
-                    for platform in platform_tags:
-                        yield dedup(f"{py}-{abi}-{platform}")
+        # current python version, abi=none, all platforms:
+        for py in [f"py3{minor_version}"]:
+            for abi in ["none"]:
+                for platform in platform_tags:
+                    yield dedup(f"{py}-{abi}-{platform}")
 
-            # current major python version (py3), abi=none, all platforms:
-            for py in ["py3"]:
-                for abi in ["none"]:
-                    for platform in platform_tags:
-                        yield dedup(f"{py}-{abi}-{platform}")
+        # current major python version (py3), abi=none, all platforms:
+        for py in ["py3"]:
+            for abi in ["none"]:
+                for platform in platform_tags:
+                    yield dedup(f"{py}-{abi}-{platform}")
 
-            # older python versions, abi=none, all platforms:
-            for py in [f"py3{v}" for v in seq(minor_version - 1, 0)]:
-                for abi in ["none"]:
-                    for platform in platform_tags:
-                        yield dedup(f"{py}-{abi}-{platform}")
+        # older python versions, abi=none, all platforms:
+        for py in [f"py3{v}" for v in seq(minor_version - 1, 0)]:
+            for abi in ["none"]:
+                for platform in platform_tags:
+                    yield dedup(f"{py}-{abi}-{platform}")
 
-            # current python version, abi=none, platform=any
-            yield f"py3{minor_version}-none-any"
+        # current python version, abi=none, platform=any
+        yield f"py3{minor_version}-none-any"
 
-            # current major python version, abi=none, platform=any
-            yield "py3-none-any"
+        # current major python version, abi=none, platform=any
+        yield "py3-none-any"
 
-            # older python versions, abi=none, platform=any
-            for py in [f"py3{v}" for v in seq(minor_version - 1, 0)]:
-                yield f"{py}-none-any"
-
-        return Platform(
-            python_version=["3", str(minor_version)], python_tags=list(tags())
-        )
+        # older python versions, abi=none, platform=any
+        for py in [f"py3{v}" for v in seq(minor_version - 1, 0)]:
+            yield f"{py}-none-any"
 
 
 class RequirementsParser:
@@ -365,7 +388,7 @@ class RequirementsParser:
         if hasattr(file, "read"):
             req_txt = file.read()
         else:
-            req_txt = pathlib.Path(file).read_text()
+            req_txt = pathlib.Path(file).read_text(encoding="utf-8")
         return cls.parse_string(req_txt)
 
 
@@ -390,7 +413,8 @@ class PypiClient:
                 return None
 
         def _query_from_pypi(url) -> str:
-            json_string = urllib.request.urlopen(url).read().decode("utf-8")
+            with urllib.request.urlopen(url) as response:
+                json_string = response.read().decode("utf-8")
             cls.cache[url] = json_string
             return json_string
 
@@ -497,16 +521,18 @@ class DownloadChooser:
 
 
 class FlatpakGenerator:
-    """Provides methods for generating a flatpak-builder build manifest."""
+    """Provides methods for generating a flatpak-builder build module."""
 
     @staticmethod
-    def manifest(
+    def build_module(
         requirements: Iterable[Requirement],
         downloads: Iterable[Download],
         module_name="python3-package-installation",
-        pip_install_template: str = 'pip3 install --verbose --exists-action=i --no-index --find-links="file://${PWD}" --prefix=${FLATPAK_DEST} --no-build-isolation ',
+        pip_install_template: str = "pip3 install --verbose --exists-action=i "
+        '--no-index --find-links="file://${PWD}" '
+        "--prefix=${FLATPAK_DEST} --no-build-isolation ",
     ) -> dict:
-        """Generates a module for a flatpak-builder build manifest."""
+        """Generates a build module for inclusion in a flatpak-builder build manifest."""
 
         def source(download: Download) -> dict:
             source = {"type": "file", "url": download.url, "sha256": download.sha256}
@@ -522,6 +548,16 @@ class FlatpakGenerator:
             ],
             "sources": [source(download) for download in downloads],
         }
+
+    @classmethod
+    def build_module_as_str(cls, *args, **kwargs) -> str:
+        """
+        Generates a build module for inclusion in a flatpak-builder build manifest.
+
+        The args and kwargs are the same as in
+        :py:meth:`~req2flatpak.FlatpakGenerator.build_module`
+        """
+        return json.dumps(cls.build_module(*args, **kwargs), indent=2)
 
 
 # =============================================================================
@@ -588,31 +624,23 @@ def main():
     parser = cli_parser()
     options = parser.parse_args()
 
+    # stream output to a file or to stdout
+    output_stream = options.outfile if hasattr(options.outfile, "write") else sys.stdout
+
     # print platform info if requested, and exit
     if options.platform_info:
-        output_stream = (
-            options.outfile if hasattr(options.outfile, "write") else sys.stdout
+        json.dump(
+            asdict(PlatformFactory.from_current_interpreter()), output_stream, indent=4
         )
-        platform = PlatformFactory.from_current_interpreter()
-        json.dump(asdict(platform), output_stream, indent=4)
         parser.exit()
 
     # print installed packages if requested, and exit
     if options.installed_packages:
-        output_stream = (
-            options.outfile if hasattr(options.outfile, "write") else sys.stdout
-        )
-        try:
-            import pkg_resources
-
-            pkgs = {p.key: p.version for p in pkg_resources.working_set}
-            for pkg, version in pkgs.items():
-                print(f"{pkg}=={version}", file=output_stream)
-        except Exception as e:
-            logger.warning("Could not determine installed python packages.", exc_info=e)
-            return None
-        finally:
-            parser.exit()
+        # pylint: disable=not-an-iterable
+        pkgs = {p.key: p.version for p in pkg_resources.working_set}
+        for pkg, version in pkgs.items():
+            print(f"{pkg}=={version}", file=output_stream)
+        parser.exit()
 
     # parse requirements
     requirements = []
@@ -621,22 +649,26 @@ def main():
             requirements += RequirementsParser.parse_string("\n".join(reqs))
         if reqs := options.requirements_file:
             requirements += RequirementsParser.parse_file(reqs)
-    if not len(requirements):
+    if not requirements:
         parser.error(
-            "Error parsing requirements. At least one requirement must be specified."
+            "Error parsing requirements: At least one requirement must be specified."
         )
 
     # parse target platforms
     if not options.target_platforms:
         parser.error(
-            "Error parsing target platforms. Missing commandline argument, at least one target platform must be specified as, e.g., '39-x86_64' or '310-aarch64'."
+            "Error parsing target platforms. "
+            "Missing commandline argument, at least one target platform must "
+            "be specified as, e.g., '39-x86_64' or '310-aarch64'."
         )
     platforms = [
         PlatformFactory.from_string(platform) for platform in options.target_platforms
     ]
-    if not len(platforms):
+    if not platforms:
         parser.error(
-            "Error parsing target platforms. At least one target platform must be specified as, e.g., '39-x86_64' or '310-aarch64'."
+            "Error parsing target platforms. "
+            "At least one target platform must be specified "
+            "as, e.g., '39-x86_64' or '310-aarch64'."
         )
 
     # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
@@ -652,10 +684,9 @@ def main():
     }
 
     # generate flatpak build manifest
-    manifest = FlatpakGenerator.manifest(requirements, downloads)
+    manifest = FlatpakGenerator.build_module(requirements, downloads)
 
     # write output
-    output_stream = options.outfile if hasattr(options.outfile, "write") else sys.stdout
     json.dump(manifest, output_stream, indent=4)
 
 

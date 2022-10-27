@@ -1,0 +1,56 @@
+name: Setup
+description: Sets up python and poetry
+
+# note:
+# this is a local composite action
+# documentation: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+# code example: https://github.com/GuillaumeFalourd/poc-github-actions/blob/main/.github/actions/local-action/action.yaml
+
+inputs:
+  setup-pre-commit:
+    description: Whether pre-commit shall be setup, too
+    required: false
+    default: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Avoid git conflicts when tag and branch pushed at same time
+      if: startsWith(github.ref, 'refs/tags')
+      run: sleep 60
+      shell: bash
+
+    - name: Checkout
+      uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+    - name: Install poetry
+      run: pipx install poetry
+      shell: bash
+
+    - name: setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        cache: "poetry"
+
+    - name: Install project dependencies
+      run: |
+        poetry env use python3.10
+        poetry about
+        poetry install --with dev
+      shell: bash
+
+    - name: Install pre-commit
+      if: ${{ inputs.setup-pre-commit }}
+      run: pipx install pre-commit
+      shell: bash
+    - name: Set PY variable
+      if: ${{ inputs.setup-pre-commit }}
+      run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
+      shell: bash
+    - name: Configure Caching for Pre-Commit
+      if: ${{ inputs.setup-pre-commit }}
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}

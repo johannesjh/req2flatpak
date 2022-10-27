@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_call:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup
+        with:
+          setup-pre-commit: true
+
+      - name: Run linters
+        run: make lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup
+
+      - name: Run Tests
+        run: make test
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Setup
+        id: setup
+        uses: ./.github/actions/setup
+
+      - name: Build Docs
+        run: make docs
+
+      - name: Publish Docs
+        id: publish-docs
+        if: github.ref_name == 'main' || startswith(github.ref_name, 'doc') || github.ref_type == 'tag'
+        uses: ./.github/actions/publish-docs
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

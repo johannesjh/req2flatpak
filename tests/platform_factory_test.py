@@ -28,7 +28,7 @@ class RegressionTest(unittest.TestCase):
     @staticmethod
     def _load_platform_tags_from_file(filename: Union[Path, str]) -> list[str]:
         """Returns the list of platform tags from a platforminfo .json file."""
-        with open(filename, "r") as f:
+        with open(filename, "r", encoding="utf-8") as f:
             data = json.load(f)
         return data["python_tags"]
 
