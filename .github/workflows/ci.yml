@@ -1,4 +1,4 @@
-name: Development
+name: CI
 
 on:
   push:
@@ -15,16 +15,8 @@ jobs:
       - name: Setup
         id: setup
         uses: ./.github/actions/setup
-
-      - name: Install pre-commit
-        run: pipx install pre-commit
-      - name: Set PY variable
-        run: echo "PY=$(python -VV | sha256sum | cut -d' ' -f1)" >> $GITHUB_ENV
-      - name: Configure Caching for Pre-Commit
-        uses: actions/cache@v3
         with:
-          path: ~/.cache/pre-commit
-          key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+          setup-pre-commit: true
 
       - name: Run linters
         run: make lint
@@ -52,5 +44,12 @@ jobs:
         id: setup
         uses: ./.github/actions/setup
 
-      - name: Build docs
+      - name: Build Docs
         run: make docs
+
+      - name: Publish Docs
+        id: publish-docs
+        if: github.ref_name == 'main' || startswith(github.ref_name, 'doc') || github.ref_type == 'tag'
+        uses: ./.github/actions/publish-docs
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

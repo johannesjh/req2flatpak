@@ -1,0 +1,38 @@
+name: Publish-Docs
+description: Publishes Docs on Github Pages
+
+# note:
+# this is a local composite action
+# documentation: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+# code example: https://github.com/GuillaumeFalourd/poc-github-actions/blob/main/.github/actions/local-action/action.yaml
+
+inputs:
+  token:
+    description: "secrets.GITHUB_TOKEN"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Move docs to versioned directory
+      run: |
+        mkdir -p .github/pages/
+        mv docs/build/html ".github/pages/${GITHUB_REF##*/}"
+        ls -la .github/pages
+        echo ".github/pages/${GITHUB_REF##*/}"
+        ls -la ".github/pages/${GITHUB_REF##*/}"
+      shell: bash
+
+    - name: Write versions.txt
+      run: poetry run sphinx_rtd_theme_github_versions .github/pages
+      shell: bash
+
+    - name: Publish Docs to gh-pages
+      if: github.event_name == 'push'
+      # We pin to the github action's SHA, not the tag, for security reasons.
+      # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+      uses: peaceiris/actions-gh-pages@de7ea6f8efb354206b205ef54722213d99067935 # v3.9.0
+      with:
+        github_token: ${{ inputs.token }}
+        publish_dir: .github/pages
+        keep_files: true
