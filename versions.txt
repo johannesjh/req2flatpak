@@ -1,1 +1,1 @@
-main
+lint-ci
