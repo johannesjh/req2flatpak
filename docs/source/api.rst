@@ -155,8 +155,15 @@ or you can use req2flatpak's ``PypiClient`` for this purpose.
 PypiClient
 ^^^^^^^^^^
 
-The ``PypiClient`` class allows to query the "PyPi" python package index
-about available releases.
+The ``PypiClient`` class allows to query the "PyPi" python package index about available releases.
+For example:
+
+.. literalinclude:: ../../tests/pypi_client_test.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
+
 
 Documentation of all methods provided by the ``PypiClient`` class:
 
@@ -168,19 +175,18 @@ PypiClient caches responses to reduce traffic when querying PyPi.
 By default, a simple ``dict`` is used as an in-memory cache.
 To improve caching, you can use a persistent cache as follows:
 
-.. code-block:: python
+.. literalinclude:: ../../tests/pypi_client_test.py
+   :start-after: example_usage2_start
+   :end-before: example_usage2_end
+   :language: python
+   :dedent:
 
-    import shelve
-
-    with shelve.open("pypi_cache.tmp") as cache:
-        PypiClient.cache = cache
-        releases = PypiClient.get_releases(requirements)
-
-The above code instantiates a persistent ``shelve.Shelf`` cache, using ``pypi_cache.tmp`` as filename.
-Prior to querying pypi, the code then configures the PypiClient class to use the shelf for caching.
+The above code instantiates a persistent ``shelve.Shelf`` cache using ``pypi_cache.tmp`` as filename.
+The code then configures the PypiClient class to use the shelf for caching,
+and then uses the cache when querying PyPi.
 
 Clients for other package indices instead of Pypi are not included in req2flatpak.
-You are free, of course, to implement your own client for another package index in you own script.
+You are free, of course, to implement your own clients for additional package indices in you own script.
 
 
 Choosing Compatible Downloads
