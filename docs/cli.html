@@ -236,7 +236,7 @@ module.</p>
 <section id="specifying-python-package-requirements">
 <h2>Specifying Python Package Requirements<a class="headerlink" href="#specifying-python-package-requirements" title="Permalink to this heading">¶</a></h2>
 <p>You can specify python packages as individual commandline arguments or by providing a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file.
-As a result, req2flatpak will include these packages in the generated build manifest.</p>
+As a result, req2flatpak will include these packages in the generated build module.</p>
 <p>It is important to note that req2flatpak expects all package versions to be fully specified.
 For example, req2flatpak will not accept a package version specification such as <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">&gt;=</span> <span class="pre">2.0</span></code>.
 Instead, req2flatpak expects all versions to be pinned using the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator, such as, e.g., <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">==</span> <span class="pre">2.0</span></code>.</p>
@@ -252,7 +252,7 @@ to resolve and freeze dependencies and to export them into a requirements.txt fi
 that includes the python version and system architecture.</p>
 <p>As a result, req2flatpak will include suitable package downloads
 for each of the specified target platforms
-in the flatpak builder manifest that it generates.</p>
+in the flatpak-builder build module that it generates.</p>
 <p>The string format for specifying target platforms is <code class="docutils literal notranslate"><span class="pre">&lt;python_version&gt;-&lt;system-architecture&gt;</span></code>:</p>
 <ul class="simple">
 <li><p>The python version is specified as, e.g., <code class="docutils literal notranslate"><span class="pre">cp39</span></code> for cpython 3.9 or <code class="docutils literal notranslate"><span class="pre">cp310</span></code> for cpython 3.10, and so on.

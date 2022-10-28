@@ -9,6 +9,7 @@ Installing the Python Package
 -----------------------------
 
 You can install req2flatpak as a python package.
+This is the default and recommended installation method.
 
 For example:
 

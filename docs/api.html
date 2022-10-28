@@ -143,9 +143,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#req2flatpak.FlatpakGenerator"><code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#exporting-to-json">Exporting to JSON</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-the-generated-build-module">Saving the Generated Build Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -219,20 +219,14 @@
   <section id="using-the-python-api">
 <h1>Using the Python API<a class="headerlink" href="#using-the-python-api" title="Permalink to this heading">¶</a></h1>
 <p>You can use req2flatpak’s python api to write a custom python script that makes use of req2flatpak’s functionality.
-This allows to programmatically tweak and tune your script’s behavior as needed.</p>
+This allows to programmatically tweak and tune the behavior as needed.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
-<p>You can use the following code example to get started with your script.</p>
+<p>You can use the following code as an example to get started with your script.
+The code demonstrates how to generate a flatpak-builder build module
+in order to install python packages on a specific flatpak target platform.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">example_usage</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Example showing how to use req2flatpak in your own script.&quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">req2flatpak</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">DownloadChooser</span><span class="p">,</span>
-        <span class="n">FlatpakGenerator</span><span class="p">,</span>
-        <span class="n">PlatformFactory</span><span class="p">,</span>
-        <span class="n">PypiClient</span><span class="p">,</span>
-        <span class="n">RequirementsParser</span><span class="p">,</span>
-    <span class="p">)</span>
-
     <span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)]</span>
     <span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">&quot;requirements.txt&quot;</span><span class="p">)</span>
     <span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
@@ -241,21 +235,32 @@ This allows to programmatically tweak and tune your script’s behavior as neede
         <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
         <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The benefit of writing a custom script is:
-You have all the freedom in the world to modify each step as you see fit.
-For example, in your custom script:</p>
+<p>The above code uses req2flatpak to generate a build module in five steps:</p>
+<ol class="arabic simple">
+<li><p>define the target platforms,</p></li>
+<li><p>specify the python packages to be installed,</p></li>
+<li><p>query PyPi about available downloads,</p></li>
+<li><p>choose downloads that are compatible with the target platforms,</p></li>
+<li><p>generate the flatpak-builder build module.</p></li>
+</ol>
+<p>…including the generated build module in a flatpak build
+will install the required packages using the chosen downloads.</p>
+<p>You will benefit from a writing a custom script
+(in contrast to simply using req2flatpak’s commandline interface)
+if you want to change the modify or tweak the behavior.
+In a custom script, you have all the freedom in the world
+to modify each step as you see fit.
+For example:</p>
 <ul class="simple">
 <li><p>you may want to query other package indices instead of pypi,</p></li>
 <li><p>you may prefer wheels or sdists for certain packages, or</p></li>
 <li><p>you may want to exclude specific packages.</p></li>
 </ul>
-<p>All of this can be freely implemented in a custom script.
-Of course, it is also possible to fork and modify req2flatpak.</p>
-<p>Note that for further inspiration about how to use req2flatpak’s classes and methods,
-you can also have a look at how req2flatpak’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
+<p>The following subsections explain in detail how you can use req2flatpak’s python api in your custom script.
+For further inspiration you can also have a look at how req2flatpak’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
 </section>
 <section id="specifying-target-platforms">
 <h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading">¶</a></h2>
@@ -300,7 +305,7 @@ And you can use functionality from req2flatpak, as described below.</p>
 <dd><p>Provides methods for creating platform objects.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_current_interpreter">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_current_interpreter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_current_interpreter" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_current_interpreter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_current_interpreter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a platform object that describes the current interpreter and system.</p>
 <p>This method requires the <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package to be installed
 because functionality from this package is used to generate the list of
@@ -313,7 +318,7 @@ properties from the current interpreter and system.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_python_version_and_arch">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_python_version_and_arch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minor_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x86_64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_python_version_and_arch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minor_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x86_64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a platform object that roughly describes a cpython installation on linux.</p>
 <p>The tags in the platform object are a rough approximation, trying to match what
 <cite>packaging.tags.sys_tags</cite> would return if invoked on a linux system with cpython.
@@ -321,7 +326,8 @@ No guarantees are made about how closely this approximation matches a real syste
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>minor_version</strong> – the python 3 minor version, specified as int.</p></li>
+<li><p><strong>minor_version</strong> – the python 3 minor version, specified as int.
+Defaults to the current python version.</p></li>
 <li><p><strong>arch</strong> – either “x86_64” or “aarch64”.</p></li>
 </ul>
 </dd>
@@ -330,7 +336,7 @@ No guarantees are made about how closely this approximation matches a real syste
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_string">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_string" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_string" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a platform object by parsing a platform string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -422,7 +428,7 @@ to resolve and freeze dependencies and to export them into a requirements.txt fi
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.Release">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads:</span> <span class="pre">~typing.List[~req2flatpak.Download]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Release" title="Permalink to this definition">¶</a></dt>
-<dd><p>Represents a python package release as package name, version, and list of available downloads.</p>
+<dd><p>Represents a package release as name, version, and downloads.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Release.downloads">
 <span class="sig-name descname"><span class="pre">downloads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Release.downloads" title="Permalink to this definition">¶</a></dt>
@@ -582,9 +588,15 @@ preferred downloads are returned first.</p>
 </section>
 <section id="generating-a-build-module-for-flatpak-builder">
 <h2>Generating a Build Module for flatpak-builder<a class="headerlink" href="#generating-a-build-module-for-flatpak-builder" title="Permalink to this heading">¶</a></h2>
+<p>The output of req2flatpak is a build module,
+intended to be processed by <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code>
+as part of a build manifest.</p>
 <p>flatpak-builder creates flatpak packages by processing build manifests.
 A manifest can consist of multiple build modules.
-Each module adds to the things that shall be included in the resulting flatpak package.</p>
+Each module adds to the things to be included in the resulting flatpak package.
+The build modules generated by req2flatpak are no different;
+when processed by flatpak-builder, they install required python packages
+to include them into the flatpak package.</p>
 <section id="flatpakgenerator">
 <h3>FlatpakGenerator<a class="headerlink" href="#flatpakgenerator" title="Permalink to this heading">¶</a></h3>
 <p>req2flatpak’s <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code> class provides methods for generating a build module
@@ -592,39 +604,47 @@ that will instruct flatpak-builder to install the required python packages.</p>
 <p>Example usage:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a flatpak build module for given requirements,</span>
 <span class="c1"># including chosen package downloads:</span>
-<span class="n">manifest</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">FlatpakGenerator</span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Provides methods for generating a flatpak-builder build manifest.</p>
+<dd><p>Provides methods for generating a flatpak-builder build module.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator.manifest">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">manifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python3-package-installation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pip_install_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pip3</span> <span class="pre">install</span> <span class="pre">--verbose</span> <span class="pre">--exists-action=i</span> <span class="pre">--no-index</span> <span class="pre">--find-links=&quot;file://${PWD}&quot;</span> <span class="pre">--prefix=${FLATPAK_DEST}</span> <span class="pre">--no-build-isolation</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.manifest" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates a module for a flatpak-builder build manifest.</p>
+<dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator.build_module">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python3-package-installation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pip_install_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pip3</span> <span class="pre">install</span> <span class="pre">--verbose</span> <span class="pre">--exists-action=i</span> <span class="pre">--no-index</span> <span class="pre">--find-links=&quot;file://${PWD}&quot;</span> <span class="pre">--prefix=${FLATPAK_DEST}</span> <span class="pre">--no-build-isolation</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.build_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a build module for inclusion in a flatpak-builder build manifest.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator.build_module_as_str">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_module_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.build_module_as_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a build module for inclusion in a flatpak-builder build manifest.</p>
+<p>The args and kwargs are the same as in
+<a class="reference internal" href="#req2flatpak.FlatpakGenerator.build_module" title="req2flatpak.FlatpakGenerator.build_module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_module()</span></code></a></p>
 </dd></dl>
 
 </dd></dl>
 
 </section>
-<section id="exporting-to-json">
-<h3>Exporting to JSON<a class="headerlink" href="#exporting-to-json" title="Permalink to this heading">¶</a></h3>
-<p>You can easily export the generated manifest to json
-using built-in functionality from python’s standards library.
+</section>
+<section id="saving-the-generated-build-module">
+<h2>Saving the Generated Build Module<a class="headerlink" href="#saving-the-generated-build-module" title="Permalink to this heading">¶</a></h2>
+<p>You can easily save a generated build module as a .json file
+using built-in functionality from python’s standard library.
 For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># export a manifest to json</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># example showing how to export a build module to json</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="c1"># export the manifest to a json string:</span>
-<span class="n">json_string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="c1"># export the manifest by writing to an output stream or to a file:</span>
-<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># write the json data to file:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;build-module.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+ <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">build_module</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
+<p>The above code assumes a build module has been generated and is stored as a dict in the variable <code class="docutils literal notranslate"><span class="pre">build_module</span></code>.
+The code shows how to serialize the dict and save it to an output file.</p>
 </section>
 </section>
 
