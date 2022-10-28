@@ -2,32 +2,45 @@ Using the Python API
 ====================
 
 You can use req2flatpak's python api to write a custom python script that makes use of req2flatpak's functionality.
-This allows to programmatically tweak and tune your script's behavior as needed.
+This allows to programmatically tweak and tune the behavior as needed.
 
 
 Example
 -------
 
-You can use the following code example to get started with your script.
+You can use the following code as an example to get started with your script.
+The code demonstrates how to generate a flatpak-builder build module
+in order to install python packages on a specific flatpak target platform.
 
 .. literalinclude:: ../../tests/example_usage_test.py
    :language: python
    :pyobject: example_usage
    :dedent:
 
-The benefit of writing a custom script is:
-You have all the freedom in the world to modify each step as you see fit.
-For example, in your custom script:
+The above code uses req2flatpak to generate a build module in five steps:
+
+#. define the target platforms,
+#. specify the python packages to be installed,
+#. query PyPi about available downloads,
+#. choose downloads that are compatible with the target platforms,
+#. generate the flatpak-builder build module.
+
+...including the generated build module in a flatpak build
+will install the required packages using the chosen downloads.
+
+You will benefit from a writing a custom script
+(in contrast to simply using req2flatpak's commandline interface)
+if you want to change the modify or tweak the behavior.
+In a custom script, you have all the freedom in the world
+to modify each step as you see fit.
+For example:
 
 * you may want to query other package indices instead of pypi,
 * you may prefer wheels or sdists for certain packages, or
 * you may want to exclude specific packages.
 
-All of this can be freely implemented in a custom script.
-Of course, it is also possible to fork and modify req2flatpak.
-
-Note that for further inspiration about how to use req2flatpak's classes and methods,
-you can also have a look at how req2flatpak's ``main()`` method is implemented.
+The following subsections explain in detail how you can use req2flatpak's python api in your custom script.
+For further inspiration you can also have a look at how req2flatpak's ``main()`` method is implemented.
 
 
 Specifying Target Platforms
@@ -256,10 +269,10 @@ Documentation of all methods provided by the ``FlatpakGenerator`` class:
    :members:
 
 
-Exporting to JSON
-^^^^^^^^^^^^^^^^^
+Saving the Generated Build Module
+---------------------------------
 
-You can easily export a generated build module to json
+You can easily save a generated build module as a .json file
 using built-in functionality from python's standard library.
 For example:
 
@@ -268,13 +281,9 @@ For example:
    # example showing how to export a build module to json
    import json
 
-   # convert a generated build module to a json string:
-   json_string = json.dumps(build_module, indent=2)
+   # write the json data to file:
+   with open("build-module.json", "w") as outfile:
+    json.dump(build_module, outfile, indent=2)
 
-   # write the json data to an output stream or file:
-   json.dump(build_module, file, indent=2)
-
-The above code assumes a build module has been generated
-and is stored as a dict in the variable ``build_module``.
-The code then shows how to serialize the dict to a string,
-file our output stream.
+The above code assumes a build module has been generated and is stored as a dict in the variable ``build_module``.
+The code shows how to serialize the dict and save it to an output file.
