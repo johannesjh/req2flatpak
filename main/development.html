@@ -96,7 +96,8 @@
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#design-goals">Design Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#architecture-and-design-goals">Architecture and Design Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining-the-source-code">Obtaining the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-a-development-environment">Setting up a Development Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#code-quality">Code quality</a></li>
@@ -171,32 +172,51 @@
             
   <section id="development">
 <h1>Development<a class="headerlink" href="#development" title="Permalink to this heading">¶</a></h1>
-<section id="design-goals">
-<h2>Design Goals<a class="headerlink" href="#design-goals" title="Permalink to this heading">¶</a></h2>
-<p>A simple python script, just one file:
-req2flatpak is provided as a distribution of just one python module,
-i.e., it consists of just a single python file.
-This is similar to
-<a class="reference external" href="https://softwareengineering.stackexchange.com/a/243045">other popular python packages</a>
-like <a class="reference external" href="https://pypi.python.org/pypi/six">six</a>
-that also consist of a a single file only.
-The benefit is that this file can easily be copy-pasted
-as an alternative installation method.</p>
-<p>Minimal dependencies:
-req2flatpak only needs optional dependencies
-(see req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file for details).
-The benefit is that the script runs on a variety of systems.</p>
-<p>Do one thing well:
-req2flatpak does not resolve dependencies, nor does it freeze aka dependency version.</p>
+<p>If you want to work on req2flatpak, this section helps you get started.</p>
+<p>req2flatpak is developed in an open-source, community-driven way,
+as a voluntary effort in the authors’ free time.
+All contributions are greatly appreciated…
+pull requests are welcome, and so are bug reports and suggestions for improvement.</p>
+<section id="architecture-and-design-goals">
+<h2>Architecture and Design Goals<a class="headerlink" href="#architecture-and-design-goals" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak’s architecture implements the following design goals and design choices.</p>
+<p>req2flatpak consists of just a single python file.
+This allows req2flatpak to be installed by copy-pasting this file.</p>
+<p>req2flatpak is packaged as a python package.
+This allows req2flatpak to be installed using pip, poetry, and other similar tools.
+Note, single-file python packages are not unusual:
+other popular python packages like <a class="reference external" href="https://pypi.python.org/pypi/six">six</a>
+also consist of a a single file only,
+as explained in this <a class="reference external" href="https://softwareengineering.stackexchange.com/a/243045">stackoverflow answer</a>.</p>
+<p>req2flatpak requires minimal dependencies.
+The benefit is that req2flatpak runs on a variety of systems.
+Optional dependencies are declared in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.</p>
+<p>req2flatpak aims to do one thing well.
+Its focus is on generating flatpak-builder build modules
+for installing required python packages in a flatpak package.
+Other functionality is intentionally not included in req2flatpak,
+particularly if it would increase the code size or require additional dependencies.
+For example, req2flatpak does not resolve dependencies, nor does it freeze dependency versions
+(other tools like pip, pip-compile and poetry can be used for this).</p>
+</section>
+<section id="obtaining-the-source-code">
+<h2>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak’s original source code lives in this github repository:
+<a class="reference external" href="https://github.com/johannesjh/req2flatpak">https://github.com/johannesjh/req2flatpak</a></p>
+<p>You can download the source code by cloning the git repository.</p>
 </section>
 <section id="setting-up-a-development-environment">
 <h2>Setting up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permalink to this heading">¶</a></h2>
-<p>Simply clone this project in the python IDE of your choice.</p>
+<p>Simply clone/open req2flatpak in the IDE of your choice.</p>
+<p>Features and languages that the IDE should ideally support:
+* python
+* poetry for managing req2flatpak’s dependencies in a virtual environment
+* restructured text (<code class="docutils literal notranslate"><span class="pre">*.rst</span></code>) for writing documentation</p>
 </section>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h2>
-<p>req2flatpak depends on very few other software packages, and all of
-these dependencies are optional, see <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p>
+<p>req2flatpak depends on very few other software packages,
+as documented in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.</p>
 </section>
 <section id="code-quality">
 <h2>Code quality<a class="headerlink" href="#code-quality" title="Permalink to this heading">¶</a></h2>

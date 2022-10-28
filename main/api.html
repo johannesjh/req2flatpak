@@ -143,9 +143,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#req2flatpak.FlatpakGenerator"><code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#exporting-to-json">Exporting to JSON</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#saving-the-generated-build-module">Saving the Generated Build Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -219,10 +219,12 @@
   <section id="using-the-python-api">
 <h1>Using the Python API<a class="headerlink" href="#using-the-python-api" title="Permalink to this heading">¶</a></h1>
 <p>You can use req2flatpak’s python api to write a custom python script that makes use of req2flatpak’s functionality.
-This allows to programmatically tweak and tune your script’s behavior as needed.</p>
+This allows to programmatically tweak and tune the behavior as needed.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
-<p>You can use the following code example to get started with your script.</p>
+<p>You can use the following code as an example to get started with your script.
+The code demonstrates how to generate a flatpak-builder build module
+in order to install python packages on a specific flatpak target platform.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">example_usage</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Example showing how to use req2flatpak in your own script.&quot;&quot;&quot;</span>
     <span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)]</span>
@@ -236,18 +238,29 @@ This allows to programmatically tweak and tune your script’s behavior as neede
     <span class="k">return</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The benefit of writing a custom script is:
-You have all the freedom in the world to modify each step as you see fit.
-For example, in your custom script:</p>
+<p>The above code uses req2flatpak to generate a build module in five steps:</p>
+<ol class="arabic simple">
+<li><p>define the target platforms,</p></li>
+<li><p>specify the python packages to be installed,</p></li>
+<li><p>query PyPi about available downloads,</p></li>
+<li><p>choose downloads that are compatible with the target platforms,</p></li>
+<li><p>generate the flatpak-builder build module.</p></li>
+</ol>
+<p>…including the generated build module in a flatpak build
+will install the required packages using the chosen downloads.</p>
+<p>You will benefit from a writing a custom script
+(in contrast to simply using req2flatpak’s commandline interface)
+if you want to change the modify or tweak the behavior.
+In a custom script, you have all the freedom in the world
+to modify each step as you see fit.
+For example:</p>
 <ul class="simple">
 <li><p>you may want to query other package indices instead of pypi,</p></li>
 <li><p>you may prefer wheels or sdists for certain packages, or</p></li>
 <li><p>you may want to exclude specific packages.</p></li>
 </ul>
-<p>All of this can be freely implemented in a custom script.
-Of course, it is also possible to fork and modify req2flatpak.</p>
-<p>Note that for further inspiration about how to use req2flatpak’s classes and methods,
-you can also have a look at how req2flatpak’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
+<p>The following subsections explain in detail how you can use req2flatpak’s python api in your custom script.
+For further inspiration you can also have a look at how req2flatpak’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
 </section>
 <section id="specifying-target-platforms">
 <h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading">¶</a></h2>
@@ -616,26 +629,22 @@ that will instruct flatpak-builder to install the required python packages.</p>
 </dd></dl>
 
 </section>
-<section id="exporting-to-json">
-<h3>Exporting to JSON<a class="headerlink" href="#exporting-to-json" title="Permalink to this heading">¶</a></h3>
-<p>You can easily export a generated build module to json
+</section>
+<section id="saving-the-generated-build-module">
+<h2>Saving the Generated Build Module<a class="headerlink" href="#saving-the-generated-build-module" title="Permalink to this heading">¶</a></h2>
+<p>You can easily save a generated build module as a .json file
 using built-in functionality from python’s standard library.
 For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># example showing how to export a build module to json</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="c1"># convert a generated build module to a json string:</span>
-<span class="n">json_string</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">build_module</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="c1"># write the json data to an output stream or file:</span>
-<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">build_module</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># write the json data to file:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;build-module.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+ <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">build_module</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The above code assumes a build module has been generated
-and is stored as a dict in the variable <code class="docutils literal notranslate"><span class="pre">build_module</span></code>.
-The code then shows how to serialize the dict to a string,
-file our output stream.</p>
-</section>
+<p>The above code assumes a build module has been generated and is stored as a dict in the variable <code class="docutils literal notranslate"><span class="pre">build_module</span></code>.
+The code shows how to serialize the dict and save it to an output file.</p>
 </section>
 </section>
 
