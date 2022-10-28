@@ -197,9 +197,8 @@ module.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">req2flatpak</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">requirements</span> <span class="p">[</span><span class="n">REQUIREMENTS</span> <span class="o">...</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">requirements</span><span class="o">-</span><span class="n">file</span> <span class="p">[</span><span class="n">REQUIREMENTS_FILE</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">target</span><span class="o">-</span><span class="n">platforms</span> <span class="n">TARGET_PLATFORMS</span> <span class="p">[</span><span class="n">TARGET_PLATFORMS</span> <span class="o">...</span><span class="p">]]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="Named Arguments">
@@ -215,19 +214,19 @@ module.</p>
 <dt><kbd>--target-platforms, -t</kbd></dt>
 <dd><p>Target platforms can be specified as, e.g., ‘39-x86_64’ or ‘310-aarch64’.</p>
 </dd>
-<dt><kbd>--cache, --no-cache</kbd></dt>
-<dd><p>Uses a persistent cache when querying pypi. (default: False)</p>
+<dt><kbd>--cache</kbd></dt>
+<dd><p>Uses a persistent cache when querying pypi.</p>
 <p>Default: False</p>
 </dd>
 <dt><kbd>--outfile, -o</kbd></dt>
 <dd><p>Default: &lt;_io.TextIOWrapper name=’&lt;stdout&gt;’ mode=’w’ encoding=’utf-8’&gt;</p>
 </dd>
-<dt><kbd>--platform-info, --no-platform-info</kbd></dt>
-<dd><p>Prints information about the current platform. (default: False)</p>
+<dt><kbd>--platform-info</kbd></dt>
+<dd><p>Prints information about the current platform.</p>
 <p>Default: False</p>
 </dd>
-<dt><kbd>--installed-packages, --no-installed-packages</kbd></dt>
-<dd><p>Prints installed packages in requirements.txt format. (default: False)</p>
+<dt><kbd>--installed-packages</kbd></dt>
+<dd><p>Prints installed packages in requirements.txt format.</p>
 <p>Default: False</p>
 </dd>
 </dl>
