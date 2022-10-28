@@ -45,21 +45,21 @@ class ExampleUsageTest(unittest.TestCase):
             # mock pypi response:
             PypiClient.cache[self.pypi_url] = self.pypi_response
 
-            # generate the flatpak manifest
-            manifest = example_usage()
+            # generate the flatpak build module
+            build_module = example_usage()
 
-            # validate the generated manifest
-            assert manifest[
+            # validate the generated build module
+            assert build_module[
                 "build-commands"
-            ], "No build-commands section was found in the manifest."
-            assert manifest["sources"], "No sources were found in the manifest."
-            assert manifest["sources"][0]["type"] == "file"
+            ], "No build-commands section was found in the build module."
+            assert build_module["sources"], "No sources were found in the build module."
+            assert build_module["sources"][0]["type"] == "file"
             assert (
-                "requests" in manifest["build-commands"][0]
-            ), "The requests package was not found in the manifest's build command."
+                "requests" in build_module["build-commands"][0]
+            ), "The requests package was not found in the build module's build command."
             assert (
-                "requests" in manifest["sources"][0]["url"]
-            ), "The requests package was not found in the manifest's sources."
+                "requests" in build_module["sources"][0]["url"]
+            ), "The requests package was not found in the build module's sources."
 
 
 if __name__ == "__main__":

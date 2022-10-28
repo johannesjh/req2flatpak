@@ -23,14 +23,14 @@
 # SOFTWARE.
 
 """
-req2flatpak converts python package requirements to flatpak build manifests.
+req2flatpak converts python package requirements to a flatpak build module.
 
-The script takes python package requirements as input, e.g., as
-requirements.txt file. It allows to specify the target platform's python
-version and system architecture. The script outputs an automatically
-generated flatpak-builder build module. The build module, if included
-into a flatpak build manifest, will install the python packages using
-pip.
+The req2flatpak script takes python package requirements as input, e.g., as
+``requirements.txt`` file. It allows to specify the target platform’s
+python version and architecture. The script outputs an automatically
+generated ``flatpak-builder`` build module. The build module, if included
+into a flatpak-builder build manifest, will install the python packages
+using pip.
 """
 
 import argparse
@@ -568,7 +568,7 @@ class FlatpakGenerator:
 def cli_parser() -> argparse.ArgumentParser:
     """Returns the req2flatpak commandline interface parser."""
     parser = argparse.ArgumentParser(
-        description="req2flatpak generates a flatpak build manifest for installing required python packages."
+        description="req2flatpak generates a flatpak-builder build module for installing required python packages."
     )
     parser.add_argument(
         "--requirements",
@@ -683,11 +683,11 @@ def main():
         for platform in platforms
     }
 
-    # generate flatpak build manifest
-    manifest = FlatpakGenerator.build_module(requirements, downloads)
+    # generate flatpak-builder build module
+    build_module = FlatpakGenerator.build_module(requirements, downloads)
 
     # write output
-    json.dump(manifest, output_stream, indent=4)
+    json.dump(build_module, output_stream, indent=4)
 
 
 if __name__ == "__main__":
