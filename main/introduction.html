@@ -174,8 +174,10 @@
             
   <section id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">req2flatpak</span></code> is a script to convert python package requirements to flatpak build
-manifests.</p>
+<p><code class="docutils literal notranslate"><span class="pre">req2flatpak</span></code> is a script to convert python package requirements
+to a flatpak-builder build module.
+The module will install the required python packages
+as part of a flatpak build.</p>
 <section id="intended-use">
 <h2>Intended Use<a class="headerlink" href="#intended-use" title="Permalink to this heading">¶</a></h2>
 <p>req2flatpak is for programmers
@@ -183,8 +185,9 @@ who want to package a python application using flatpak.</p>
 <p>The req2flatpak script takes python package requirements as input, e.g., as
 <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file. It allows to specify the target platform’s
 python version and architecture. The script outputs an automatically
-generated <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code> build module. The manifest, if included
-into a flatpak build, will install the python packages using pip.</p>
+generated <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code> build module. The build module, if included
+into a flatpak-builder build manifest, will install the python packages
+using pip.</p>
 </section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h2>
@@ -259,7 +262,7 @@ It supports more commandline options and probably has a more complete
 feature set.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> is faster. The script itself runs faster because
 it does not need to download package files in order to generate the
-manifest. And the flatpak build runs faster because all packages
+build module. And the flatpak build runs faster because all packages
 (from the entire <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file) are installed in a single
 call to <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> re-implements some functionality of pip. In
