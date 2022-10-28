@@ -3,8 +3,11 @@ req2flatpak
 
 .. inclusion-marker-do-not-remove
 
-``req2flatpak`` is a script to convert python package requirements to flatpak build
-manifests.
+``req2flatpak`` is a script to convert python package requirements
+to a flatpak-builder build module.
+The module will install the required python packages
+as part of a flatpak build.
+
 
 Intended Use
 ------------
@@ -15,8 +18,9 @@ who want to package a python application using flatpak.
 The req2flatpak script takes python package requirements as input, e.g., as
 ``requirements.txt`` file. It allows to specify the target platform’s
 python version and architecture. The script outputs an automatically
-generated ``flatpak-builder`` build module. The manifest, if included
-into a flatpak build, will install the python packages using pip.
+generated ``flatpak-builder`` build module. The build module, if included
+into a flatpak-builder build manifest, will install the python packages
+using pip.
 
 Getting Started
 ---------------
@@ -105,7 +109,7 @@ I see the following similarities and differences:
    feature set.
 -  ``req2flatpak.py`` is faster. The script itself runs faster because
    it does not need to download package files in order to generate the
-   manifest. And the flatpak build runs faster because all packages
+   build module. And the flatpak build runs faster because all packages
    (from the entire ``requirements.txt`` file) are installed in a single
    call to ``pip install``.
 -  ``req2flatpak.py`` re-implements some functionality of pip. In

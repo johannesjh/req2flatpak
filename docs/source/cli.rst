@@ -37,7 +37,7 @@ Specifying Python Package Requirements
 --------------------------------------
 
 You can specify python packages as individual commandline arguments or by providing a ``requirements.txt`` file.
-As a result, req2flatpak will include these packages in the generated build manifest.
+As a result, req2flatpak will include these packages in the generated build module.
 
 It is important to note that req2flatpak expects all package versions to be fully specified.
 For example, req2flatpak will not accept a package version specification such as ``requests >= 2.0``.
@@ -58,7 +58,7 @@ that includes the python version and system architecture.
 
 As a result, req2flatpak will include suitable package downloads
 for each of the specified target platforms
-in the flatpak builder manifest that it generates.
+in the flatpak-builder build module that it generates.
 
 The string format for specifying target platforms is ``<python_version>-<system-architecture>``:
 
