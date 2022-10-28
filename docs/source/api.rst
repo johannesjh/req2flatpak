@@ -109,9 +109,11 @@ There are many options for how to create a requirement object in your code.
 One option is to use methods from req2flatpak's ``RequirementsParser`` class,
 as in the following example:
 
-.. code-block:: python
-
-   requirements = RequirementsParser.parse_file("requirements.txt")
+.. literalinclude:: ../../tests/requirements_parser_test.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``RequirementsParser`` class:
