@@ -43,9 +43,19 @@ import sys
 import urllib.request
 from contextlib import nullcontext, suppress
 from dataclasses import asdict, dataclass, field
-from functools import cached_property
 from itertools import product
-from typing import FrozenSet, Hashable, Iterable, Iterator, List, Optional, Union
+from typing import (
+    FrozenSet,
+    Generator,
+    Hashable,
+    Iterable,
+    Iterator,
+    List,
+    Optional,
+    Set,
+    Tuple,
+    Union,
+)
 
 import pkg_resources
 
@@ -55,6 +65,38 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 # Helper functions / semi vendored code
 # =============================================================================
+
+try:
+    from functools import cached_property  # added with py 3.8
+except ImportError:
+
+    # Inspired by the implementation in the standard library
+    # pylint: disable=invalid-name,too-few-public-methods
+    class cached_property:
+        """A property-like wrapper that caches the value."""
+
+        def __init__(self, func):
+            """Init."""
+            self.func = func
+            self.attrname = None
+            self.__doc__ = func.__doc__
+
+        def __set_name__(self, owner, name):
+            """Set name of the attribute this instance is assigned to."""
+            self.attrname = name
+
+        def __get__(self, instance, owner=None):
+            """Return value if this is set as an attribute."""
+            if not self.attrname:
+                raise TypeError("cached_property must be used as an attribute.")
+            _None = object()
+            cache = instance.__dict__
+            val = cache.get(self.attrname, _None)
+            if val is _None:
+                val = self.func(instance)
+                cache[self.attrname] = val
+            return val
+
 
 try:
     # use packaging.tags functionality if available
@@ -71,22 +113,24 @@ except ModuleNotFoundError:
     def tags_from_wheel_filename(filename: str) -> List[str]:
         """Parse a wheel filename into a list of compatible platform tags."""
         InvalidWheelFilename = Exception
-        Tag = lambda *args: tuple(args)  # pylint: disable=C3001,C0103
+        Tag = Tuple[str, str, str]
 
         # the following code is based on packaging.tags.parse_tag,
         # it is needed for the parse_wheel_filename function:
         def parse_tag(tag: str) -> FrozenSet[Tag]:
-            tags = set()
+            tags: Set[Tag] = set()
             interpreters, abis, platforms = tag.split("-")
             for interpreter in interpreters.split("."):
                 for abi in abis.split("."):
                     for platform_ in platforms.split("."):
-                        tags.add(Tag(interpreter, abi, platform_))
+                        tags.add((interpreter, abi, platform_))
             return frozenset(tags)
 
-        # the following code is based on packaging.utils.parse_wheel_filename.
+        # the following code is based on packaging.utils.parse_wheel_filename:
         # pylint: disable=redefined-outer-name
-        def parse_wheel_filename(wheel_filename: str) -> List[tuple]:
+        def parse_wheel_filename(
+            wheel_filename: str,
+        ) -> Iterable[Tag]:
             if not wheel_filename.endswith(".whl"):
                 raise InvalidWheelFilename(
                     "Error parsing wheel filename: "
@@ -112,7 +156,7 @@ except ModuleNotFoundError:
 # =============================================================================
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Platform:
     """Represents a target platform for python package installations."""
 
@@ -123,7 +167,7 @@ class Platform:
     """A list of platform tags, similar to ``packaging.tags.sys_tags()``."""
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Requirement:
     """Represents a python package requirement."""
 
@@ -134,7 +178,7 @@ class Requirement:
     """The exact version of the package."""
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Download:
     """Represents a python package download."""
 
@@ -153,13 +197,11 @@ class Download:
         return not self.is_wheel and not self.filename.endswith(".egg")
 
     @cached_property
-    def tags(self) -> List[str]:
+    def tags(self) -> Optional[List[str]]:
         """Returns a list of tags that this download is compatible for."""
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_wheel_filename
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_sdist_filename
-        if self.is_sdist:
-            return []
-        if self.filename.endswith(".whl"):
+        if not self.is_sdist and self.filename.endswith(".whl"):
             return tags_from_wheel_filename(self.filename)
         return None
 
@@ -176,7 +218,7 @@ class Download:
         return None
 
 
-@dataclass(frozen=True, kw_only=True)
+@dataclass(frozen=True)
 class Release(Requirement):
     """Represents a package release as name, version, and downloads."""
 
@@ -201,7 +243,7 @@ class PlatformFactory:
         return list(platform.python_version_tuple())
 
     @staticmethod
-    def _get_current_python_tags() -> Optional[List[str]]:
+    def _get_current_python_tags() -> List[str]:
         try:
             # pylint: disable=import-outside-toplevel
             import packaging.tags
@@ -212,7 +254,7 @@ class PlatformFactory:
             logger.warning(
                 'Error trying to import the "packaging" package.', exc_info=e
             )
-            return None
+            return []
 
     @classmethod
     def from_current_interpreter(cls) -> Platform:
@@ -280,7 +322,9 @@ class PlatformFactory:
         )
 
     @classmethod
-    def _cp3_linux_tags(cls, minor_version: int = None, arch="x86_64"):
+    def _cp3_linux_tags(
+        cls, minor_version: int = None, arch="x86_64"
+    ) -> Generator[str, None, None]:
         """Yields python platform tags for cpython3 on linux."""
         # pylint: disable=too-many-branches
 
@@ -395,7 +439,7 @@ class RequirementsParser:
 # Cache typealias
 # This is meant for caching responses when querying package information.
 # A cache can either be a dict for in-memory caching, or a shelve.Shelf
-Cache = Union[dict, shelve.Shelf]  # type: TypeAlias
+Cache = Union[dict, shelve.Shelf]
 
 
 class PypiClient:
@@ -591,7 +635,7 @@ def cli_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--cache",
-        action=argparse.BooleanOptionalAction,
+        action="store_true",
         default=False,
         help="Uses a persistent cache when querying pypi.",
     )
@@ -604,13 +648,13 @@ def cli_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--platform-info",
-        action=argparse.BooleanOptionalAction,
+        action="store_true",
         default=False,
         help="Prints information about the current platform.",
     )
     parser.add_argument(
         "--installed-packages",
-        action=argparse.BooleanOptionalAction,
+        action="store_true",
         default=False,
         help="Prints installed packages in requirements.txt format.",
     )
@@ -645,10 +689,12 @@ def main():
     # parse requirements
     requirements = []
     with suppress(AttributeError):
-        if reqs := options.requirements:
-            requirements += RequirementsParser.parse_string("\n".join(reqs))
-        if reqs := options.requirements_file:
-            requirements += RequirementsParser.parse_file(reqs)
+        if options.requirements:
+            requirements += RequirementsParser.parse_string(
+                "\n".join(options.requirements)
+            )
+        if options.requirements_file:
+            requirements += RequirementsParser.parse_file(options.requirements_file)
     if not requirements:
         parser.error(
             "Error parsing requirements: At least one requirement must be specified."
