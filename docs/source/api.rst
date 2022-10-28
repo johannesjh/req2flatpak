@@ -26,8 +26,8 @@ The above code uses req2flatpak to generate a build module in five steps:
 #. choose downloads that are compatible with the target platforms,
 #. generate the flatpak-builder build module.
 
-...including the generated build module in a flatpak build
-will install the required packages using the chosen downloads.
+...if you include the resulting build module in a flatpak build,
+the module will install the required packages.
 
 You will benefit from a writing a custom script
 (in contrast to simply using req2flatpak's commandline interface)
@@ -41,7 +41,7 @@ For example:
 * you may want to exclude specific packages.
 
 The following subsections explain in detail how you can use req2flatpak's python api in your custom script.
-For further inspiration you can also have a look at how req2flatpak's ``main()`` method is implemented.
+For further inspiration you can also have a look at how req2flatpak's :py:meth:`~req2flatpak.main` method is implemented.
 
 
 Specifying Target Platforms
@@ -62,7 +62,7 @@ Target platforms are represented in req2flatpak as a dataclass, as follows.
    :undoc-members:
 
 There are many options how to create platform objects.
-You can create platform objects manually in your script.
+You can create platform objects any way you wish in your script.
 And you can use functionality from req2flatpak, as described below.
 
 
