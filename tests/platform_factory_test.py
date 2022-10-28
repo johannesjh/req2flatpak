@@ -10,6 +10,24 @@ from typing import Iterable, Union
 from req2flatpak import PlatformFactory
 
 
+class ExampleUsageTest(unittest.TestCase):
+    """Test to ensure that code examples in the documentation keep working."""
+
+    def example_usage(self):
+        """Demonstrates how to create a platform object from string."""
+        # example_usage1_start
+        platform = PlatformFactory.from_string("cp310-x86_64")
+        # example_usage1_end
+        return platform
+
+    def test(self):
+        """Ensures that the code example keeps working."""
+        platform = self.example_usage()
+        assert platform.python_version == ["3", "10"]
+        assert any("x86_64" in tag for tag in platform.python_tags)
+        assert all("aarch" not in tag for tag in platform.python_tags)
+
+
 @dataclass(kw_only=True, frozen=True)
 class RegressionTestData:
     """Represents a target platform (minor_version, architecture) and saved platform info."""
@@ -62,6 +80,7 @@ class RegressionTest(unittest.TestCase):
                     minor_version=int(data.minor_version), arch=data.architecture
                 ).python_tags
                 assert expected_tags == generated_tags
+        print(" here")
 
 
 if __name__ == "__main__":

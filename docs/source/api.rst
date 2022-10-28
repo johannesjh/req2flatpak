@@ -12,9 +12,10 @@ You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.
 
-.. literalinclude:: ../../tests/example_usage_test.py
+.. literalinclude:: ../../tests/req2flatpak_test.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
    :language: python
-   :pyobject: example_usage
    :dedent:
 
 The above code uses req2flatpak to generate a build module in five steps:
@@ -72,9 +73,11 @@ The PlatformFactory provides methods for creating platform objects.
 
 For example:
 
-.. code-block:: python
-
-    platform = PlatformFactory.from_string("cp310-x86_64")
+.. literalinclude:: ../../tests/platform_factory_test.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``PlatformFactory`` class:
