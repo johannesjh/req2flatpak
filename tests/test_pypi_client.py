@@ -54,7 +54,6 @@ class ExampleUsageTest(unittest.TestCase):
         # prepare mocked cache
         def mocked_shelve_open(*_, **__):
             """A mock version of ``shelve.open`` that returns a simple dict to be used as cache."""
-            print("here the mocked contextmgr")
             return contextlib.nullcontext(enter_result=self.cache)
 
         # test with caching
