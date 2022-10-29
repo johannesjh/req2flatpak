@@ -80,7 +80,6 @@ class RegressionTest(unittest.TestCase):
                     minor_version=int(data.minor_version), arch=data.architecture
                 ).python_tags
                 assert expected_tags == generated_tags
-        print(" here")
 
 
 if __name__ == "__main__":

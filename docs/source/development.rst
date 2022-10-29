@@ -9,8 +9,44 @@ All contributions are greatly appreciated…
 pull requests are welcome, and so are bug reports and suggestions for improvement.
 
 
-Architecture and Design Goals
+Obtaining the Source Code
+-------------------------
+
+req2flatpak's original source code lives in this github repository:
+https://github.com/johannesjh/req2flatpak.
+You can download the source code by cloning the git repository.
+
+
+Setting up a Development Environment
+------------------------------------
+
+Simply clone/open req2flatpak in the IDE of your choice.
+Features and languages that the IDE should ideally support include:
+
+* python
+* poetry for managing req2flatpak's dependencies in a virtual environment
+* restructured text (``*.rst``) for writing documentation
+
+
+Installing Dependencies
+-----------------------
+
+req2flatpak depends on very few other software packages, as documented in req2flatpak's ``pyproject.toml`` file.
+Run ``poetry install`` to install these packages into a virtual environment.
+
+
+Running a Development Version
 -----------------------------
+
+Have a look at the commands available in req2flatpak's ``makefile``:
+
+.. literalinclude:: ../../Makefile
+   :language: Makefile
+   :dedent:
+
+
+Understanding the Architecture and Design Goals
+------------------------------------------------
 
 req2flatpak's architecture implements the following design goals and design choices.
 
@@ -37,38 +73,19 @@ For example, req2flatpak does not resolve dependencies, nor does it freeze depen
 (other tools like pip, pip-compile and poetry can be used for this).
 
 
-Obtaining the Source Code
--------------------------
+Modifying and Contributing Code
+-------------------------------
 
-req2flatpak's original source code lives in this github repository:
-https://github.com/johannesjh/req2flatpak
-
-You can download the source code by cloning the git repository.
-
-
-Setting up a Development Environment
-------------------------------------
-
-Simply clone/open req2flatpak in the IDE of your choice.
-
-Features and languages that the IDE should ideally support:
-* python
-* poetry for managing req2flatpak's dependencies in a virtual environment
-* restructured text (``*.rst``) for writing documentation
+You are free to modify req2flatpak as you wish
+(under the terms of its very permissive MIT license).
+You are very welcome to contribute improvements back to the original req2flatpak.
 
 
-Dependencies
-------------
+Ensuring Code quality
+---------------------
 
-req2flatpak depends on very few other software packages,
-as documented in req2flatpak's ``pyproject.toml`` file.
+Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code before committing changes,
 
-
-Code quality
-------------
-
-Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the
-code before committing changes.
 
 .. code:: bash
 

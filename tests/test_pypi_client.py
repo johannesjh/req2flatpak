@@ -1,7 +1,6 @@
 """Automated tests for :class:req2flatpak.PypiClient."""
 import contextlib
 import importlib
-import shelve
 import unittest
 from typing import List
 from unittest.mock import patch
@@ -17,7 +16,7 @@ class ExampleUsageTest(unittest.TestCase):
 
     cache = {
         "https://pypi.org/pypi/requests/2.28.1/json": importlib.resources.files(tests)
-        .joinpath("pypi_client_test_requests2.28.1.json")
+        .joinpath("test_pypi_client_requests2.28.1.json")
         .read_text(encoding="utf-8")
     }
 
@@ -32,7 +31,7 @@ class ExampleUsageTest(unittest.TestCase):
         self, requirements: List[Requirement]
     ) -> List[Release]:
         """Demonstrates how to use caching when querying pypi."""
-        # pylint: disable=redefined-outer-name,reimported,import-outside-toplevel
+        # pylint: disable=import-outside-toplevel
         # example_usage2_start
         import shelve
 
@@ -45,7 +44,7 @@ class ExampleUsageTest(unittest.TestCase):
     def test_example_usage(self):
         """Ensures that example_usage keeps working."""
         PypiClient.cache = self.cache
-        releases = self.example_usage_with_caching(self.requirements)
+        releases = self.example_usage(self.requirements)
         assert len(releases) == 1
         assert releases[0].package == "requests"
 
@@ -55,10 +54,11 @@ class ExampleUsageTest(unittest.TestCase):
         # prepare mocked cache
         def mocked_shelve_open(*_, **__):
             """A mock version of ``shelve.open`` that returns a simple dict to be used as cache."""
+            print("here the mocked contextmgr")
             return contextlib.nullcontext(enter_result=self.cache)
 
         # test with caching
-        with patch.object(shelve, "open", mocked_shelve_open):
+        with patch("shelve.open", new=mocked_shelve_open):
             releases = self.example_usage_with_caching(self.requirements)
             assert len(releases) == 1
             assert releases[0].package == "requests"

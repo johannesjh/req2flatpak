@@ -12,7 +12,7 @@ You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.
 
-.. literalinclude:: ../../tests/req2flatpak_test.py
+.. literalinclude:: ../../tests/test_req2flatpak.py
    :start-after: example_usage1_start
    :end-before: example_usage1_end
    :language: python
@@ -73,7 +73,7 @@ The PlatformFactory provides methods for creating platform objects.
 
 For example:
 
-.. literalinclude:: ../../tests/platform_factory_test.py
+.. literalinclude:: ../../tests/test_platform_factory.py
    :start-after: example_usage1_start
    :end-before: example_usage1_end
    :language: python
@@ -109,7 +109,7 @@ There are many options for how to create a requirement object in your code.
 One option is to use methods from req2flatpak's ``RequirementsParser`` class,
 as in the following example:
 
-.. literalinclude:: ../../tests/requirements_parser_test.py
+.. literalinclude:: ../../tests/test_requirements_parser.py
    :start-after: example_usage1_start
    :end-before: example_usage1_end
    :language: python
@@ -158,7 +158,7 @@ PypiClient
 The ``PypiClient`` class allows to query the "PyPi" python package index about available releases.
 For example:
 
-.. literalinclude:: ../../tests/pypi_client_test.py
+.. literalinclude:: ../../tests/test_pypi_client.py
    :start-after: example_usage1_start
    :end-before: example_usage1_end
    :language: python
@@ -175,7 +175,7 @@ PypiClient caches responses to reduce traffic when querying PyPi.
 By default, a simple ``dict`` is used as an in-memory cache.
 To improve caching, you can use a persistent cache as follows:
 
-.. literalinclude:: ../../tests/pypi_client_test.py
+.. literalinclude:: ../../tests/test_pypi_client.py
    :start-after: example_usage2_start
    :end-before: example_usage2_end
    :language: python
@@ -231,7 +231,7 @@ The ``DownloadChooser`` class provides the following methods
 for filtering compatible downloads and for choosing the "best" download.
 For example:
 
-.. literalinclude:: ../../tests/pypi_client_test.py
+.. literalinclude:: ../../tests/test_download_chooser.py
    :start-after: example_usage1_start
    :end-before: example_usage1_end
    :language: python
