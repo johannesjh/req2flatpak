@@ -268,11 +268,11 @@ that will instruct flatpak-builder to install the required python packages.
 
 Example usage:
 
-.. code-block:: python
-
-   # generate a flatpak build module for given requirements,
-   # including chosen package downloads:
-   build_module = FlatpakGenerator.manifest(requirements, downloads)
+.. literalinclude:: ../../tests/test_flatpak_generator.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``FlatpakGenerator`` class:
