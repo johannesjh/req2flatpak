@@ -38,7 +38,9 @@ Run ``poetry install`` to install these packages into a virtual environment.
 Running a Development Version
 -----------------------------
 
-Have a look at the commands available in req2flatpak's ``makefile``:
+Have a look at the commands available in req2flatpak's ``makefile``.
+These commands show how to run a local req2flatpak development version,
+as well as various other development-related tasks.
 
 .. literalinclude:: ../../Makefile
    :language: Makefile
@@ -70,7 +72,7 @@ for installing required python packages in a flatpak package.
 Other functionality is intentionally not included in req2flatpak,
 particularly if it would increase the code size or require additional dependencies.
 For example, req2flatpak does not resolve dependencies, nor does it freeze dependency versions
-(other tools like pip, pip-compile and poetry can be used for this).
+(other tools like pip-compile and poetry are already good at this).
 
 
 Modifying and Contributing Code
