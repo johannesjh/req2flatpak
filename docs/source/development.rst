@@ -83,6 +83,12 @@ You are free to modify req2flatpak as you wish
 You are very welcome to contribute improvements back to the original req2flatpak.
 
 
+Running Tests
+-------------
+
+Use the ``make test`` command to run automated tests.
+
+
 Ensuring Code quality
 ---------------------
 
