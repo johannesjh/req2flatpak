@@ -554,12 +554,12 @@ class DownloadChooser:
             return None
 
     @classmethod
-    def wheel_or_sdist(cls, release: Release, platform: Platform):
+    def wheel_or_sdist(cls, release: Release, platform: Platform) -> Optional[Download]:
         """Returns a wheel or an sdist for this release, in this order of preference."""
         return cls.wheel(release, platform) or cls.sdist(release)
 
     @classmethod
-    def sdist_or_wheel(cls, release: Release, platform: Platform):
+    def sdist_or_wheel(cls, release: Release, platform: Platform) -> Optional[Download]:
         """Returns an sdist or a wheel for this release, in this order of preference."""
         return cls.sdist(release) or cls.wheel(release, platform)
 
