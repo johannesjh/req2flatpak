@@ -231,10 +231,11 @@ The ``DownloadChooser`` class provides the following methods
 for filtering compatible downloads and for choosing the "best" download.
 For example:
 
-.. code-block:: python
-
-   # choose the best wheel for a target platform:
-   wheel = DownloadChooser.wheel(release, platform)
+.. literalinclude:: ../../tests/pypi_client_test.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``DownloadChooser`` class:
