@@ -225,17 +225,15 @@ This allows to programmatically tweak and tune the behavior as needed.</p>
 <p>You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">example_usage</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Example showing how to use req2flatpak in your own script.&quot;&quot;&quot;</span>
-    <span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)]</span>
-    <span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">&quot;requirements.txt&quot;</span><span class="p">)</span>
-    <span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
-    <span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
-        <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">&quot;requirements.txt&quot;</span><span class="p">)</span>
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The above code uses req2flatpak to generate a build module in five steps:</p>
@@ -246,8 +244,8 @@ in order to install python packages on a specific flatpak target platform.</p>
 <li><p>choose downloads that are compatible with the target platforms,</p></li>
 <li><p>generate the flatpak-builder build module.</p></li>
 </ol>
-<p>…including the generated build module in a flatpak build
-will install the required packages using the chosen downloads.</p>
+<p>…if you include the resulting build module in a flatpak build,
+the module will install the required packages.</p>
 <p>You will benefit from a writing a custom script
 (in contrast to simply using req2flatpak’s commandline interface)
 if you want to change the modify or tweak the behavior.
@@ -260,7 +258,7 @@ For example:</p>
 <li><p>you may want to exclude specific packages.</p></li>
 </ul>
 <p>The following subsections explain in detail how you can use req2flatpak’s python api in your custom script.
-For further inspiration you can also have a look at how req2flatpak’s <code class="docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
+For further inspiration you can also have a look at how req2flatpak’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
 </section>
 <section id="specifying-target-platforms">
 <h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading">¶</a></h2>
@@ -288,7 +286,7 @@ when choosing package downloads to install on this platform.</p>
 </dd></dl>
 
 <p>There are many options how to create platform objects.
-You can create platform objects manually in your script.
+You can create platform objects any way you wish in your script.
 And you can use functionality from req2flatpak, as described below.</p>
 </section>
 <section id="platformfactory">
@@ -455,8 +453,11 @@ or you can use req2flatpak’s <code class="docutils literal notranslate"><span 
 </section>
 <section id="pypiclient">
 <h3>PypiClient<a class="headerlink" href="#pypiclient" title="Permalink to this heading">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">PypiClient</span></code> class allows to query the “PyPi” python package index
-about available releases.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">PypiClient</span></code> class allows to query the “PyPi” python package index about available releases.
+For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">PypiClient</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.PypiClient">
@@ -493,10 +494,11 @@ To improve caching, you can use a persistent cache as follows:</p>
     <span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The above code instantiates a persistent <code class="docutils literal notranslate"><span class="pre">shelve.Shelf</span></code> cache, using <code class="docutils literal notranslate"><span class="pre">pypi_cache.tmp</span></code> as filename.
-Prior to querying pypi, the code then configures the PypiClient class to use the shelf for caching.</p>
+<p>The above code instantiates a persistent <code class="docutils literal notranslate"><span class="pre">shelve.Shelf</span></code> cache using <code class="docutils literal notranslate"><span class="pre">pypi_cache.tmp</span></code> as filename.
+The code then configures the PypiClient class to use the shelf for caching,
+and then uses the cache when querying PyPi.</p>
 <p>Clients for other package indices instead of Pypi are not included in req2flatpak.
-You are free, of course, to implement your own client for another package index in you own script.</p>
+You are free, of course, to implement your own clients for additional package indices in you own script.</p>
 </section>
 </section>
 <section id="choosing-compatible-downloads">
@@ -572,13 +574,13 @@ preferred downloads are returned first.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.wheel_or_sdist">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wheel_or_sdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.DownloadChooser.wheel_or_sdist" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wheel_or_sdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.wheel_or_sdist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a wheel or an sdist for this release, in this order of preference.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.sdist_or_wheel">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sdist_or_wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.DownloadChooser.sdist_or_wheel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sdist_or_wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.sdist_or_wheel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an sdist or a wheel for this release, in this order of preference.</p>
 </dd></dl>
 
@@ -602,9 +604,8 @@ to include them into the flatpak package.</p>
 <p>req2flatpak’s <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code> class provides methods for generating a build module
 that will instruct flatpak-builder to install the required python packages.</p>
 <p>Example usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a flatpak build module for given requirements,</span>
-<span class="c1"># including chosen package downloads:</span>
-<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">manifest</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a flatpak build module:</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code> class:</p>

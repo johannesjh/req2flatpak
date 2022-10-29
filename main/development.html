@@ -96,11 +96,14 @@
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#architecture-and-design-goals">Architecture and Design Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#obtaining-the-source-code">Obtaining the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-a-development-environment">Setting up a Development Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#code-quality">Code quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-development-version">Running a Development Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#understanding-the-architecture-and-design-goals">Understanding the Architecture and Design Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ensuring-code-quality">Ensuring Code quality</a></li>
 </ul>
 </li>
 </ul>
@@ -177,8 +180,52 @@
 as a voluntary effort in the authors’ free time.
 All contributions are greatly appreciated…
 pull requests are welcome, and so are bug reports and suggestions for improvement.</p>
-<section id="architecture-and-design-goals">
-<h2>Architecture and Design Goals<a class="headerlink" href="#architecture-and-design-goals" title="Permalink to this heading">¶</a></h2>
+<section id="obtaining-the-source-code">
+<h2>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak’s original source code lives in this github repository:
+<a class="reference external" href="https://github.com/johannesjh/req2flatpak">https://github.com/johannesjh/req2flatpak</a>.
+You can download the source code by cloning the git repository.</p>
+</section>
+<section id="setting-up-a-development-environment">
+<h2>Setting up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permalink to this heading">¶</a></h2>
+<p>Simply clone/open req2flatpak in the IDE of your choice.
+Features and languages that the IDE should ideally support include:</p>
+<ul class="simple">
+<li><p>python</p></li>
+<li><p>poetry for managing req2flatpak’s dependencies in a virtual environment</p></li>
+<li><p>restructured text (<code class="docutils literal notranslate"><span class="pre">*.rst</span></code>) for writing documentation</p></li>
+</ul>
+</section>
+<section id="installing-dependencies">
+<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Permalink to this heading">¶</a></h2>
+<p>req2flatpak depends on very few other software packages, as documented in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
+Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span></code> to install these packages into a virtual environment.</p>
+</section>
+<section id="running-a-development-version">
+<h2>Running a Development Version<a class="headerlink" href="#running-a-development-version" title="Permalink to this heading">¶</a></h2>
+<p>Have a look at the commands available in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">makefile</span></code>.
+These commands show how to run a local req2flatpak development version,
+as well as various other development-related tasks.</p>
+<div class="highlight-Makefile notranslate"><div class="highlight"><pre><span></span><span class="nf">.PHONY</span><span class="o">:</span> <span class="n">run</span>
+<span class="nf">run</span><span class="o">:</span>
+	poetry run req2flatpak
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">lint</span>
+<span class="nf">lint</span><span class="o">:</span>
+	poetry run pre-commit run --all-files
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">test</span>
+<span class="nf">test</span><span class="o">:</span>
+	poetry run python3 -m unittest
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">docs</span>
+<span class="nf">docs</span><span class="o">:</span>
+	poetry run sphinx-build -v -b html docs/source docs/build/html
+</pre></div>
+</div>
+</section>
+<section id="understanding-the-architecture-and-design-goals">
+<h2>Understanding the Architecture and Design Goals<a class="headerlink" href="#understanding-the-architecture-and-design-goals" title="Permalink to this heading">¶</a></h2>
 <p>req2flatpak’s architecture implements the following design goals and design choices.</p>
 <p>req2flatpak consists of just a single python file.
 This allows req2flatpak to be installed by copy-pasting this file.</p>
@@ -197,31 +244,21 @@ for installing required python packages in a flatpak package.
 Other functionality is intentionally not included in req2flatpak,
 particularly if it would increase the code size or require additional dependencies.
 For example, req2flatpak does not resolve dependencies, nor does it freeze dependency versions
-(other tools like pip, pip-compile and poetry can be used for this).</p>
+(other tools like pip-compile and poetry are already good at this).</p>
 </section>
-<section id="obtaining-the-source-code">
-<h2>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Permalink to this heading">¶</a></h2>
-<p>req2flatpak’s original source code lives in this github repository:
-<a class="reference external" href="https://github.com/johannesjh/req2flatpak">https://github.com/johannesjh/req2flatpak</a></p>
-<p>You can download the source code by cloning the git repository.</p>
+<section id="modifying-and-contributing-code">
+<h2>Modifying and Contributing Code<a class="headerlink" href="#modifying-and-contributing-code" title="Permalink to this heading">¶</a></h2>
+<p>You are free to modify req2flatpak as you wish
+(under the terms of its very permissive MIT license).
+You are very welcome to contribute improvements back to the original req2flatpak.</p>
 </section>
-<section id="setting-up-a-development-environment">
-<h2>Setting up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permalink to this heading">¶</a></h2>
-<p>Simply clone/open req2flatpak in the IDE of your choice.</p>
-<p>Features and languages that the IDE should ideally support:
-* python
-* poetry for managing req2flatpak’s dependencies in a virtual environment
-* restructured text (<code class="docutils literal notranslate"><span class="pre">*.rst</span></code>) for writing documentation</p>
+<section id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this heading">¶</a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> command to run automated tests.</p>
 </section>
-<section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h2>
-<p>req2flatpak depends on very few other software packages,
-as documented in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.</p>
-</section>
-<section id="code-quality">
-<h2>Code quality<a class="headerlink" href="#code-quality" title="Permalink to this heading">¶</a></h2>
-<p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the
-code before committing changes.</p>
+<section id="ensuring-code-quality">
+<h2>Ensuring Code quality<a class="headerlink" href="#ensuring-code-quality" title="Permalink to this heading">¶</a></h2>
+<p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the code before committing changes,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to install pre-commit on your system,</span>
 <span class="c1"># follow instructions from https://pre-commit.com/, for example:</span>
 pip install pre-commit  <span class="c1"># install pre-commit using pip</span>

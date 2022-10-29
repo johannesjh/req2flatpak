@@ -12,9 +12,10 @@ You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.
 
-.. literalinclude:: ../../tests/example_usage_test.py
+.. literalinclude:: ../../tests/test_req2flatpak.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
    :language: python
-   :pyobject: example_usage
    :dedent:
 
 The above code uses req2flatpak to generate a build module in five steps:
@@ -25,8 +26,8 @@ The above code uses req2flatpak to generate a build module in five steps:
 #. choose downloads that are compatible with the target platforms,
 #. generate the flatpak-builder build module.
 
-...including the generated build module in a flatpak build
-will install the required packages using the chosen downloads.
+...if you include the resulting build module in a flatpak build,
+the module will install the required packages.
 
 You will benefit from a writing a custom script
 (in contrast to simply using req2flatpak's commandline interface)
@@ -40,7 +41,7 @@ For example:
 * you may want to exclude specific packages.
 
 The following subsections explain in detail how you can use req2flatpak's python api in your custom script.
-For further inspiration you can also have a look at how req2flatpak's ``main()`` method is implemented.
+For further inspiration you can also have a look at how req2flatpak's :py:meth:`~req2flatpak.main` method is implemented.
 
 
 Specifying Target Platforms
@@ -61,7 +62,7 @@ Target platforms are represented in req2flatpak as a dataclass, as follows.
    :undoc-members:
 
 There are many options how to create platform objects.
-You can create platform objects manually in your script.
+You can create platform objects any way you wish in your script.
 And you can use functionality from req2flatpak, as described below.
 
 
@@ -72,9 +73,11 @@ The PlatformFactory provides methods for creating platform objects.
 
 For example:
 
-.. code-block:: python
-
-    platform = PlatformFactory.from_string("cp310-x86_64")
+.. literalinclude:: ../../tests/test_platform_factory.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``PlatformFactory`` class:
@@ -106,9 +109,11 @@ There are many options for how to create a requirement object in your code.
 One option is to use methods from req2flatpak's ``RequirementsParser`` class,
 as in the following example:
 
-.. code-block:: python
-
-   requirements = RequirementsParser.parse_file("requirements.txt")
+.. literalinclude:: ../../tests/test_requirements_parser.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``RequirementsParser`` class:
@@ -150,8 +155,15 @@ or you can use req2flatpak's ``PypiClient`` for this purpose.
 PypiClient
 ^^^^^^^^^^
 
-The ``PypiClient`` class allows to query the "PyPi" python package index
-about available releases.
+The ``PypiClient`` class allows to query the "PyPi" python package index about available releases.
+For example:
+
+.. literalinclude:: ../../tests/test_pypi_client.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
+
 
 Documentation of all methods provided by the ``PypiClient`` class:
 
@@ -163,19 +175,18 @@ PypiClient caches responses to reduce traffic when querying PyPi.
 By default, a simple ``dict`` is used as an in-memory cache.
 To improve caching, you can use a persistent cache as follows:
 
-.. code-block:: python
+.. literalinclude:: ../../tests/test_pypi_client.py
+   :start-after: example_usage2_start
+   :end-before: example_usage2_end
+   :language: python
+   :dedent:
 
-    import shelve
-
-    with shelve.open("pypi_cache.tmp") as cache:
-        PypiClient.cache = cache
-        releases = PypiClient.get_releases(requirements)
-
-The above code instantiates a persistent ``shelve.Shelf`` cache, using ``pypi_cache.tmp`` as filename.
-Prior to querying pypi, the code then configures the PypiClient class to use the shelf for caching.
+The above code instantiates a persistent ``shelve.Shelf`` cache using ``pypi_cache.tmp`` as filename.
+The code then configures the PypiClient class to use the shelf for caching,
+and then uses the cache when querying PyPi.
 
 Clients for other package indices instead of Pypi are not included in req2flatpak.
-You are free, of course, to implement your own client for another package index in you own script.
+You are free, of course, to implement your own clients for additional package indices in you own script.
 
 
 Choosing Compatible Downloads
@@ -220,10 +231,11 @@ The ``DownloadChooser`` class provides the following methods
 for filtering compatible downloads and for choosing the "best" download.
 For example:
 
-.. code-block:: python
-
-   # choose the best wheel for a target platform:
-   wheel = DownloadChooser.wheel(release, platform)
+.. literalinclude:: ../../tests/test_download_chooser.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``DownloadChooser`` class:
@@ -256,11 +268,11 @@ that will instruct flatpak-builder to install the required python packages.
 
 Example usage:
 
-.. code-block:: python
-
-   # generate a flatpak build module for given requirements,
-   # including chosen package downloads:
-   build_module = FlatpakGenerator.manifest(requirements, downloads)
+.. literalinclude:: ../../tests/test_flatpak_generator.py
+   :start-after: example_usage1_start
+   :end-before: example_usage1_end
+   :language: python
+   :dedent:
 
 
 Documentation of all methods provided by the ``FlatpakGenerator`` class:
