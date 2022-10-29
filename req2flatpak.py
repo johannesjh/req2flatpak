@@ -624,8 +624,7 @@ def cli_parser() -> argparse.ArgumentParser:
         "-r",
         nargs="?",
         type=argparse.FileType("r"),
-        default=sys.stdin,
-        help="Requirements can be read from a specified requirements.txt file or from stdin.",
+        help="Requirements can be read from a specified requirements.txt file.",
     )
     parser.add_argument(
         "--target-platforms",
