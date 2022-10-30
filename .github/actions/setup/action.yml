@@ -11,6 +11,10 @@ inputs:
     description: Whether pre-commit shall be setup, too
     required: false
     default: false
+  install-options:
+    description: Additional arguments to pass to `poetry install`.
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -37,7 +41,7 @@ runs:
       run: |
         poetry env use python3.10
         poetry about
-        poetry install --with dev
+        poetry install ${{ inputs.install-options }}
       shell: bash
 
     - name: Install pre-commit

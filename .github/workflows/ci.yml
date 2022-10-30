@@ -17,8 +17,16 @@ jobs:
         uses: ./.github/actions/setup
         with:
           setup-pre-commit: true
+          # lint group will be installed anyways because it is not optional
+          install-options: --with lint
 
       - name: Run linters
+        run: make lint
+
+      - name: Install extras
+        run: poetry install --all-extras
+
+      - name: Lint with extra packages installed
         run: make lint
 
   test:
@@ -30,6 +38,8 @@ jobs:
       - name: Setup
         id: setup
         uses: ./.github/actions/setup
+        with:
+          install-options: --without lint
 
       - name: Run Tests
         run: make test
@@ -43,6 +53,8 @@ jobs:
       - name: Setup
         id: setup
         uses: ./.github/actions/setup
+        with:
+          install-options: --with docs
 
       - name: Build Docs
         run: make docs
