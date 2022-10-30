@@ -1,14 +1,12 @@
 """Automated tests for :class:req2flatpak.PlatformFactory."""
 
-import importlib
 import json
 import re
 import unittest
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Union
+from typing import Iterable, List, Union
 
-import tests
 from req2flatpak import PlatformFactory
 
 
@@ -30,7 +28,7 @@ class ExampleUsageTest(unittest.TestCase):
         assert all("aarch" not in tag for tag in platform.python_tags)
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass
 class RegressionTestData:
     """Represents a target platform (minor_version, architecture) and saved platform info."""
 
@@ -46,7 +44,7 @@ class RegressionTest(unittest.TestCase):
     filename_pattern = r"^(?:py|cp)?(\d)(\d+)-(.*)\.platforminfo.json$"
 
     @staticmethod
-    def _load_platform_tags_from_file(filename: Union[Path, str]) -> list[str]:
+    def _load_platform_tags_from_file(filename: Union[Path, str]) -> List[str]:
         """Returns the list of platform tags from a platforminfo .json file."""
         with open(filename, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -57,7 +55,7 @@ class RegressionTest(unittest.TestCase):
         """Yields testdata for subtests."""
         platforminfo_files = [
             entry
-            for entry in importlib.resources.files(tests).iterdir()
+            for entry in Path(__file__).parent.iterdir()
             if entry.is_file() and re.match(cls.filename_pattern, entry.name)
         ]
         for file in platforminfo_files:
