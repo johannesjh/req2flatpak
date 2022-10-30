@@ -4,4 +4,4 @@ pypi_cache
 __pycache__
 .pytest_cache
 docs/build
-
+.python-version
