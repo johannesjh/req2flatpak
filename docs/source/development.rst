@@ -17,6 +17,22 @@ https://github.com/johannesjh/req2flatpak.
 You can download the source code by cloning the git repository.
 
 
+Installing Python
+-----------------
+
+Most systems come with python pre-installed.
+You can use this python version to develop req2flatpak.
+
+It can be useful to install a specific (older) version of python
+to make sure req2flatpak stays compatible with older targeted python versions.
+
+* Python versions targeted by req2flatpak are defined in the ``pyproject.toml`` file.
+* You can use `pyenv <https://github.com/pyenv/pyenv>`__
+  to install various python versions.
+  It is a good practice to install and use the oldest still supported python version
+  when developing req2flatpak.
+
+
 Setting up a Development Environment
 ------------------------------------
 
