@@ -1,76 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Using the Commandline Interface &mdash; req2flatpak 0.0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using the Python API" href="api.html" />
     <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> req2flatpak
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
@@ -110,78 +59,37 @@
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">req2flatpak</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Using the Commandline Interface</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/cli.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="using-the-commandline-interface">
-<h1>Using the Commandline Interface<a class="headerlink" href="#using-the-commandline-interface" title="Permalink to this heading">¶</a></h1>
+<h1>Using the Commandline Interface<a class="headerlink" href="#using-the-commandline-interface" title="Permalink to this heading"></a></h1>
 <p>req2flatpak comes with a simple commandline interface
 that covers basic usage
 and makes it easy to get started.</p>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <p>You can, for example, invoke req2flatpak’s commandline interface like this:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py --requirements-file requirements.txt --target-platforms cp310-x86_64 cp310-aarch64
 </pre></div>
@@ -192,7 +100,7 @@ the specified target platforms, and generate a flatpak-builder build
 module.</p>
 </section>
 <section id="documentation-of-commandline-options">
-<h2>Documentation of Commandline Options<a class="headerlink" href="#documentation-of-commandline-options" title="Permalink to this heading">¶</a></h2>
+<h2>Documentation of Commandline Options<a class="headerlink" href="#documentation-of-commandline-options" title="Permalink to this heading"></a></h2>
 <p>req2flatpak’s commandline interface supports the following commands and options.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">req2flatpak</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">requirements</span> <span class="p">[</span><span class="n">REQUIREMENTS</span> <span class="o">...</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">requirements</span><span class="o">-</span><span class="n">file</span> <span class="p">[</span><span class="n">REQUIREMENTS_FILE</span><span class="p">]]</span>
@@ -202,7 +110,7 @@ module.</p>
 </pre></div>
 </div>
 <section id="Named Arguments">
-<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this heading">¶</a></h3>
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this heading"></a></h3>
 <dl class="option-list">
 <dt><kbd>--requirements</kbd></dt>
 <dd><p>One or more requirements can be specified as commandline arguments, e.g., ‘pandas==1.4.4’.</p>
@@ -232,7 +140,7 @@ module.</p>
 </section>
 </section>
 <section id="specifying-python-package-requirements">
-<h2>Specifying Python Package Requirements<a class="headerlink" href="#specifying-python-package-requirements" title="Permalink to this heading">¶</a></h2>
+<h2>Specifying Python Package Requirements<a class="headerlink" href="#specifying-python-package-requirements" title="Permalink to this heading"></a></h2>
 <p>You can specify python packages as individual commandline arguments or by providing a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file.
 As a result, req2flatpak will include these packages in the generated build module.</p>
 <p>It is important to note that req2flatpak expects all package versions to be fully specified.
@@ -245,7 +153,7 @@ You can use other tools like
 to resolve and freeze dependencies and to export them into a requirements.txt file.</p>
 </section>
 <section id="specifying-target-platforms">
-<h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading">¶</a></h2>
+<h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading"></a></h2>
 <p>One or more target platforms can be specified in a simple string format
 that includes the python version and system architecture.</p>
 <p>As a result, req2flatpak will include suitable package downloads
@@ -259,7 +167,7 @@ Other python interpreters instead of cpython are not supported.</p></li>
 </ul>
 </section>
 <section id="querying-information-about-the-current-platform">
-<h2>Querying Information about the Current Platform<a class="headerlink" href="#querying-information-about-the-current-platform" title="Permalink to this heading">¶</a></h2>
+<h2>Querying Information about the Current Platform<a class="headerlink" href="#querying-information-about-the-current-platform" title="Permalink to this heading"></a></h2>
 <p>req2flatpak provides a <code class="docutils literal notranslate"><span class="pre">platform-info</span></code> command for querying information
 about the current platform, i.e., about the python interpreter and system
 architecture used to run the req2flatpak script.</p>
@@ -292,7 +200,7 @@ a platform object from it.</p>
 because the list of tags is about 700 lines long.</p>
 </section>
 <section id="querying-installed-python-packages">
-<h2>Querying Installed Python Packages<a class="headerlink" href="#querying-installed-python-packages" title="Permalink to this heading">¶</a></h2>
+<h2>Querying Installed Python Packages<a class="headerlink" href="#querying-installed-python-packages" title="Permalink to this heading"></a></h2>
 <p>req2flatpak provides a command <code class="docutils literal notranslate"><span class="pre">installed-packages</span></code> which allows to  query
 currently installed python packages.</p>
 <p>You can run the <code class="docutils literal notranslate"><span class="pre">installed-packages</span></code> command on your target platform to find
@@ -305,50 +213,33 @@ to make sure that your package versions are compatible with your target platform
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="api.html" class="btn btn-neutral float-right" title="Using the Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Using the Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, johannesjh.
-
-    </p>
+    <p>&#169; Copyright 2022, johannesjh.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-  
-  
-    
-  
    
   <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
     <span class="rst-current-version" data-toggle="rst-current-version">

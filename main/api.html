@@ -1,76 +1,36 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Using the Python API &mdash; req2flatpak 0.0.1 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-
-    
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Development" href="development.html" />
     <link rel="prev" title="Using the Commandline Interface" href="cli.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="index.html" class="icon icon-home"> req2flatpak
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -78,18 +38,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
@@ -151,77 +100,36 @@
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">req2flatpak</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-        
       <li>Using the Python API</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="using-the-python-api">
-<h1>Using the Python API<a class="headerlink" href="#using-the-python-api" title="Permalink to this heading">¶</a></h1>
+<h1>Using the Python API<a class="headerlink" href="#using-the-python-api" title="Permalink to this heading"></a></h1>
 <p>You can use req2flatpak’s python api to write a custom python script that makes use of req2flatpak’s functionality.
 This allows to programmatically tweak and tune the behavior as needed.</p>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h2>
 <p>You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.</p>
@@ -261,25 +169,25 @@ For example:</p>
 For further inspiration you can also have a look at how req2flatpak’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
 </section>
 <section id="specifying-target-platforms">
-<h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading">¶</a></h2>
+<h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Permalink to this heading"></a></h2>
 <p>A target platform describes everything that pip (or req2flatpak) needs to know
 when choosing package downloads to install on this platform.</p>
 <section id="platforms">
-<h3>Platforms<a class="headerlink" href="#platforms" title="Permalink to this heading">¶</a></h3>
+<h3>Platforms<a class="headerlink" href="#platforms" title="Permalink to this heading"></a></h3>
 <p>Target platforms are represented in req2flatpak as a dataclass, as follows.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.Platform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Platform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">python_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">python_tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Platform" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Platform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">python_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">python_tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Platform" title="Permalink to this definition"></a></dt>
 <dd><p>Represents a target platform for python package installations.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Platform.python_tags">
-<span class="sig-name descname"><span class="pre">python_tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Platform.python_tags" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">python_tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Platform.python_tags" title="Permalink to this definition"></a></dt>
 <dd><p>A list of platform tags, similar to <code class="docutils literal notranslate"><span class="pre">packaging.tags.sys_tags()</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Platform.python_version">
-<span class="sig-name descname"><span class="pre">python_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Platform.python_version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">python_version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Platform.python_version" title="Permalink to this definition"></a></dt>
 <dd><p>A list of python version numbers, similar to <code class="docutils literal notranslate"><span class="pre">platform.python_version_tuple()</span></code>.</p>
 </dd></dl>
 
@@ -290,7 +198,7 @@ You can create platform objects any way you wish in your script.
 And you can use functionality from req2flatpak, as described below.</p>
 </section>
 <section id="platformfactory">
-<h3>PlatformFactory<a class="headerlink" href="#platformfactory" title="Permalink to this heading">¶</a></h3>
+<h3>PlatformFactory<a class="headerlink" href="#platformfactory" title="Permalink to this heading"></a></h3>
 <p>The PlatformFactory provides methods for creating platform objects.</p>
 <p>For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platform</span> <span class="o">=</span> <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)</span>
@@ -299,11 +207,11 @@ And you can use functionality from req2flatpak, as described below.</p>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">PlatformFactory</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">PlatformFactory</span></span><a class="headerlink" href="#req2flatpak.PlatformFactory" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">PlatformFactory</span></span><a class="headerlink" href="#req2flatpak.PlatformFactory" title="Permalink to this definition"></a></dt>
 <dd><p>Provides methods for creating platform objects.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_current_interpreter">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_current_interpreter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_current_interpreter" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_current_interpreter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_current_interpreter" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a platform object that describes the current interpreter and system.</p>
 <p>This method requires the <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package to be installed
 because functionality from this package is used to generate the list of
@@ -316,13 +224,13 @@ properties from the current interpreter and system.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_python_version_and_arch">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_python_version_and_arch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minor_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x86_64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_python_version_and_arch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minor_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x86_64'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a platform object that roughly describes a cpython installation on linux.</p>
 <p>The tags in the platform object are a rough approximation, trying to match what
 <cite>packaging.tags.sys_tags</cite> would return if invoked on a linux system with cpython.
 No guarantees are made about how closely this approximation matches a real system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minor_version</strong> – the python 3 minor version, specified as int.
 Defaults to the current python version.</p></li>
@@ -334,10 +242,10 @@ Defaults to the current python version.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PlatformFactory.from_string">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_string" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">platform_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.PlatformFactory.from_string" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a platform object by parsing a platform string.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>platform_string</strong> – A string specifying python version and system
 architecture. The string format is
 “{python_version}-{system_architecture}”.
@@ -353,25 +261,25 @@ Acceptable values are the same as in
 </section>
 </section>
 <section id="specifying-package-requirements">
-<h2>Specifying Package Requirements<a class="headerlink" href="#specifying-package-requirements" title="Permalink to this heading">¶</a></h2>
+<h2>Specifying Package Requirements<a class="headerlink" href="#specifying-package-requirements" title="Permalink to this heading"></a></h2>
 <p>A requirement describes the name and exact version
 of a python package that shall be installed.</p>
 <section id="requirements">
-<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading">¶</a></h3>
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
 <p>Package requirements are represented in req2flatpak as a dataclass, as follows:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.Requirement">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Requirement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Requirement" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Requirement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Requirement" title="Permalink to this definition"></a></dt>
 <dd><p>Represents a python package requirement.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Requirement.package">
-<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Requirement.package" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Requirement.package" title="Permalink to this definition"></a></dt>
 <dd><p>A python package name.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Requirement.version">
-<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Requirement.version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Requirement.version" title="Permalink to this definition"></a></dt>
 <dd><p>The exact version of the package.</p>
 </dd></dl>
 
@@ -379,7 +287,7 @@ of a python package that shall be installed.</p>
 
 </section>
 <section id="requirementsparser">
-<h3>RequirementsParser<a class="headerlink" href="#requirementsparser" title="Permalink to this heading">¶</a></h3>
+<h3>RequirementsParser<a class="headerlink" href="#requirementsparser" title="Permalink to this heading"></a></h3>
 <p>There are many options for how to create a requirement object in your code.
 One option is to use methods from req2flatpak’s <code class="docutils literal notranslate"><span class="pre">RequirementsParser</span></code> class,
 as in the following example:</p>
@@ -389,19 +297,19 @@ as in the following example:</p>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">RequirementsParser</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.RequirementsParser">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">RequirementsParser</span></span><a class="headerlink" href="#req2flatpak.RequirementsParser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">RequirementsParser</span></span><a class="headerlink" href="#req2flatpak.RequirementsParser" title="Permalink to this definition"></a></dt>
 <dd><p>Parses requirements.txt files in a very simple way.</p>
 <p>This methods expects all versions to be pinned, and it does not
 resolve dependencies.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.RequirementsParser.parse_file">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.RequirementsParser.parse_file" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.RequirementsParser.parse_file" title="Permalink to this definition"></a></dt>
 <dd><p>Parses a requirements.txt file into a list of Requirement objects.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.RequirementsParser.parse_string">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements_txt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.RequirementsParser.parse_string" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements_txt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.RequirementsParser.parse_string" title="Permalink to this definition"></a></dt>
 <dd><p>Parses requirements.txt string content into a list of Requirement objects.</p>
 </dd></dl>
 
@@ -418,29 +326,29 @@ to resolve and freeze dependencies and to export them into a requirements.txt fi
 </section>
 </section>
 <section id="querying-package-indices-for-available-releases">
-<h2>Querying Package Indices for Available Releases<a class="headerlink" href="#querying-package-indices-for-available-releases" title="Permalink to this heading">¶</a></h2>
+<h2>Querying Package Indices for Available Releases<a class="headerlink" href="#querying-package-indices-for-available-releases" title="Permalink to this heading"></a></h2>
 <p>A release describes what is offered by package index (or multiple indices) for a given package requirement.</p>
 <section id="release">
-<h3>Release<a class="headerlink" href="#release" title="Permalink to this heading">¶</a></h3>
+<h3>Release<a class="headerlink" href="#release" title="Permalink to this heading"></a></h3>
 <p>Releases are represented in req2flatpak as a dataclass, as follows:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.Release">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads:</span> <span class="pre">~typing.List[~req2flatpak.Download]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Release" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">Release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads:</span> <span class="pre">~typing.List[~req2flatpak.Download]</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#req2flatpak.Release" title="Permalink to this definition"></a></dt>
 <dd><p>Represents a package release as name, version, and downloads.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Release.downloads">
-<span class="sig-name descname"><span class="pre">downloads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Release.downloads" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">downloads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#req2flatpak.Release.downloads" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Release.package">
-<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Release.package" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">package</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Release.package" title="Permalink to this definition"></a></dt>
 <dd><p>A python package name.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.Release.version">
-<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Release.version" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#req2flatpak.Release.version" title="Permalink to this definition"></a></dt>
 <dd><p>The exact version of the package.</p>
 </dd></dl>
 
@@ -452,7 +360,7 @@ You can create release objects in your code as you wish,
 or you can use req2flatpak’s <code class="docutils literal notranslate"><span class="pre">PypiClient</span></code> for this purpose.</p>
 </section>
 <section id="pypiclient">
-<h3>PypiClient<a class="headerlink" href="#pypiclient" title="Permalink to this heading">¶</a></h3>
+<h3>PypiClient<a class="headerlink" href="#pypiclient" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">PypiClient</span></code> class allows to query the “PyPi” python package index about available releases.
 For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
@@ -461,23 +369,23 @@ For example:</p>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">PypiClient</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.PypiClient">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">PypiClient</span></span><a class="headerlink" href="#req2flatpak.PypiClient" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">PypiClient</span></span><a class="headerlink" href="#req2flatpak.PypiClient" title="Permalink to this definition"></a></dt>
 <dd><p>Queries package information from the PyPi package index.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="req2flatpak.PypiClient.cache">
-<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Shelf</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#req2flatpak.PypiClient.cache" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Shelf</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#req2flatpak.PypiClient.cache" title="Permalink to this definition"></a></dt>
 <dd><p>A dict-like object for caching responses from PyPi.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PypiClient.get_release">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></span><a class="headerlink" href="#req2flatpak.PypiClient.get_release" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></span><a class="headerlink" href="#req2flatpak.PypiClient.get_release" title="Permalink to this definition"></a></dt>
 <dd><p>Queries pypi regarding available releases for this requirement.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.PypiClient.get_releases">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_releases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reqs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.PypiClient.get_releases" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_releases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reqs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.PypiClient.get_releases" title="Permalink to this definition"></a></dt>
 <dd><p>Queries pypi regarding available releases for these requirements.</p>
 </dd></dl>
 
@@ -502,10 +410,10 @@ You are free, of course, to implement your own clients for additional package in
 </section>
 </section>
 <section id="choosing-compatible-downloads">
-<h2>Choosing Compatible Downloads<a class="headerlink" href="#choosing-compatible-downloads" title="Permalink to this heading">¶</a></h2>
+<h2>Choosing Compatible Downloads<a class="headerlink" href="#choosing-compatible-downloads" title="Permalink to this heading"></a></h2>
 <p>req2flatpak provides methods for choosing the best compatible download for a given target platform.</p>
 <section id="background-information">
-<h3>Background Information<a class="headerlink" href="#background-information" title="Permalink to this heading">¶</a></h3>
+<h3>Background Information<a class="headerlink" href="#background-information" title="Permalink to this heading"></a></h3>
 <p>Choosing compatible downloads is important because, generally speaking,
 only a subset of downloads are compatible with a given target platform.
 For example, a release may contain wheels for older python interpreters
@@ -531,7 +439,7 @@ function is easy to understand and can serve for inspiration.</p></li>
 </ul>
 </section>
 <section id="downloadchooser">
-<h3>DownloadChooser<a class="headerlink" href="#downloadchooser" title="Permalink to this heading">¶</a></h3>
+<h3>DownloadChooser<a class="headerlink" href="#downloadchooser" title="Permalink to this heading"></a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">DownloadChooser</span></code> class provides the following methods
 for filtering compatible downloads and for choosing the “best” download.
 For example:</p>
@@ -542,19 +450,19 @@ For example:</p>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">DownloadChooser</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">DownloadChooser</span></span><a class="headerlink" href="#req2flatpak.DownloadChooser" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">DownloadChooser</span></span><a class="headerlink" href="#req2flatpak.DownloadChooser" title="Permalink to this definition"></a></dt>
 <dd><p>Provides methods for choosing package downloads.</p>
 <p>This class implements logic for filtering wheel and sdist downloads
 that are compatible with a given target platform.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.matches">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Download</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform_tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.matches" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Download</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform_tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.matches" title="Permalink to this definition"></a></dt>
 <dd><p>Returns whether a download is compatible with a target platform tag.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.downloads">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">downloads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheels_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sdists_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.downloads" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">downloads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wheels_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sdists_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.downloads" title="Permalink to this definition"></a></dt>
 <dd><p>Yields suitable downloads for a specific platform.</p>
 <p>The order of downloads matches the order of platform tags, i.e.,
 preferred downloads are returned first.</p>
@@ -562,25 +470,25 @@ preferred downloads are returned first.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.wheel">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.wheel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.wheel" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the preferred wheel download for this release.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.sdist">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.sdist" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.sdist" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the source package download for this release.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.wheel_or_sdist">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wheel_or_sdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.wheel_or_sdist" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wheel_or_sdist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.wheel_or_sdist" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a wheel or an sdist for this release, in this order of preference.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.DownloadChooser.sdist_or_wheel">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sdist_or_wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.sdist_or_wheel" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sdist_or_wheel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">release</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Release" title="req2flatpak.Release"><span class="pre">Release</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">platform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#req2flatpak.Platform" title="req2flatpak.Platform"><span class="pre">Platform</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#req2flatpak.DownloadChooser.sdist_or_wheel" title="Permalink to this definition"></a></dt>
 <dd><p>Returns an sdist or a wheel for this release, in this order of preference.</p>
 </dd></dl>
 
@@ -589,7 +497,7 @@ preferred downloads are returned first.</p>
 </section>
 </section>
 <section id="generating-a-build-module-for-flatpak-builder">
-<h2>Generating a Build Module for flatpak-builder<a class="headerlink" href="#generating-a-build-module-for-flatpak-builder" title="Permalink to this heading">¶</a></h2>
+<h2>Generating a Build Module for flatpak-builder<a class="headerlink" href="#generating-a-build-module-for-flatpak-builder" title="Permalink to this heading"></a></h2>
 <p>The output of req2flatpak is a build module,
 intended to be processed by <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code>
 as part of a build manifest.</p>
@@ -600,7 +508,7 @@ The build modules generated by req2flatpak are no different;
 when processed by flatpak-builder, they install required python packages
 to include them into the flatpak package.</p>
 <section id="flatpakgenerator">
-<h3>FlatpakGenerator<a class="headerlink" href="#flatpakgenerator" title="Permalink to this heading">¶</a></h3>
+<h3>FlatpakGenerator<a class="headerlink" href="#flatpakgenerator" title="Permalink to this heading"></a></h3>
 <p>req2flatpak’s <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code> class provides methods for generating a build module
 that will instruct flatpak-builder to install the required python packages.</p>
 <p>Example usage:</p>
@@ -611,17 +519,17 @@ that will instruct flatpak-builder to install the required python packages.</p>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator</span></code> class:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">FlatpakGenerator</span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">req2flatpak.</span></span><span class="sig-name descname"><span class="pre">FlatpakGenerator</span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator" title="Permalink to this definition"></a></dt>
 <dd><p>Provides methods for generating a flatpak-builder build module.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator.build_module">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python3-package-installation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pip_install_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pip3</span> <span class="pre">install</span> <span class="pre">--verbose</span> <span class="pre">--exists-action=i</span> <span class="pre">--no-index</span> <span class="pre">--find-links=&quot;file://${PWD}&quot;</span> <span class="pre">--prefix=${FLATPAK_DEST}</span> <span class="pre">--no-build-isolation</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.build_module" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">requirements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#req2flatpak.Requirement" title="req2flatpak.Requirement"><span class="pre">Requirement</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">downloads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Download</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'python3-package-installation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pip_install_template</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'pip3</span> <span class="pre">install</span> <span class="pre">--verbose</span> <span class="pre">--exists-action=i</span> <span class="pre">--no-index</span> <span class="pre">--find-links=&quot;file://${PWD}&quot;</span> <span class="pre">--prefix=${FLATPAK_DEST}</span> <span class="pre">--no-build-isolation</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.build_module" title="Permalink to this definition"></a></dt>
 <dd><p>Generates a build module for inclusion in a flatpak-builder build manifest.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator.build_module_as_str">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_module_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.build_module_as_str" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_module_as_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.build_module_as_str" title="Permalink to this definition"></a></dt>
 <dd><p>Generates a build module for inclusion in a flatpak-builder build manifest.</p>
 <p>The args and kwargs are the same as in
 <a class="reference internal" href="#req2flatpak.FlatpakGenerator.build_module" title="req2flatpak.FlatpakGenerator.build_module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_module()</span></code></a></p>
@@ -632,7 +540,7 @@ that will instruct flatpak-builder to install the required python packages.</p>
 </section>
 </section>
 <section id="saving-the-generated-build-module">
-<h2>Saving the Generated Build Module<a class="headerlink" href="#saving-the-generated-build-module" title="Permalink to this heading">¶</a></h2>
+<h2>Saving the Generated Build Module<a class="headerlink" href="#saving-the-generated-build-module" title="Permalink to this heading"></a></h2>
 <p>You can easily save a generated build module as a .json file
 using built-in functionality from python’s standard library.
 For example:</p>
@@ -651,50 +559,33 @@ The code shows how to serialize the dict and save it to an output file.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="cli.html" class="btn btn-neutral float-left" title="Using the Commandline Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2022, johannesjh.
-
-    </p>
+    <p>&#169; Copyright 2022, johannesjh.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-
-  
-  
-    
-  
    
   <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
     <span class="rst-current-version" data-toggle="rst-current-version">
