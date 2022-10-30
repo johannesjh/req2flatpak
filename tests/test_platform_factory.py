@@ -1,5 +1,6 @@
 """Automated tests for :class:req2flatpak.PlatformFactory."""
 
+import importlib
 import json
 import re
 import unittest
@@ -7,6 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, Union
 
+import tests
 from req2flatpak import PlatformFactory
 
 
@@ -51,11 +53,11 @@ class RegressionTest(unittest.TestCase):
         return data["python_tags"]
 
     @classmethod
-    def _testdata(cls, path=".") -> Iterable[RegressionTestData]:
+    def _testdata(cls) -> Iterable[RegressionTestData]:
         """Yields testdata for subtests."""
         platforminfo_files = [
             entry
-            for entry in Path(path).iterdir()
+            for entry in importlib.resources.files(tests).iterdir()
             if entry.is_file() and re.match(cls.filename_pattern, entry.name)
         ]
         for file in platforminfo_files:
