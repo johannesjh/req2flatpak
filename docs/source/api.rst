@@ -12,7 +12,7 @@ You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.
 
-.. literalinclude:: ../../tests/test_req2flatpak.py
+.. literalinclude:: ../../tests/test_req2flatpak_api.py
    :start-after: example_usage1_start
    :end-before: example_usage1_end
    :language: python

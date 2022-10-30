@@ -1,4 +1,4 @@
-"""Example usage demo, with a regression test to make sure the demo keeps working."""
+"""Test to ensure that the code example demonstrating req2flatpak's api usage keeps working."""
 
 import unittest
 from unittest.mock import patch
