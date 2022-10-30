@@ -1,6 +1,12 @@
-"""Example usage demo, with a regression test to make sure the demo keeps working."""
-
+"""Tests for req2flatpak's commandline interface."""
+import json
+import subprocess
+import tempfile
 import unittest
+from abc import ABC
+from itertools import product
+from pathlib import Path
+from typing import List
 from unittest.mock import patch
 
 from req2flatpak import (
@@ -13,7 +19,7 @@ from req2flatpak import (
 
 
 class ExampleUsageTest(unittest.TestCase):
-    """Regression test to ensure that the code for the above usage example keeps working."""
+    """Test to ensure that the code usage example keeps working."""
 
     requirements_txt = "requests == 2.28.1"
     pypi_url = "https://pypi.org/pypi/requests/2.28.1/json"
@@ -64,5 +70,133 @@ class ExampleUsageTest(unittest.TestCase):
             ), "The requests package was not found in the build module's sources."
 
 
-if __name__ == "__main__":
-    unittest.main()
+class Req2FlatpakBaseTest(ABC):
+    """Base class for testing req2flatpak using both its CLI and API."""
+
+    requirements: List[str]
+
+    target_platforms: List[str]
+
+    def validate_build_module(self, build_module: dict) -> None:
+        """To be implemented by subclasses."""
+        raise NotImplementedError
+
+    def _run_r2f(self, args: List[str]) -> subprocess.CompletedProcess:
+        """Runs req2flatpak's cli in a subprocess."""
+        cwd = Path(__file__).parent / ".."
+        cmd = ["python3", "req2flatpak.py"]
+        return subprocess.run(cmd + args, cwd=cwd, capture_output=True, check=True)
+
+    def test_cli_with_reqs_as_args(self):
+        """Runs req2flatpak by passing requirements as commandline arguments."""
+        args = ["--requirements"] + self.requirements
+        args += ["--target-platforms"] + self.target_platforms
+        result = self._run_r2f(args)
+        build_module = json.loads(result.stdout)
+        self.validate_build_module(build_module)
+
+    def test_cli_with_reqs_as_file(self):
+        """Runs req2flatpak by passing requirements as requirements.txt file."""
+        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
+            req_file.write("\n".join(self.requirements))
+            req_file.flush()
+            req_file.seek(0)
+            args = ["--requirements-file", req_file.name]
+            args += ["--target-platforms"] + self.target_platforms
+            result = self._run_r2f(args)
+            build_module = json.loads(result.stdout)
+            self.validate_build_module(build_module)
+
+    def test_api(self):
+        """Runs req2flatpak by calling its python api."""
+        platforms = [
+            PlatformFactory.from_string(platform) for platform in self.target_platforms
+        ]
+        requirements = RequirementsParser.parse_string("\n".join(self.requirements))
+        releases = PypiClient.get_releases(requirements)
+        downloads = {
+            DownloadChooser.wheel_or_sdist(release, platform)
+            for release in releases
+            for platform in platforms
+        }
+        build_module = FlatpakGenerator.build_module(requirements, downloads)
+        self.validate_build_module(build_module)
+
+
+class SinglePlatformTest(unittest.TestCase, Req2FlatpakBaseTest):
+    """Test involving a single requirement and a single target platform."""
+
+    requirements = ["requests==2.28.1"]
+    target_platforms = ["cp310-x86_64"]
+
+    def validate_build_module(self, build_module):
+        """Validates that the build module installs requests."""
+        self.assertIn("requests", build_module["build-commands"][0])
+        self.assertIn("requests", build_module["sources"][0]["url"])
+
+
+class MultiPlatformTest(unittest.TestCase, Req2FlatpakBaseTest):
+    """Test involving a single requirement with platform-specific wheels."""
+
+    requirements = ["scikit-learn==1.1.3"]
+    target_platforms = ["cp310-x86_64", "cp310-aarch64"]
+
+    def validate_build_module(self, build_module):
+        """Validates that the build module installs scikit-learn."""
+        self.assertIn("scikit-learn", build_module["build-commands"][0])
+        self.assertTrue(build_module["sources"])
+
+        # each url must contain scikit-learn:
+        for source in build_module["sources"]:
+            self.assertIn("scikit_learn", source["url"])
+
+        # each architecture must be found in the urls:
+        for arch in ["x86_64", "aarch64"]:
+            self.assertTrue(
+                any(arch in source["url"] for source in build_module["sources"]),
+                "The architecture {arch} was not found in the build module's sources.",
+            )
+
+
+class MultiReqTest(unittest.TestCase, Req2FlatpakBaseTest):
+    """Test involving multiple requirements for multiple target platforms."""
+
+    requirements = ["numpy==1.23.4", "pandas==1.5.1"]
+    target_platforms = ["cp310-x86_64", "cp310-aarch64"]
+
+    def validate_build_module(self, build_module):
+        """Validates that the build module installs the required packages."""
+        packages = map(lambda r: r.split("==")[0].strip(), self.requirements)
+        architectures = map(lambda a: a.split("-")[1], self.target_platforms)
+
+        # each package must be found in the build command:
+        for package in packages:
+            self.assertIn(package, build_module["build-commands"][0])
+
+        # each package and architecture must be found in the urls:
+        for package, arch in product(packages, architectures):
+            self.assertTrue(
+                any(
+                    package in source["url"] and arch in source["url"]
+                    for source in build_module["sources"]
+                ),
+                f"The package {package} and architecture {arch} was not found in the build module's sources.",
+            )
+
+
+class EggTest(unittest.TestCase, Req2FlatpakBaseTest):
+    """Test involving a package that publishes eggs."""
+
+    requirements = ["beancount==2.3.5"]
+    target_platforms = ["cp310-x86_64", "cp310-aarch64"]
+
+    def validate_build_module(self, build_module):
+        """Validates that the build module installs beancount."""
+
+        # validate that the build command includes beancount:
+        self.assertIn("beancount", build_module["build-commands"][0])
+
+        # validate that at least one beancount source has been added:
+        self.assertTrue(
+            any("beancount" in source["url"] for source in build_module["sources"])
+        )
