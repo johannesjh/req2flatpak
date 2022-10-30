@@ -1,11 +1,10 @@
 """Automated tests for :class:req2flatpak.PypiClient."""
 import contextlib
-import importlib
 import unittest
+from pathlib import Path
 from typing import List
 from unittest.mock import patch
 
-import tests
 from req2flatpak import PypiClient, Release, Requirement, RequirementsParser
 
 
@@ -15,9 +14,9 @@ class ExampleUsageTest(unittest.TestCase):
     requirements = RequirementsParser.parse_string("requests == 2.28.1")
 
     cache = {
-        "https://pypi.org/pypi/requests/2.28.1/json": importlib.resources.files(tests)
-        .joinpath("test_pypi_client_requests2.28.1.json")
-        .read_text(encoding="utf-8")
+        "https://pypi.org/pypi/requests/2.28.1/json": (
+            Path(__file__).parent / "test_pypi_client_requests2.28.1.json"
+        ).read_text(encoding="utf-8")
     }
 
     def example_usage(self, requirements: List[Requirement]) -> List[Release]:
