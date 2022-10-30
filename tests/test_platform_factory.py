@@ -59,13 +59,18 @@ class RegressionTest(unittest.TestCase):
             if entry.is_file() and re.match(cls.filename_pattern, entry.name)
         ]
         for file in platforminfo_files:
-            platform_string = re.match(r"(.*)\.platforminfo\.json", file.name).group(1)
-            major, minor, arch = re.match(
-                cls.platform_pattern, platform_string
-            ).groups()
+            # parse platform string from filename:
+            platform_string_match = re.match(r"(.*)\.platforminfo\.json", file.name)
+            assert platform_string_match is not None
+            platform_string = platform_string_match.group(1)
+
+            # parse version and architecture from platform string:
+            platform_string_match = re.match(cls.platform_pattern, platform_string)
+            assert platform_string_match is not None
+            major, minor, arch = platform_string_match.groups()
             assert major == "3"
             yield RegressionTestData(
-                minor_version=minor, architecture=arch, platforminfo_file=file
+                minor_version=int(minor), architecture=arch, platforminfo_file=file
             )
 
     def test(self):

@@ -18,6 +18,7 @@ sphinx = "^5.3.0"
 sphinx-argparse = "^0.3.2"
 sphinx-rtd-theme-github-versions = "^1.1"
 pylint = "^2.15.5"
+mypy = "^0.982"
 
 [tool.poetry.extras]
 packaging = ["packaging"]
