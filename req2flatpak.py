@@ -45,6 +45,8 @@ from contextlib import nullcontext, suppress
 from dataclasses import asdict, dataclass, field
 from itertools import product
 from typing import (
+    Any,
+    Dict,
     FrozenSet,
     Generator,
     Hashable,
@@ -56,6 +58,7 @@ from typing import (
     Tuple,
     Union,
 )
+from urllib.parse import urlparse
 
 import pkg_resources
 
@@ -67,12 +70,13 @@ logger = logging.getLogger(__name__)
 # =============================================================================
 
 try:
-    from functools import cached_property  # added with py 3.8
+    # added with py 3.8
+    from functools import cached_property  # type: ignore[attr-defined]
 except ImportError:
 
     # Inspired by the implementation in the standard library
     # pylint: disable=invalid-name,too-few-public-methods
-    class cached_property:
+    class cached_property:  # type: ignore[no-redef]
         """A property-like wrapper that caches the value."""
 
         def __init__(self, func):
@@ -208,9 +212,7 @@ class Download:
     @cached_property
     def arch(self) -> Optional[str]:
         """Returns a wheel's target architecture, and None for sdists."""
-        if self.is_sdist:
-            return None
-        if self.is_wheel:
+        if not self.is_sdist and self.is_wheel and self.tags:
             if any(tag.endswith("x86_64") for tag in self.tags):
                 return "x86_64"
             if any(tag.endswith("aarch64") for tag in self.tags):
@@ -288,7 +290,7 @@ class PlatformFactory:
           :py:meth:`~req2flatpak.PlatformFactory.from_python_version_and_arch`.
         """
         try:
-            _, minor, arch = re.match(
+            _, minor, arch = re.match(  # type: ignore[union-attr]
                 r"^(?:py|cp)?(\d)(\d+)-(.*)$", platform_string
             ).groups()
             return cls.from_python_version_and_arch(minor_version=int(minor), arch=arch)
@@ -449,20 +451,25 @@ class PypiClient:
     """A dict-like object for caching responses from PyPi."""
 
     @classmethod
+    def _query_from_cache(cls, url) -> Optional[str]:
+        try:
+            return cls.cache[url]
+        except KeyError:
+            return None
+
+    @classmethod
+    def _query_from_pypi(cls, url) -> str:
+        # url scheme might be `file:/`
+        if not urlparse(url).scheme == "https":
+            raise ValueError("URL scheme not `https`.")
+        with urllib.request.urlopen(url) as response:  # nosec: B310
+            json_string = response.read().decode("utf-8")
+        cls.cache[url] = json_string
+        return json_string
+
+    @classmethod
     def _query(cls, url) -> str:
-        def _query_from_cache(url) -> Optional[str]:
-            try:
-                return cls.cache[url]
-            except KeyError:
-                return None
-
-        def _query_from_pypi(url) -> str:
-            with urllib.request.urlopen(url) as response:
-                json_string = response.read().decode("utf-8")
-            cls.cache[url] = json_string
-            return json_string
-
-        return _query_from_cache(url) or _query_from_pypi(url)
+        return cls._query_from_cache(url) or cls._query_from_pypi(url)
 
     @classmethod
     def get_release(cls, req: Requirement) -> Release:
@@ -503,7 +510,7 @@ class DownloadChooser:
         if download.is_sdist:
             return True
 
-        return platform_tag in download.tags
+        return platform_tag in (download.tags or [])
 
     @classmethod
     def downloads(
@@ -579,7 +586,11 @@ class FlatpakGenerator:
         """Generates a build module for inclusion in a flatpak-builder build manifest."""
 
         def source(download: Download) -> dict:
-            source = {"type": "file", "url": download.url, "sha256": download.sha256}
+            source: Dict[str, Any] = {
+                "type": "file",
+                "url": download.url,
+                "sha256": download.sha256,
+            }
             if download.arch:
                 source["only-arches"] = [download.arch]
             return source
@@ -717,7 +728,9 @@ def main():
         )
 
     # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
-    with shelve.open("pypi_cache") if options.cache else nullcontext() as cache:
+    with (
+        shelve.open("pypi_cache") if options.cache else nullcontext()  # nosec: B301
+    ) as cache:
         PypiClient.cache = cache or {}
         releases = PypiClient.get_releases(requirements)
 

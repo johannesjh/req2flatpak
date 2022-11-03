@@ -18,15 +18,9 @@ jobs:
         with:
           setup-pre-commit: true
           # lint group will be installed anyways because it is not optional
-          install-options: --with lint
+          install-options: --with lint --all-extras
 
       - name: Run linters
-        run: make lint
-
-      - name: Install extras
-        run: poetry install --all-extras
-
-      - name: Lint with extra packages installed
         run: make lint
 
   test:

@@ -27,7 +27,7 @@ extensions += ["sphinx_rtd_theme"]
 extensions += ["sphinxarg.ext"]
 
 templates_path = ["_templates"]
-exclude_patterns = []
+exclude_patterns = []  # type: ignore
 
 # =============================================================================
 # Options for HTML output
