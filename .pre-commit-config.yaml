@@ -22,20 +22,28 @@ repos:
         additional_dependencies: [sphinx]
         args: ["--config", "docs/rstcheck.cfg"]
 
-  - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.1.1
-    hooks:
-      - id: pydocstyle
-        additional_dependencies: [toml]
-
   - repo: local
     hooks:
-      - id: pylint
-        name: pylint
-        entry: pylint
+      - id: pylama
+        name: pylama
+        entry: pylama
         language: system
         types: [python]
-        args: [
-            "-rn", # Only display messages
-            "-sn", # Don't display the score
-          ]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: "1.7.4"
+    hooks:
+      - id: bandit
+        files: "req2flatpak.py"
+        args:
+          - "--aggregate"
+          - "vuln"
+          - "-ll"
+          - "-q"
+          - "-f"
+          - "custom"
+          - "--msg-template"
+          - "--------------------------------------------------\n
+            {relpath}:{line}:\n
+            [{test_id:^8}] Severity: {severity} Confidence: {confidence}\n
+            {msg}"
