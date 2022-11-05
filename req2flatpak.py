@@ -106,16 +106,24 @@ try:
     # use packaging.tags functionality if available
     from packaging.utils import parse_wheel_filename
 
-    def tags_from_wheel_filename(filename: str) -> List[str]:
-        """Parse a wheel filename into a list of compatible platform tags."""
+    def tags_from_wheel_filename(filename: str) -> Set[str]:
+        """
+        Parses a wheel filename into a list of compatible platform tags.
+
+        Implemented using functionality from ``packaging.utils.parse_wheel_filename``.
+        """
         _, _, _, tags = parse_wheel_filename(filename)
-        return [str(tag) for tag in tags]
+        return {str(tag) for tag in tags}
 
 except ModuleNotFoundError:
     # fall back to a local implementation
     # that is heavily inspired by / almost vendored from the `packaging` package:
-    def tags_from_wheel_filename(filename: str) -> List[str]:
-        """Parse a wheel filename into a list of compatible platform tags."""
+    def tags_from_wheel_filename(filename: str) -> Set[str]:
+        """
+        Parses a wheel filename into a list of compatible platform tags.
+
+        Implemented as (semi-)vendored functionality in req2flatpak.
+        """
         InvalidWheelFilename = Exception
         Tag = Tuple[str, str, str]
 
@@ -152,7 +160,7 @@ except ModuleNotFoundError:
             parts = wheel_filename.split("-", dashes - 2)
             return parse_tag(parts[-1])
 
-        return ["-".join(tag_tuple) for tag_tuple in parse_wheel_filename(filename)]
+        return {"-".join(tag_tuple) for tag_tuple in parse_wheel_filename(filename)}
 
 
 # =============================================================================
@@ -201,7 +209,7 @@ class Download:
         return not self.is_wheel and not self.filename.endswith(".egg")
 
     @cached_property
-    def tags(self) -> Optional[List[str]]:
+    def tags(self) -> Optional[Set[str]]:
         """Returns a list of tags that this download is compatible for."""
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_wheel_filename
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_sdist_filename
