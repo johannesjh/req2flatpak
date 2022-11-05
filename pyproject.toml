@@ -11,10 +11,17 @@ req2flatpak = 'req2flatpak:main'
 
 [tool.poetry.dependencies]
 python = "^3.7.2"
-packaging = { version = "^21.3", optional = true}
+packaging = { version = "^21.3", optional = true }
 
 [tool.poetry.group.lint.dependencies]
-pylint = "^2.15.5"
+pylama = { extras = [
+    "mypy",
+    "pylint",
+    "eradicate",
+    "toml",
+], version = "^8.4.1" }
+bandit = { extras = ["toml"], version = "^1.7.4" }
+types-setuptools = "^65.5.0.2" # type stubs for mypy linting
 
 # [tool.poetry.group.tests.dependencies]
 
@@ -37,6 +44,19 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 skip_gitignore = true
 
+[tool.pylama]
+max_line_length = 88
+concurrent = true
+linters = "pycodestyle,pydocstyle,pyflakes,pylint,eradicate,mypy"
+
+[tool.pylama.linter.pycodestyle]
+ignore = "W503,E203,E501"
+
+# [tool.pycodestyle] -> see setup.cfg
+
+[tool.pylama.linter.pydocstyle]
+ignore = "D202,D203,D205,D401,D212"
+
 [tool.pydocstyle]
 ignore = ["D202", "D203", "D205", "D401", "D212"]
 
@@ -44,3 +64,6 @@ ignore = ["D202", "D203", "D205", "D401", "D212"]
 format.max-line-length = 88
 main.disable = ["C0301"]            # ignore line-too-long
 basic.good-names = ["e", "f", "py"]
+
+[tool.bandit]
+exclude_dirs = ['tests']
