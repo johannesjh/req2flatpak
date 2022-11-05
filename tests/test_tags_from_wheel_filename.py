@@ -2,7 +2,7 @@
 
 import unittest
 from importlib import reload
-from typing import Callable, Dict, List
+from typing import Callable, Dict, Optional, Set
 from unittest import mock
 
 import req2flatpak
@@ -25,56 +25,52 @@ class TestTagsFromWheelFilename(unittest.TestCase):
     in the packaging package.
     """
 
-    tags_from_wheel_using_packaging_package: Callable
-    tags_from_wheel_without_packaging_package: Callable
+    implementations: Dict[str, Optional[Callable]] = {
+        "with_packaging": None,
+        "without_packaging": None,
+    }
 
-    testdata: Dict[str, List[str]] = {
-        "pandas-1.5.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": [
-            "cp310-cp310-manylinux2014_aarch64",
+    data: Dict[str, Set[str]] = {
+        "pandas-1.5.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl": {
             "cp310-cp310-manylinux_2_17_aarch64",
-        ],
-        "requests-2.28.1-py3-none-any.whl": ["py3-none-any"],
-        "scikit_learn-1.1.3-cp311-cp311-win_amd64.whl": ["cp311-cp311-win_amd64"],
-        "scikit_learn-1.1.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": [
-            "cp311-cp311-manylinux2014_x86_64",
+            "cp310-cp310-manylinux2014_aarch64",
+        },
+        "requests-2.28.1-py3-none-any.whl": {"py3-none-any"},
+        "scikit_learn-1.1.3-cp311-cp311-win_amd64.whl": {"cp311-cp311-win_amd64"},
+        "scikit_learn-1.1.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
             "cp311-cp311-manylinux_2_17_x86_64",
-        ],
+            "cp311-cp311-manylinux2014_x86_64",
+        },
     }
 
     @classmethod
     def setUpClass(cls):
         """Retrieves the two implementations of ``tags_from_wheel_filename``."""
 
-        # Related work:
-        # How to mock an ImportError: https://stackoverflow.com/a/62456280
-        # How to mock a ModuleNotFoundError: https://stackoverflow.com/a/67884737
-        # How to ignore certain imports: https://stackoverflow.com/a/63353431
-
-        # get the implementation that uses the ``packaging`` package
-        cls.tags_from_wheel_using_packaging_package = staticmethod(
-            req2flatpak.tags_from_wheel_filename
-        )
-
         # get the implementation that does not use the ``packaging`` package
+        # related work:
+        # - how to mock a ModuleNotFoundError: https://stackoverflow.com/a/67884737
+        # - how to ignore certain imports: https://stackoverflow.com/a/63353431
         with mock.patch.dict("sys.modules", {"packaging.utils": None}):
             reload(req2flatpak)
-            cls.tags_from_wheel_without_packaging_package = staticmethod(
-                req2flatpak.tags_from_wheel_filename
-            )
+            cls.implementations[
+                "without_packaging"
+            ] = req2flatpak.tags_from_wheel_filename
 
-        # make sure we got two different implementations
+        # get the implementation that uses the ``packaging`` package
+        reload(req2flatpak)
+        cls.implementations["with_packaging"] = req2flatpak.tags_from_wheel_filename
+
+        # ensure that we got two different implementations
         assert (
-            cls.tags_from_wheel_using_packaging_package
-            != cls.tags_from_wheel_without_packaging_package
+            cls.implementations["without_packaging"]
+            != cls.implementations["with_packaging"]
         )
 
     def test(self):
         """Tests the behavior of ``tags_from_wheel_filename``."""
-
-        for filename, tags in self.testdata.items():
-            for tags_from_wheel in [
-                self.tags_from_wheel_without_packaging_package,
-                self.tags_from_wheel_using_packaging_package,
-            ]:
-                with self.subTest(filename=filename, function=tags_from_wheel.__name__):
-                    self.assertEqual(tags_from_wheel(filename), tags)
+        for filename, expected_tags in self.data.items():
+            for description, func in self.implementations.items():
+                with self.subTest(filename=filename, impl=description):
+                    parsed_tags = func(filename)  # pylint: disable=not-callable
+                    self.assertEqual(parsed_tags, expected_tags)
