@@ -14,6 +14,7 @@ python = "^3.7.2"
 packaging = { version = "^21.3", optional = true }
 
 [tool.poetry.group.lint.dependencies]
+pydocstyle = "6.2.1"  # temporarily downgraded on 2022-01-04 because of https://github.com/PyCQA/pydocstyle/issues/621
 pylama = { extras = [
     "mypy",
     "pylint",

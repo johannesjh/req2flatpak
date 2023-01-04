@@ -288,7 +288,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "pydocstyle"
-version = "6.2.2"
+version = "6.2.1"
 description = "Python docstring style checker"
 category = "dev"
 optional = false
@@ -680,7 +680,7 @@ packaging = ["packaging"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "d1f779133703a9fed3bd5de23283364014c3c109069bfd333528e9e7cb4ff8f4"
+content-hash = "115846ea8cf7f946a7c6c83a2c4f1fe01d5325800f0a5f28a93a967b898ceecd"
 
 [metadata.files]
 alabaster = [
@@ -871,8 +871,8 @@ pycodestyle = [
     {file = "pycodestyle-2.10.0.tar.gz", hash = "sha256:347187bdb476329d98f695c213d7295a846d1152ff4fe9bacb8a9590b8ee7053"},
 ]
 pydocstyle = [
-    {file = "pydocstyle-6.2.2-py3-none-any.whl", hash = "sha256:021b33525927b43b4469c2715694c38082cb98146b52342df652b30806e3cb61"},
-    {file = "pydocstyle-6.2.2.tar.gz", hash = "sha256:5714e3a96f6ece848a1c35f581e89f3164867733609f0dd8a99f7e7c6b526bdd"},
+    {file = "pydocstyle-6.2.1-py3-none-any.whl", hash = "sha256:e034023706489a5786778d21bd25e951052616b260d83e163f09d559dcd647b9"},
+    {file = "pydocstyle-6.2.1.tar.gz", hash = "sha256:5ddccabe3c9555d4afaabdba909ca2de4fa24ac31e2eede4ab3d528a4bcadd52"},
 ]
 pyflakes = [
     {file = "pyflakes-3.0.1-py2.py3-none-any.whl", hash = "sha256:ec55bf7fe21fff7f1ad2f7da62363d749e2a470500eab1b555334b67aa1ef8cf"},
