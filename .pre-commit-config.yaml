@@ -1,49 +1,46 @@
 repos:
-  - repo: https://github.com/pycqa/isort
-    rev: 5.10.1
-    hooks:
+  - hooks:
       - id: isort
         name: isort (python)
-
-  - repo: https://github.com/psf/black
-    rev: 22.10.0
-    hooks:
+    repo: https://github.com/pycqa/isort
+    rev: v5.11.3
+  - hooks:
       - id: black
-
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v2.7.1"
-    hooks:
+    repo: https://github.com/psf/black
+    rev: 22.12.0
+  - hooks:
       - id: prettier
-
-  - repo: https://github.com/rstcheck/rstcheck
-    rev: "v6.1.0"
-    hooks:
-      - id: rstcheck
-        additional_dependencies: [sphinx]
-        args: ["--config", "docs/rstcheck.cfg"]
-
-  - repo: local
-    hooks:
-      - id: pylama
-        name: pylama
-        entry: pylama
-        language: system
-        types: [python]
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: "1.7.4"
-    hooks:
-      - id: bandit
-        files: "req2flatpak.py"
+    repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+  - hooks:
+      - additional_dependencies:
+          - sphinx
         args:
-          - "--aggregate"
-          - "vuln"
-          - "-ll"
-          - "-q"
-          - "-f"
-          - "custom"
-          - "--msg-template"
-          - "--------------------------------------------------\n
-            {relpath}:{line}:\n
-            [{test_id:^8}] Severity: {severity} Confidence: {confidence}\n
-            {msg}"
+          - --config
+          - docs/rstcheck.cfg
+        id: rstcheck
+    repo: https://github.com/rstcheck/rstcheck
+    rev: v6.1.1
+  - hooks:
+      - entry: pylama
+        id: pylama
+        language: system
+        name: pylama
+        types:
+          - python
+    repo: local
+  - hooks:
+      - args:
+          - --aggregate
+          - vuln
+          - -ll
+          - -q
+          - -f
+          - custom
+          - --msg-template
+          - "--------------------------------------------------\n {relpath}:{line}:\n\
+            \ [{test_id:^8}] Severity: {severity} Confidence: {confidence}\n {msg}"
+        files: req2flatpak.py
+        id: bandit
+    repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
