@@ -125,3 +125,14 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
 
    # to prettify and lint only staged changes
    pre-commit run
+
+
+Publishing a Release
+--------------------
+
+Use the following steps to publish a release of req2flatpak:
+
+* Enter the version number to be released in ``pyproject.toml``, e.g., ``version = "1.2.3"``. Commit and push this change to a branch and create a merge request.
+* Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch
+* Tag the main branch with the version to be released, e.g., push a tag named ``v1.2.3``.
+* Github CI will build the python package and publish it on PyPI.

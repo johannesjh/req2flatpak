@@ -105,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensuring-code-quality">Ensuring Code quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-a-release">Publishing a Release</a></li>
 </ul>
 </li>
 </ul>
@@ -288,6 +289,16 @@ pre-commit run --all
 pre-commit run
 </pre></div>
 </div>
+</section>
+<section id="publishing-a-release">
+<h2>Publishing a Release<a class="headerlink" href="#publishing-a-release" title="Permalink to this heading">¶</a></h2>
+<p>Use the following steps to publish a release of req2flatpak:</p>
+<ul class="simple">
+<li><p>Enter the version number to be released in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, e.g., <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;1.2.3&quot;</span></code>. Commit and push this change to a branch and create a merge request.</p></li>
+<li><p>Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch</p></li>
+<li><p>Tag the main branch with the version to be released, e.g., push a tag named <code class="docutils literal notranslate"><span class="pre">v1.2.3</span></code>.</p></li>
+<li><p>Github CI will build the python package and publish it on PyPI.</p></li>
+</ul>
 </section>
 </section>
 
