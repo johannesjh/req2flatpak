@@ -1,3 +1,7 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "req2flatpak"
 version = "0.1.0"
@@ -12,6 +16,9 @@ req2flatpak = 'req2flatpak:main'
 [tool.poetry.dependencies]
 python = "^3.7.2"
 packaging = { version = "^21.3", optional = true }
+
+[tool.poetry.extras]
+packaging = ["packaging"]
 
 [tool.poetry.group.lint.dependencies]
 pylama = { extras = [
@@ -32,13 +39,6 @@ optional = true
 sphinx = "^5.3.0"
 sphinx-argparse = "^0.3.2"
 sphinx-rtd-theme-github-versions = "^1.1"
-
-[tool.poetry.extras]
-packaging = ["packaging"]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
