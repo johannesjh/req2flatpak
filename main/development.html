@@ -222,21 +222,21 @@ Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <
 <p>Have a look at the commands available in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">makefile</span></code>.
 These commands show how to run a local req2flatpak development version,
 as well as various other development-related tasks.</p>
-<div class="highlight-Makefile notranslate"><div class="highlight"><pre><span></span><span class="nf">.PHONY</span><span class="o">:</span> <span class="n">run</span>
+<div class="highlight-Makefile notranslate"><div class="highlight"><pre><span></span><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">run</span>
 <span class="nf">run</span><span class="o">:</span>
-	poetry run req2flatpak
+<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>req2flatpak
 
-<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">lint</span>
+<span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">lint</span>
 <span class="nf">lint</span><span class="o">:</span>
-	poetry run pre-commit run --all-files
+<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>pre-commit<span class="w"> </span>run<span class="w"> </span>--all-files
 
-<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">test</span>
+<span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">test</span>
 <span class="nf">test</span><span class="o">:</span>
-	poetry run python3 -m unittest
+<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>unittest
 
-<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">docs</span>
+<span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">docs</span>
 <span class="nf">docs</span><span class="o">:</span>
-	poetry run sphinx-build -v -b html docs/source docs/build/html
+<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-v<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs/source<span class="w"> </span>docs/build/html
 </pre></div>
 </div>
 </section>
@@ -277,16 +277,16 @@ You are very welcome to contribute improvements back to the original req2flatpak
 <p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the code before committing changes,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to install pre-commit on your system,</span>
 <span class="c1"># follow instructions from https://pre-commit.com/, for example:</span>
-pip install pre-commit  <span class="c1"># install pre-commit using pip</span>
+pip<span class="w"> </span>install<span class="w"> </span>pre-commit<span class="w">  </span><span class="c1"># install pre-commit using pip</span>
 
 <span class="c1"># to install the pre-commit git hooks in the cloned favagtk repo</span>
-pre-commit install  <span class="c1"># activates pre-commit in the current git repo</span>
+pre-commit<span class="w"> </span>install<span class="w">  </span><span class="c1"># activates pre-commit in the current git repo</span>
 
 <span class="c1"># to prettify and lint all code</span>
-pre-commit run --all
+pre-commit<span class="w"> </span>run<span class="w"> </span>--all
 
 <span class="c1"># to prettify and lint only staged changes</span>
-pre-commit run
+pre-commit<span class="w"> </span>run
 </pre></div>
 </div>
 </section>
