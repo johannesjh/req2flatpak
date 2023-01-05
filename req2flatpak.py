@@ -227,6 +227,17 @@ class Download(Requirement):
                 return "aarch64"
         return None
 
+    def __lt__(self, other):
+        """Makes this class sortable."""
+        # Note: Implementing __lt__ is sufficient to make a class sortable,
+        # see, e.g., https://stackoverflow.com/a/7152796
+
+        def sort_keys(download: Download) -> Tuple[str, str, str]:
+            """A tuple of package, version and architecture is used as key for sorting."""
+            return download.package, download.version, download.arch or ""
+
+        return sort_keys(self) < sort_keys(other)
+
 
 @dataclass(frozen=True)
 class Release(Requirement):
@@ -606,10 +617,7 @@ class FlatpakGenerator:
             return source
 
         def sources(downloads: Iterable[Download]) -> List[dict]:
-            sorted_downloads = sorted(
-                downloads, key=lambda d: (d.package, d.version, d.arch)
-            )
-            return [source(download) for download in sorted_downloads]
+            return [source(download) for download in sorted(downloads)]
 
         return {
             "name": module_name,
