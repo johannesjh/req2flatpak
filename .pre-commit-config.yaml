@@ -22,6 +22,12 @@ repos:
         additional_dependencies: [sphinx]
         args: ["--config", "docs/rstcheck.cfg"]
 
+  - repo: https://github.com/python-poetry/poetry
+    rev: "1.3.1" # add version here
+    hooks:
+      - id: poetry-check
+      - id: poetry-lock
+
   - repo: local
     hooks:
       - id: pylama
