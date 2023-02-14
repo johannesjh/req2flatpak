@@ -31,6 +31,7 @@ bandit = { extras = ["toml"], version = "^1.7.4" }
 types-setuptools = "^65.5.0.2" # type stubs for mypy linting
 
 # [tool.poetry.group.tests.dependencies]
+pydocstyle = "<6.2"
 
 [tool.poetry.group.docs]
 optional = true
