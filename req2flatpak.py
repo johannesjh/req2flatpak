@@ -102,6 +102,10 @@ except ImportError:
             return val
 
 
+class InvalidWheelFilename(Exception):
+    """An invalid wheel filename was found, users should refer to PEP 427."""
+
+
 try:
     # use packaging.tags functionality if available
     from packaging.utils import parse_wheel_filename
@@ -124,7 +128,6 @@ except ModuleNotFoundError:
 
         Implemented as (semi-)vendored functionality in req2flatpak.
         """
-        InvalidWheelFilename = Exception
         Tag = Tuple[str, str, str]
 
         # the following code is based on packaging.tags.parse_tag,
@@ -319,7 +322,7 @@ class PlatformFactory:
 
     @classmethod
     def from_python_version_and_arch(
-        cls, minor_version: int = None, arch="x86_64"
+        cls, minor_version: Optional[int] = None, arch="x86_64"
     ) -> Platform:
         """
         Returns a platform object that roughly describes a cpython installation on linux.
@@ -344,7 +347,7 @@ class PlatformFactory:
 
     @classmethod
     def _cp3_linux_tags(
-        cls, minor_version: int = None, arch="x86_64"
+        cls, minor_version: Optional[int] = None, arch="x86_64"
     ) -> Generator[str, None, None]:
         """Yields python platform tags for cpython3 on linux."""
         # pylint: disable=too-many-branches
