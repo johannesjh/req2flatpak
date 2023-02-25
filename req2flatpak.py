@@ -652,7 +652,7 @@ class FlatpakGenerator:
         # optional dependency, not imported at top
         import yaml
 
-        return yaml.dump(cls.build_module(*args, **kwargs), indent=2)
+        return yaml.dump(cls.build_module(*args, **kwargs), default_flow_style=False)
 
 
 # =============================================================================
@@ -749,7 +749,7 @@ def main():
     if options.platform_info:
         info = asdict(PlatformFactory.from_current_interpreter())
         if options.yaml:
-            yaml.dump(info, output_stream, indent=2)
+            yaml.dump(info, output_stream, default_flow_style=False)
         else:
             json.dump(info, output_stream, indent=4)
         parser.exit()
@@ -811,7 +811,7 @@ def main():
     build_module = FlatpakGenerator.build_module(requirements, downloads)
 
     if options.yaml:
-        yaml.dump(build_module, output_stream, indent=2)
+        yaml.dump(build_module, output_stream, default_flow_style=False)
         parser.exit()
 
     # write output
