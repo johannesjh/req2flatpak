@@ -19,6 +19,7 @@ packaging = { version = "^21.3", optional = true }
 
 [tool.poetry.extras]
 packaging = ["packaging"]
+# TODO: something about pyyaml here
 
 [tool.poetry.group.lint.dependencies]
 pylama = { extras = [

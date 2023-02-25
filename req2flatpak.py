@@ -634,12 +634,25 @@ class FlatpakGenerator:
     @classmethod
     def build_module_as_str(cls, *args, **kwargs) -> str:
         """
-        Generates a build module for inclusion in a flatpak-builder build manifest.
+        Generate JSON build module for inclusion in a flatpak-builder build manifest.
 
         The args and kwargs are the same as in
         :py:meth:`~req2flatpak.FlatpakGenerator.build_module`
         """
         return json.dumps(cls.build_module(*args, **kwargs), indent=4)
+
+    @classmethod
+    def build_module_as_yaml_str(cls, *args, **kwargs) -> str:
+        """
+        Generate YAML build module for inclusion in a flatpak-builder build manifest.
+
+        The args and kwargs are the same as in
+        :py:meth:`~req2flatpak.FlatpakGenerator.build_module`
+        """
+        # optional dependency, not imported at top
+        import yaml
+
+        return yaml.dump(cls.build_module(*args, **kwargs), indent=2)
 
 
 # =============================================================================
@@ -682,6 +695,10 @@ def cli_parser() -> argparse.ArgumentParser:
         nargs="?",
         type=argparse.FileType("w"),
         default=sys.stdout,
+        help="""
+            By default, writes JSON but specify a '.yaml' extension and YAML
+            will be written instead, provided you have the 'pyyaml' package.
+        """,
     )
     parser.add_argument(
         "--platform-info",
@@ -706,7 +723,13 @@ def main():
     options = parser.parse_args()
 
     # stream output to a file or to stdout
-    output_stream = options.outfile if hasattr(options.outfile, "write") else sys.stdout
+    want_yaml = False
+    if hasattr(options.outfile, "write"):
+        output_stream = options.outfile
+        if pathlib.Path(output_stream.name).suffix.casefold() in (".yaml", ".yml"):
+            want_yaml = True
+    else:
+        output_stream = sys.stdout
 
     # print platform info if requested, and exit
     if options.platform_info:
@@ -770,6 +793,17 @@ def main():
 
     # generate flatpak-builder build module
     build_module = FlatpakGenerator.build_module(requirements, downloads)
+
+    if want_yaml:
+        try:
+            # optional dependency, not imported at top
+            import yaml
+        except ImportError:
+            parser.error(
+                "Writing yaml files requires pyyaml package: try 'pip install pyyaml'"
+            )
+        yaml.dump(build_module, output_stream, indent=2)
+        parser.exit()
 
     # write output
     json.dump(build_module, output_stream, indent=4)
