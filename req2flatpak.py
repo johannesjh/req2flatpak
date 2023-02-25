@@ -695,6 +695,15 @@ def cli_parser() -> argparse.ArgumentParser:
         default=False,
         help="Prints installed packages in requirements.txt format.",
     )
+    try:
+        # get the version number from pyproject.toml
+        __version__ = pkg_resources.get_distribution("req2flatpak").version
+    except pkg_resources.DistributionNotFound:
+        # ... which only works once installed
+        __version__ = "<version unavailable>"
+    parser.add_argument(
+        "--version", action="version", version="%(prog)s " + __version__
+    )
     return parser
 
 
