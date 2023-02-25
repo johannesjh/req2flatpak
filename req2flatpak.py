@@ -690,6 +690,12 @@ def cli_parser() -> argparse.ArgumentParser:
         help="Uses a persistent cache when querying pypi.",
     )
     parser.add_argument(
+        "--yaml",
+        action="store_true",
+        help="Write YAML instead of the default JSON.  Needs the 'pyyaml' package.",
+    )
+
+    parser.add_argument(
         "--outfile",
         "-o",
         nargs="?",
@@ -723,11 +729,10 @@ def main():
     options = parser.parse_args()
 
     # stream output to a file or to stdout
-    want_yaml = False
     if hasattr(options.outfile, "write"):
         output_stream = options.outfile
         if pathlib.Path(output_stream.name).suffix.casefold() in (".yaml", ".yml"):
-            want_yaml = True
+            options.yaml = True
     else:
         output_stream = sys.stdout
 
@@ -794,7 +799,7 @@ def main():
     # generate flatpak-builder build module
     build_module = FlatpakGenerator.build_module(requirements, downloads)
 
-    if want_yaml:
+    if options.yaml:
         try:
             # optional dependency, not imported at top
             import yaml
