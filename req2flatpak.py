@@ -64,6 +64,9 @@ import pkg_resources
 
 logger = logging.getLogger(__name__)
 
+# careful, it is also repeated in pyproject.toml
+__version__ = "0.1.1.dev"
+
 
 # =============================================================================
 # Helper functions / semi vendored code
@@ -695,12 +698,6 @@ def cli_parser() -> argparse.ArgumentParser:
         default=False,
         help="Prints installed packages in requirements.txt format.",
     )
-    try:
-        # get the version number from pyproject.toml
-        __version__ = pkg_resources.get_distribution("req2flatpak").version
-    except pkg_resources.DistributionNotFound:
-        # ... which only works once installed
-        __version__ = "<version unavailable>"
     parser.add_argument(
         "--version", action="version", version="%(prog)s " + __version__
     )
