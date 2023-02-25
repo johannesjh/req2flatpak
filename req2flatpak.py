@@ -728,16 +728,6 @@ def main():
     parser = cli_parser()
     options = parser.parse_args()
 
-    def _get_yaml_module_or_exit():
-        try:
-            # optional dependency, not imported at top
-            import yaml
-        except ImportError:
-            parser.error(
-                "Outputing YAML requires 'pyyaml' package: try 'pip install pyyaml'"
-        )
-        return yaml
-
     # stream output to a file or to stdout
     if hasattr(options.outfile, "write"):
         output_stream = options.outfile
@@ -746,17 +736,22 @@ def main():
     else:
         output_stream = sys.stdout
 
+    if options.yaml:
+        try:
+            # optional dependency, not imported at top
+            import yaml
+        except ImportError:
+            parser.error(
+                "Outputing YAML requires 'pyyaml' package: try 'pip install pyyaml'"
+            )
+
     # print platform info if requested, and exit
-    if options.platform_info and options.yaml:
-        yaml = _get_yaml_module_or_exit()
-        yaml.dump(
-            asdict(PlatformFactory.from_current_interpreter()), output_stream, indent=2
-        )
-        parser.exit()
     if options.platform_info:
-        json.dump(
-            asdict(PlatformFactory.from_current_interpreter()), output_stream, indent=4
-        )
+        info = asdict(PlatformFactory.from_current_interpreter())
+        if options.yaml:
+            yaml.dump(info, output_stream, indent=2)
+        else:
+            json.dump(info, output_stream, indent=4)
         parser.exit()
 
     # print installed packages if requested, and exit
@@ -816,7 +811,6 @@ def main():
     build_module = FlatpakGenerator.build_module(requirements, downloads)
 
     if options.yaml:
-        yaml = _get_yaml_module_or_exit()
         yaml.dump(build_module, output_stream, indent=2)
         parser.exit()
 
