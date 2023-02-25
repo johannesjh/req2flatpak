@@ -639,7 +639,7 @@ class FlatpakGenerator:
         The args and kwargs are the same as in
         :py:meth:`~req2flatpak.FlatpakGenerator.build_module`
         """
-        return json.dumps(cls.build_module(*args, **kwargs), indent=2)
+        return json.dumps(cls.build_module(*args, **kwargs), indent=4)
 
 
 # =============================================================================
