@@ -4,6 +4,8 @@ repos:
     hooks:
       - id: poetry-check
       - id: poetry-lock
+        args:
+          - "--no-update"
 
   - repo: https://github.com/floatingpurr/sync_with_poetry
     rev: 6fd6194c7bbd629b18a7bcd7a4a38a57f128b451 # 0.4.0
