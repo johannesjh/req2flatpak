@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import List
 from unittest.mock import patch
 
+import yaml
+
 from req2flatpak import (
     DownloadChooser,
     FlatpakGenerator,
@@ -93,6 +95,15 @@ class Req2FlatpakBaseTest(ABC):
         args += ["--target-platforms"] + self.target_platforms
         result = self._run_r2f(args)
         build_module = json.loads(result.stdout)
+        self.validate_build_module(build_module)
+
+    def test_cli_with_reqs_as_args_yaml(self):
+        """Runs req2flatpak in yaml mode by passing requirements as cmdline arg."""
+        args = ["--requirements"] + self.requirements
+        args += ["--target-platforms"] + self.target_platforms
+        args += ["--yaml"]
+        result = self._run_r2f(args)
+        build_module = yaml.load(result.stdout, yaml.Loader)
         self.validate_build_module(build_module)
 
     def test_cli_with_reqs_as_file(self):
