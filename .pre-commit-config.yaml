@@ -49,7 +49,7 @@ repos:
     rev: "1.7.4" # frozen: 1.7.4
     hooks:
       - id: bandit
-        files: "req2flatpak.py"
+        files: "^req2flatpak.py$"
         args:
           - "--aggregate"
           - "vuln"
