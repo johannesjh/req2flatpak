@@ -118,6 +118,19 @@ class Req2FlatpakBaseTest(ABC):
             build_module = json.loads(result.stdout)
             self.validate_build_module(build_module)
 
+    def test_cli_with_reqs_as_file_yaml(self):
+        """Runs req2flatpak by passing requirements as requirements.txt file."""
+        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
+            req_file.write("\n".join(self.requirements))
+            req_file.flush()
+            req_file.seek(0)
+            args = ["--requirements-file", req_file.name]
+            args += ["--target-platforms"] + self.target_platforms
+            args += ["--yaml"]
+            result = self._run_r2f(args)
+            build_module = yaml.load(result.stdout, yaml.Loader)
+            self.validate_build_module(build_module)
+
     def test_api(self):
         """Runs req2flatpak by calling its python api."""
         platforms = [
