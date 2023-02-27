@@ -127,6 +127,10 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
    pre-commit run
 
 
+If this doesn't work, you can disable pre-commit using ``pre-commit uninstall``.
+We welcome your contributions even if your workflow differs from what we recommend here.
+
+
 Publishing a Release
 --------------------
 
