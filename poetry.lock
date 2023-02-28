@@ -719,7 +719,7 @@ files = [
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1230,8 +1230,9 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 
 [extras]
 packaging = ["packaging"]
+yaml = ["pyyaml"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7.2"
-content-hash = "750c7f502c3eaec5a8d8349251f90fd9fcf577fb4185ca3716e0a54f21e96337"
+content-hash = "8cf0740c1d625b42dc2f3bca5baab8d52c95a2fc60e71016460a5d5acfce85a0"
