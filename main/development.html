@@ -289,6 +289,8 @@ pre-commit<span class="w"> </span>run<span class="w"> </span>--all
 pre-commit<span class="w"> </span>run
 </pre></div>
 </div>
+<p>If this doesn’t work, you can skip specific checks by prepending <code class="docutils literal notranslate"><span class="pre">SKIP=&lt;hook-id&gt;</span></code> like so: <code class="docutils literal notranslate"><span class="pre">SKIP=poetry-lock</span> <span class="pre">git</span> <span class="pre">commit</span></code>. You can disable all hooks for a commit by using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-n</span></code> or disable pre-commit entirely for the repository with <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">uninstall</span></code>.
+We welcome your contributions even if your workflow differs from what we recommend here.</p>
 </section>
 <section id="publishing-a-release">
 <h2>Publishing a Release<a class="headerlink" href="#publishing-a-release" title="Permalink to this heading">¶</a></h2>
