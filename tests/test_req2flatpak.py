@@ -7,9 +7,13 @@ from abc import ABC
 from itertools import product
 from pathlib import Path
 from typing import List
+from unittest import skipUnless
 from unittest.mock import patch
 
-import yaml
+try:
+    import yaml
+except ImportError:
+    yaml = None  # type: ignore
 
 from req2flatpak import (
     DownloadChooser,
@@ -97,6 +101,7 @@ class Req2FlatpakBaseTest(ABC):
         build_module = json.loads(result.stdout)
         self.validate_build_module(build_module)
 
+    @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
     def test_cli_with_reqs_as_args_yaml(self):
         """Runs req2flatpak in yaml mode by passing requirements as cmdline arg."""
         args = ["--requirements"] + self.requirements
@@ -118,6 +123,7 @@ class Req2FlatpakBaseTest(ABC):
             build_module = json.loads(result.stdout)
             self.validate_build_module(build_module)
 
+    @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
     def test_cli_with_reqs_as_file_yaml(self):
         """Runs req2flatpak by passing requirements as requirements.txt file."""
         with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
