@@ -127,6 +127,10 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
    pre-commit run
 
 
+If this doesn't work, you can skip specific checks by prepending ``SKIP=<hook-id>`` like so: ``SKIP=poetry-lock git commit``. You can disable all hooks for a commit by using ``git commit -n`` or disable pre-commit entirely for the repository with ``pre-commit uninstall``.
+We welcome your contributions even if your workflow differs from what we recommend here.
+
+
 Publishing a Release
 --------------------
 
