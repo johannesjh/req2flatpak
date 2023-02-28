@@ -30,7 +30,10 @@ pylama = { extras = [
     "toml",
 ], version = "^8.4.1" }
 bandit = { extras = ["toml"], version = "^1.7.4" }
-types-setuptools = "^65.5.0.2" # type stubs for mypy linting
+
+# type stubs for mypy linting
+types-setuptools = "^65.5.0.2"
+types-pyyaml     = "^6.0.12.8"
 
 # [tool.poetry.group.tests.dependencies]
 pydocstyle = "<6.2"
