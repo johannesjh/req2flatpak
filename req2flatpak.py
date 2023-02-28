@@ -766,6 +766,7 @@ def main():
         DownloadChooser.wheel_or_sdist(release, platform)
         for release in releases
         for platform in platforms
+        if platform
     }
 
     # generate flatpak-builder build module

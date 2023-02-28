@@ -41,7 +41,7 @@ repos:
     hooks:
       - id: pylama
         name: pylama
-        entry: pylama
+        entry: poetry run pylama
         language: system
         types: [python]
 
