@@ -4,6 +4,8 @@ repos:
     hooks:
       - id: poetry-check
       - id: poetry-lock
+        args:
+          - "--no-update"
 
   - repo: https://github.com/floatingpurr/sync_with_poetry
     rev: 6fd6194c7bbd629b18a7bcd7a4a38a57f128b451 # 0.4.0
@@ -47,7 +49,7 @@ repos:
     rev: "1.7.4" # frozen: 1.7.4
     hooks:
       - id: bandit
-        files: "req2flatpak.py"
+        files: "^req2flatpak.py$"
         args:
           - "--aggregate"
           - "vuln"
