@@ -725,7 +725,7 @@ def cli_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main():  # pylint: disable=too-many-branches
     """Main function that provides req2flatpak's commandline interface."""
 
     # process commandline arguments
