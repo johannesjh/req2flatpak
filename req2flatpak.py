@@ -64,6 +64,10 @@ import pkg_resources
 
 logger = logging.getLogger(__name__)
 
+try:
+    import yaml
+except ImportError:
+    yaml = None  # type: ignore
 
 # =============================================================================
 # Helper functions / semi vendored code
@@ -73,7 +77,6 @@ try:
     # added with py 3.8
     from functools import cached_property  # type: ignore[attr-defined]
 except ImportError:
-
     # Inspired by the implementation in the standard library
     # pylint: disable=invalid-name,too-few-public-methods
     class cached_property:  # type: ignore[no-redef]
@@ -551,9 +554,7 @@ class DownloadChooser:
         preferred downloads are returned first.
         """
         cache = set()
-        for (platform_tag, download) in product(
-            platform.python_tags, release.downloads
-        ):
+        for platform_tag, download in product(platform.python_tags, release.downloads):
             if download in cache:
                 continue
             if wheels_only and not download.is_wheel:
@@ -650,7 +651,10 @@ class FlatpakGenerator:
         :py:meth:`~req2flatpak.FlatpakGenerator.build_module`
         """
         # optional dependency, not imported at top
-        import yaml
+        if not yaml:
+            raise ImportError(
+                "Package `pyyaml` has to be installed for the yaml format."
+            )
 
         return yaml.dump(cls.build_module(*args, **kwargs), default_flow_style=False)
 
@@ -736,14 +740,10 @@ def main():
     else:
         output_stream = sys.stdout
 
-    if options.yaml:
-        try:
-            # optional dependency, not imported at top
-            import yaml
-        except ImportError:
-            parser.error(
-                "Outputing YAML requires 'pyyaml' package: try 'pip install pyyaml'"
-            )
+    if options.yaml and not yaml:
+        parser.error(
+            "Outputing YAML requires 'pyyaml' package: try 'pip install pyyaml'"
+        )
 
     # print platform info if requested, and exit
     if options.platform_info:
