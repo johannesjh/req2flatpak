@@ -808,14 +808,16 @@ def main():  # pylint: disable=too-many-branches
     }
 
     # generate flatpak-builder build module
-    build_module = FlatpakGenerator.build_module(requirements, downloads)
-
     if options.yaml:
-        yaml.dump(build_module, output_stream, default_flow_style=False)
-        parser.exit()
-
-    # write output
-    json.dump(build_module, output_stream, indent=4)
+        # write yaml
+        output_stream.write(
+            FlatpakGenerator.build_module_as_yaml_str(requirements, downloads)
+        )
+    else:
+        # write json
+        output_stream.write(
+            FlatpakGenerator.build_module_as_str(requirements, downloads)
+        )
 
 
 if __name__ == "__main__":

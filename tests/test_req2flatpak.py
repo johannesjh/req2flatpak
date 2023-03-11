@@ -91,7 +91,7 @@ class Req2FlatpakBaseTest(ABC):
     @contextmanager
     def requirements_file(
         self,
-    ) -> Generator[tempfile._TemporaryFileWrapper[str], None, None]:
+    ) -> Generator[tempfile._TemporaryFileWrapper, None, None]:
         """Create a temporary requirements file."""
         with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
             req_file.write("\n".join(self.requirements))
