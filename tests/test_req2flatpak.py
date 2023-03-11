@@ -4,9 +4,10 @@ import subprocess
 import tempfile
 import unittest
 from abc import ABC
+from contextlib import contextmanager
 from itertools import product
 from pathlib import Path
-from typing import List
+from typing import Generator, List
 from unittest import skipUnless
 from unittest.mock import patch
 
@@ -87,6 +88,17 @@ class Req2FlatpakBaseTest(ABC):
         """To be implemented by subclasses."""
         raise NotImplementedError
 
+    @contextmanager
+    def requirements_file(
+        self,
+    ) -> Generator[tempfile._TemporaryFileWrapper[str], None, None]:
+        """Create a temporary requirements file."""
+        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
+            req_file.write("\n".join(self.requirements))
+            req_file.flush()
+            req_file.seek(0)
+            yield req_file
+
     def _run_r2f(self, args: List[str]) -> subprocess.CompletedProcess:
         """Runs req2flatpak's cli in a subprocess."""
         cwd = Path(__file__).parent / ".."
@@ -113,10 +125,7 @@ class Req2FlatpakBaseTest(ABC):
 
     def test_cli_with_reqs_as_file(self):
         """Runs req2flatpak by passing requirements as requirements.txt file."""
-        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
-            req_file.write("\n".join(self.requirements))
-            req_file.flush()
-            req_file.seek(0)
+        with self.requirements_file() as req_file:
             args = ["--requirements-file", req_file.name]
             args += ["--target-platforms"] + self.target_platforms
             result = self._run_r2f(args)
@@ -126,10 +135,7 @@ class Req2FlatpakBaseTest(ABC):
     @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
     def test_cli_with_reqs_as_file_yaml(self):
         """Runs req2flatpak by passing requirements as requirements.txt file."""
-        with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8") as req_file:
-            req_file.write("\n".join(self.requirements))
-            req_file.flush()
-            req_file.seek(0)
+        with self.requirements_file() as req_file:
             args = ["--requirements-file", req_file.name]
             args += ["--target-platforms"] + self.target_platforms
             args += ["--yaml"]
