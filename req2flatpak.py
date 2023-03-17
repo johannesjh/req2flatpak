@@ -656,7 +656,9 @@ class FlatpakGenerator:
                 "Package `pyyaml` has to be installed for the yaml format."
             )
 
-        return yaml.dump(cls.build_module(*args, **kwargs), default_flow_style=False)
+        return yaml.dump(
+            cls.build_module(*args, **kwargs), default_flow_style=False, sort_keys=False
+        )
 
 
 # =============================================================================
@@ -749,7 +751,7 @@ def main():  # pylint: disable=too-many-branches
     if options.platform_info:
         info = asdict(PlatformFactory.from_current_interpreter())
         if options.yaml:
-            yaml.dump(info, output_stream, default_flow_style=False)
+            yaml.dump(info, output_stream, default_flow_style=False, sort_keys=False)
         else:
             json.dump(info, output_stream, indent=4)
         parser.exit()
