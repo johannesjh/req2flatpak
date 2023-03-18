@@ -719,7 +719,7 @@ files = [
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1095,6 +1095,18 @@ files = [
 ]
 
 [[package]]
+name = "types-pyyaml"
+version = "6.0.12.8"
+description = "Typing stubs for PyYAML"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-PyYAML-6.0.12.8.tar.gz", hash = "sha256:19304869a89d49af00be681e7b267414df213f4eb89634c4495fa62e8f942b9f"},
+    {file = "types_PyYAML-6.0.12.8-py3-none-any.whl", hash = "sha256:5314a4b2580999b2ea06b2e5f9a7763d860d6e09cdf21c0e9561daa9cbd60178"},
+]
+
+[[package]]
 name = "types-setuptools"
 version = "65.7.0.4"
 description = "Typing stubs for setuptools"
@@ -1230,8 +1242,9 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 
 [extras]
 packaging = ["packaging"]
+yaml = ["pyyaml"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7.2"
-content-hash = "750c7f502c3eaec5a8d8349251f90fd9fcf577fb4185ca3716e0a54f21e96337"
+content-hash = "c5b1d81dd25cb29f850a0b2a212ea42efd3afe44050829e25d70854669f82d45"

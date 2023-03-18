@@ -23,8 +23,41 @@ jobs:
       - name: Run linters
         run: make lint
 
-  test:
+  generate_test_matrix:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: setup python
+        uses: actions/setup-python@d27e3f3d7c64b4bbf8e4abfb9b63b83e846e0435 # v4.5.0
+        with:
+          python-version: "3.11"
+
+      - name: Extract extras from `pyproject.toml`
+        id: set-matrix
+        shell: python
+        run: |
+          import tomllib
+          import os
+          import json
+          with open('pyproject.toml', 'rb') as f:
+              manifest = tomllib.load(f)
+          yaml = { 'include' : [{ 'extras' : extra} for extra in [''] + list(manifest['tool']['poetry']['extras'])]}
+          out = json.dumps(yaml)
+          print(out)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+            f.write('matrix=' + out)
+
+  test:
+    name: test ${{ matrix.extras && 'with' || '' }} ${{ matrix.extras }}
+    runs-on: ubuntu-latest
+    needs: generate_test_matrix
+    strategy:
+      matrix: ${{ fromJson(needs.generate_test_matrix.outputs.matrix) }}
+      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
@@ -33,7 +66,7 @@ jobs:
         id: setup
         uses: ./.github/actions/setup
         with:
-          install-options: --without lint
+          install-options: --without lint ${{ matrix.extras && format('--extras "{0}"', matrix.extras) || '' }}
 
       - name: Run Tests
         run: make test

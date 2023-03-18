@@ -1,24 +1,26 @@
 [build-system]
-requires = ["poetry-core"]
+requires      = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "req2flatpak"
-version = "0.1.0"
+name        = "req2flatpak"
+version     = "0.1.0"
 description = "Generates a flatpak-builder build module for installing python packages defined in requirements.txt files."
-authors = ["johannesjh <johannesjh@users.noreply.github.com>"]
-license = "MIT"
-readme = "README.rst"
+authors     = ["johannesjh <johannesjh@users.noreply.github.com>"]
+license     = "MIT"
+readme      = "README.rst"
 
 [tool.poetry.scripts]
 req2flatpak = 'req2flatpak:main'
 
 [tool.poetry.dependencies]
-python = "^3.7.2"
+python    = "^3.7.2"
 packaging = { version = "^21.3", optional = true }
+pyyaml    = { version = "^6.0", optional = true }
 
 [tool.poetry.extras]
 packaging = ["packaging"]
+yaml      = ["pyyaml"]
 
 [tool.poetry.group.lint.dependencies]
 pylama = { extras = [
@@ -28,7 +30,10 @@ pylama = { extras = [
     "toml",
 ], version = "^8.4.1" }
 bandit = { extras = ["toml"], version = "^1.7.4" }
-types-setuptools = "^65.5.0.2" # type stubs for mypy linting
+
+# type stubs for mypy linting
+types-setuptools = "^65.5.0.2"
+types-pyyaml     = "^6.0.12.8"
 
 # [tool.poetry.group.tests.dependencies]
 pydocstyle = "<6.2"
@@ -37,18 +42,18 @@ pydocstyle = "<6.2"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^5.3.0"
-sphinx-argparse = "^0.3.2"
+sphinx                           = "^5.3.0"
+sphinx-argparse                  = "^0.3.2"
 sphinx-rtd-theme-github-versions = "^1.1"
 
 [tool.isort]
-profile = "black"
+profile        = "black"
 skip_gitignore = true
 
 [tool.pylama]
 max_line_length = 88
-concurrent = true
-linters = "pycodestyle,pydocstyle,pyflakes,pylint,eradicate,mypy"
+concurrent      = true
+linters         = "pycodestyle,pydocstyle,pyflakes,pylint,eradicate,mypy"
 
 [tool.pylama.linter.pycodestyle]
 ignore = "W503,E203,E501"
@@ -63,8 +68,8 @@ ignore = ["D202", "D203", "D205", "D401", "D212"]
 
 [tool.pylint]
 format.max-line-length = 88
-main.disable = ["C0301"]            # ignore line-too-long
-basic.good-names = ["e", "f", "py"]
+main.disable           = ["C0301"]        # ignore line-too-long
+basic.good-names       = ["e", "f", "py"]
 
 [tool.bandit]
 exclude_dirs = ['tests']
