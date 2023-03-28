@@ -183,7 +183,7 @@ and makes it easy to get started.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
 <p>You can, for example, invoke req2flatpak’s commandline interface like this:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py --requirements-file requirements.txt --target-platforms cp310-x86_64 cp310-aarch64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span>cp310-x86_64<span class="w"> </span>cp310-aarch64
 </pre></div>
 </div>
 <p>When invoked like this, req2flatpak will read the requirements file,
@@ -197,9 +197,8 @@ module.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">req2flatpak</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">requirements</span> <span class="p">[</span><span class="n">REQUIREMENTS</span> <span class="o">...</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">requirements</span><span class="o">-</span><span class="n">file</span> <span class="p">[</span><span class="n">REQUIREMENTS_FILE</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">target</span><span class="o">-</span><span class="n">platforms</span> <span class="n">TARGET_PLATFORMS</span> <span class="p">[</span><span class="n">TARGET_PLATFORMS</span> <span class="o">...</span><span class="p">]]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span> <span class="o">|</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yaml</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="Named Arguments">
@@ -209,25 +208,32 @@ module.</p>
 <dd><p>One or more requirements can be specified as commandline arguments, e.g., ‘pandas==1.4.4’.</p>
 </dd>
 <dt><kbd>--requirements-file, -r</kbd></dt>
-<dd><p>Requirements can be read from a specified requirements.txt file or from stdin.</p>
-<p>Default: &lt;_io.TextIOWrapper name=’&lt;stdin&gt;’ mode=’r’ encoding=’utf-8’&gt;</p>
+<dd><p>Requirements can be read from a specified requirements.txt file.</p>
 </dd>
 <dt><kbd>--target-platforms, -t</kbd></dt>
 <dd><p>Target platforms can be specified as, e.g., ‘39-x86_64’ or ‘310-aarch64’.</p>
 </dd>
-<dt><kbd>--cache, --no-cache</kbd></dt>
-<dd><p>Uses a persistent cache when querying pypi. (default: False)</p>
+<dt><kbd>--cache</kbd></dt>
+<dd><p>Uses a persistent cache when querying pypi.</p>
+<p>Default: False</p>
+</dd>
+<dt><kbd>--yaml</kbd></dt>
+<dd><p>Write YAML instead of the default JSON.  Needs the ‘pyyaml’ package.</p>
 <p>Default: False</p>
 </dd>
 <dt><kbd>--outfile, -o</kbd></dt>
-<dd><p>Default: &lt;_io.TextIOWrapper name=’&lt;stdout&gt;’ mode=’w’ encoding=’utf-8’&gt;</p>
+<dd><blockquote>
+<div><p>By default, writes JSON but specify a ‘.yaml’ extension and YAML
+will be written instead, provided you have the ‘pyyaml’ package.</p>
+</div></blockquote>
+<p>Default: &lt;_io.TextIOWrapper name=’&lt;stdout&gt;’ mode=’w’ encoding=’utf-8’&gt;</p>
 </dd>
-<dt><kbd>--platform-info, --no-platform-info</kbd></dt>
-<dd><p>Prints information about the current platform. (default: False)</p>
+<dt><kbd>--platform-info</kbd></dt>
+<dd><p>Prints information about the current platform.</p>
 <p>Default: False</p>
 </dd>
-<dt><kbd>--installed-packages, --no-installed-packages</kbd></dt>
-<dd><p>Prints installed packages in requirements.txt format. (default: False)</p>
+<dt><kbd>--installed-packages</kbd></dt>
+<dd><p>Prints installed packages in requirements.txt format.</p>
 <p>Default: False</p>
 </dd>
 </dl>
@@ -271,23 +277,23 @@ target platform when generating a flatpak build module using req2flatpak’s
 python apis by reading the platform information from a file and by creating
 a platform object from it.</p>
 <p>Example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py --platform-info
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py<span class="w"> </span>--platform-info
 </pre></div>
 </div>
 <p>This will generate output like this:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;python_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;3&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;10&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;6&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">],</span><span class="w"></span>
-<span class="w">    </span><span class="nt">&quot;python_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_35_x86_64&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_34_x86_64&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_33_x86_64&quot;</span><span class="p">,</span><span class="w"></span>
-<span class="w">     </span><span class="s2">&quot;...&quot;</span><span class="w"></span>
-<span class="w">    </span><span class="p">]</span><span class="w"></span>
-<span class="p">}</span><span class="w"></span>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;python_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">     </span><span class="s2">&quot;3&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;10&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;6&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;python_tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_35_x86_64&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_34_x86_64&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;cp310-cp310-manylinux_2_33_x86_64&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="s2">&quot;...&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>...note that the list of tags has been shortened in the above output
