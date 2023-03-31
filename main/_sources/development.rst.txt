@@ -48,7 +48,7 @@ Installing Dependencies
 -----------------------
 
 req2flatpak depends on very few other software packages, as documented in req2flatpak's ``pyproject.toml`` file.
-Run ``poetry install`` to install these packages into a virtual environment.
+Run ``poetry install`` to install these packages into a python virtual environment.
 
 
 Running a Development Version

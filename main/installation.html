@@ -95,7 +95,8 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-python-package">Installing the Python Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simply-downloading-or-copying-the-script">Simply Downloading or Copying the Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-from-git">Installing from Git</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#simply-downloading-and-copying-the-script">Simply Downloading and Copying the Script</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
@@ -177,17 +178,32 @@ Multiple installation methods are available.</p>
 <p>You can install req2flatpak as a python package.
 This is the default and recommended installation method.</p>
 <p>For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/johannesjh/req2flatpak
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>req2flatpak
 req2flatpak<span class="w"> </span>--help
 </pre></div>
 </div>
-<p>The first command will install the latest development version of req2flatpak.
+<p>The first command will install the latest release of req2flatpak.
 The second command will display req2flatpak’s help,
 allowing you to verify that req2flatpak was installed successfully.</p>
 </section>
-<section id="simply-downloading-or-copying-the-script">
-<h2>Simply Downloading or Copying the Script<a class="headerlink" href="#simply-downloading-or-copying-the-script" title="Permalink to this heading">¶</a></h2>
-<p>You can download the req2flatpak script to your computer and run it.
+<section id="installing-from-git">
+<h2>Installing from Git<a class="headerlink" href="#installing-from-git" title="Permalink to this heading">¶</a></h2>
+<p>It is possible to install req2flatpak from a git repository.
+This installation method is useful if you want to install and test
+a new, experimental version of req2flatpak that has not yet been officially released.</p>
+<p>To install req2flatpak from a git repository, run this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/johannesjh/req2flatpak
+</pre></div>
+</div>
+<p>The above command will install req2flatpak from the git repository’s main branch.</p>
+<p>You can, of course, specify other git repositories,
+for example in order to install from a forked repository of req2flatpak.
+And it is possible to specify specific branches, commits and tags,
+see <a class="reference external" href="https://pip.pypa.io/en/stable/topics/vcs-support/">pip’s documentation on VCS support</a>.</p>
+</section>
+<section id="simply-downloading-and-copying-the-script">
+<h2>Simply Downloading and Copying the Script<a class="headerlink" href="#simply-downloading-and-copying-the-script" title="Permalink to this heading">¶</a></h2>
+<p>You can download the <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> script to your computer and run it.
 Simple as that.</p>
 </section>
 </section>
