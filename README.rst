@@ -25,8 +25,8 @@ using pip.
 Getting Started
 ---------------
 
-Run ``pip install git+https://github.com/johannesjh/req2flatpak``
-to install the latest development version of req2flatpak.
+Run ``pip install req2flatpak``
+to install the latest release of req2flatpak.
 
 It is possible to use req2flatpak from the commandline,
 as well as programmatically from a python script.
