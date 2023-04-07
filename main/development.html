@@ -44,6 +44,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
     <link rel="prev" title="Using the Python API" href="api.html" /> 
 </head>
 
@@ -108,6 +109,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#publishing-a-release">Publishing a Release</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
             
@@ -297,7 +299,8 @@ We welcome your contributions even if your workflow differs from what we recomme
 <p>Use the following steps to publish a release of req2flatpak:</p>
 <ul class="simple">
 <li><p>Enter the version number to be released in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, e.g., <code class="docutils literal notranslate"><span class="pre">version</span> <span class="pre">=</span> <span class="pre">&quot;1.2.3&quot;</span></code>. Commit and push this change to a branch and create a merge request.</p></li>
-<li><p>Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch</p></li>
+<li><p>Describe the release in <code class="docutils literal notranslate"><span class="pre">docs/source/changelog.rst</span></code>. Commit and push the modified changelog in the same branch.</p></li>
+<li><p>Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch.</p></li>
 <li><p>Tag the main branch with the version to be released, e.g., push a tag named <code class="docutils literal notranslate"><span class="pre">v1.2.3</span></code>.</p></li>
 <li><p>Github CI will build the python package and publish it on PyPI.</p></li>
 </ul>
@@ -310,6 +313,7 @@ We welcome your contributions even if your workflow differs from what we recomme
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="api.html" class="btn btn-neutral float-left" title="Using the Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 

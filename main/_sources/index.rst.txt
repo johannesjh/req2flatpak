@@ -12,6 +12,7 @@ req2flatpak Documentation
    cli
    api
    development
+   changelog
 
 
 

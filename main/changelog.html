@@ -8,7 +8,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Installation &mdash; req2flatpak 0.0.1 documentation</title>
+  <title>Changelog &mdash; req2flatpak 0.0.1 documentation</title>
   
 
   
@@ -44,8 +44,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using the Commandline Interface" href="cli.html" />
-    <link rel="prev" title="Introduction" href="introduction.html" /> 
+    <link rel="prev" title="Development" href="development.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -93,16 +92,15 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installing-the-python-package">Installing the Python Package</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-from-git">Installing from Git</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simply-downloading-and-copying-the-script">Simply Downloading and Copying the Script</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-2-unreleased-yaml">v0.2 (unreleased) “Yaml”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-2022-12-23-initial-release">v0.1 (2022-12-23) “Initial Release”</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -151,13 +149,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Installation</li>
+      <li>Changelog</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/changelog.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -170,42 +168,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
-<p>Installing req2flatpak is easy.
-Multiple installation methods are available.</p>
-<section id="installing-the-python-package">
-<h2>Installing the Python Package<a class="headerlink" href="#installing-the-python-package" title="Permalink to this heading">¶</a></h2>
-<p>You can install req2flatpak as a python package.
-This is the default and recommended installation method.</p>
-<p>For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>req2flatpak
-req2flatpak<span class="w"> </span>--help
-</pre></div>
-</div>
-<p>The first command will install the latest release of req2flatpak.
-The second command will display req2flatpak’s help,
-allowing you to verify that req2flatpak was installed successfully.</p>
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">¶</a></h1>
+<section id="v0-2-unreleased-yaml">
+<h2>v0.2 (unreleased) “Yaml”<a class="headerlink" href="#v0-2-unreleased-yaml" title="Permalink to this heading">¶</a></h2>
+<p>Highlight: req2flatpak can now generate yaml output.</p>
+<p>Features:</p>
+<ul class="simple">
+<li><p>Adds yaml output.
+It is now possible to generate yaml output by specifying a <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> file extension
+or by specifying the <code class="docutils literal notranslate"><span class="pre">--yaml</span></code> commandline option.</p></li>
+</ul>
+<p>Bugfixes:</p>
+<ul class="simple">
+<li><p>Fixes sorting when architecture is None - <a class="reference external" href="https://github.com/johannesjh/req2flatpak/pull/34">#34</a></p></li>
+<li><p>Fixes exception handling with invalid platforms - <a class="reference external" href="https://github.com/johannesjh/req2flatpak/pull/39">#39</a></p></li>
+</ul>
 </section>
-<section id="installing-from-git">
-<h2>Installing from Git<a class="headerlink" href="#installing-from-git" title="Permalink to this heading">¶</a></h2>
-<p>It is possible to install req2flatpak from a git repository.
-This installation method is useful if you want to install and test
-a new, experimental version of req2flatpak that has not yet been officially released.</p>
-<p>To install req2flatpak from a git repository, run this command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/johannesjh/req2flatpak
-</pre></div>
-</div>
-<p>The above command will install req2flatpak from the git repository’s main branch.</p>
-<p>You can, of course, specify other git repositories,
-for example in order to install from a forked repository of req2flatpak.
-And it is possible to specify specific branches, commits and tags,
-see <a class="reference external" href="https://pip.pypa.io/en/stable/topics/vcs-support/">pip’s documentation on VCS support</a>.</p>
-</section>
-<section id="simply-downloading-and-copying-the-script">
-<h2>Simply Downloading and Copying the Script<a class="headerlink" href="#simply-downloading-and-copying-the-script" title="Permalink to this heading">¶</a></h2>
-<p>You can download the <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> script to your computer and run it.
-Simple as that.</p>
+<section id="v0-1-2022-12-23-initial-release">
+<h2>v0.1 (2022-12-23) “Initial Release”<a class="headerlink" href="#v0-1-2022-12-23-initial-release" title="Permalink to this heading">¶</a></h2>
+<p>Highlight: This is the initial release of req2flatpak.</p>
+<p>Features:</p>
+<ul class="simple">
+<li><p>Generates a flatpak-builder build module for given python package requirements; the module will install the required packages as part of a flatpak build.</p></li>
+<li><p>This initial release already comes with documentation, a clean code style, and automated tests that are run using continuous integration.</p></li>
+</ul>
 </section>
 </section>
 
@@ -215,8 +202,7 @@ Simple as that.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="cli.html" class="btn btn-neutral float-right" title="Using the Commandline Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-left" title="Development" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
