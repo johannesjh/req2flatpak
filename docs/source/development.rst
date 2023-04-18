@@ -117,7 +117,7 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
    # follow instructions from https://pre-commit.com/, for example:
    pip install pre-commit  # install pre-commit using pip
 
-   # to install the pre-commit git hooks in the cloned favagtk repo
+   # to install the pre-commit git hooks in the cloned req2flatpak repo
    pre-commit install  # activates pre-commit in the current git repo
 
    # to prettify and lint all code
