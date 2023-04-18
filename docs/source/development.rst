@@ -131,6 +131,73 @@ If this doesn't work, you can skip specific checks by prepending ``SKIP=<hook-id
 We welcome your contributions even if your workflow differs from what we recommend here.
 
 
+Updating Dependencies
+---------------------
+
+There are three categories of dependencies that can be found in this repository:
+*Github Actions*, *Poetry* and *pre-commit hooks*.
+Currently there is no programmatic way to update the github actions we depend on.
+One has to manually update the commit hashes used.
+
+Poetry dependencies
+```````````````````
+
+Poetry differentiates between direct and indirect dependencies.
+Direct dependencies are specified in ``pyproject.toml`` -- usually with a fixed version.
+Updating these can introduce bugs through breaking changes in the API exposed by
+these dependencies. That's why we'll focus on updating indirect dependencies first.
+Running the following and committing the resulting changes to ``poetry.lock`` will
+do the trick provided that set up *pre-commit* according to this guide.
+
+
+.. code:: bash
+
+   # 1. Update indirect dependencies (stored in poetry.lock)
+   poetry update
+
+   # 2. Stage and commit (runs pre-commit hooks)
+
+
+Direct dependencies are updated by changing the version specified in ``pyproject.toml``.
+
+
+.. code:: bash
+
+   # 1. Determine latest version of a package
+   pip show packaging
+
+   # 2. Update version requirement in `pyproject.toml`
+   # 3. Update `poetry.lock` (`--no-update` will prevent updating indirect dependencies)
+   poetry lock --no-update
+
+   # 4. Install newest version (adjust options to your dev env)
+   poetry install --with lint --all-extras
+
+   # 5. Stage and commit (runs pre-commit hooks)
+
+
+Pre-commit hooks
+````````````````
+
+Pre-commit hooks require a bit more steps to update because they are partially
+synced with the versions specified in ``poetry.lock``.
+
+
+.. code:: bash
+
+   # 1. Update pre-commit hooks
+   pre-commit autoupdate --freeze
+
+   # 2. Stage `.pre-commit-config.yaml`
+   git add .pre-commit-config.yaml
+
+   # 3. Sync with poetry
+   pre-commit run
+
+   # 4. Remove `frozen: x.x.x` comments for unfrozen dependencies
+   # 5. Stage and commit (runs pre-commit hooks)
+
+
 Publishing a Release
 --------------------
 
