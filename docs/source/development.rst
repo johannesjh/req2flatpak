@@ -159,13 +159,13 @@ do the trick provided that set up *pre-commit* according to this guide.
 
 
 Direct dependencies are updated by changing the version specified in ``pyproject.toml``.
+You will have to manually identify the latest version for a package by opening
+its project page on `pypi <https://pypi.org/project/{name}/>`_.
 
 
 .. code:: bash
 
-   # 1. Determine latest version of a package
-   pip show packaging
-
+   # 1. Determine latest version of a package.
    # 2. Update version requirement in `pyproject.toml`
    # 3. Update `poetry.lock` (`--no-update` will prevent updating indirect dependencies)
    poetry lock --no-update
