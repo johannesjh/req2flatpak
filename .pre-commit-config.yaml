@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/python-poetry/poetry
-    rev: "fb493f2e80a11403fa289617a703ae622d4ccd75" # frozen: 1.3.0
+    rev: "7fe4678f92dcab48a35169db6567cbb3f5a7e3ef" # frozen: 1.4.0
     hooks:
       - id: poetry-check
       - id: poetry-lock
@@ -8,30 +8,31 @@ repos:
           - "--no-update"
 
   - repo: https://github.com/floatingpurr/sync_with_poetry
-    rev: 6fd6194c7bbd629b18a7bcd7a4a38a57f128b451 # 0.4.0
+    rev: 6fd6194c7bbd629b18a7bcd7a4a38a57f128b451 # frozen: 0.4.0
     hooks:
       - id: sync_with_poetry
+        pass_filenames: false
         files: ".pre-commit-config.yaml|poetry.lock"
-        args: ["--skip", "isort"]
+        args: ["poetry.lock"]
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+    rev: 5.11.5
     hooks:
       - id: isort
         name: isort (python)
 
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: bf7a16254ec96b084a6caf3d435ec18f0f245cc7 # frozen: 23.3.0
     hooks:
       - id: black
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "cafd5506f18eea191804850dacc0a4264772d59d" # frozen: v3.0.0-alpha.4
+    rev: "6f3cb139ef36133b6f903b97facc57b07cef57c9" # frozen: v3.0.0-alpha.6
     hooks:
       - id: prettier
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: "77751d7a7d81a5d47aa344d802f41809c4d063c0" # frozen: v6.1.1
+    rev: "165c37523acb08cc649f44d378c80266ce451c2a" # frozen: v6.1.2
     hooks:
       - id: rstcheck
         additional_dependencies: [sphinx]
@@ -46,7 +47,7 @@ repos:
         types: [python]
 
   - repo: https://github.com/PyCQA/bandit
-    rev: "1.7.4" # frozen: 1.7.4
+    rev: "1.7.5"
     hooks:
       - id: bandit
         files: "^req2flatpak.py$"
