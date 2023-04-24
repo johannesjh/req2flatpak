@@ -106,6 +106,11 @@
 <li class="toctree-l2"><a class="reference internal" href="#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensuring-code-quality">Ensuring Code quality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-dependencies">Updating Dependencies</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#poetry-dependencies">Poetry dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pre-commit-hooks">Pre-commit hooks</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#publishing-a-release">Publishing a Release</a></li>
 </ul>
 </li>
@@ -281,7 +286,7 @@ You are very welcome to contribute improvements back to the original req2flatpak
 <span class="c1"># follow instructions from https://pre-commit.com/, for example:</span>
 pip<span class="w"> </span>install<span class="w"> </span>pre-commit<span class="w">  </span><span class="c1"># install pre-commit using pip</span>
 
-<span class="c1"># to install the pre-commit git hooks in the cloned favagtk repo</span>
+<span class="c1"># to install the pre-commit git hooks in the cloned req2flatpak repo</span>
 pre-commit<span class="w"> </span>install<span class="w">  </span><span class="c1"># activates pre-commit in the current git repo</span>
 
 <span class="c1"># to prettify and lint all code</span>
@@ -293,6 +298,60 @@ pre-commit<span class="w"> </span>run
 </div>
 <p>If this doesn’t work, you can skip specific checks by prepending <code class="docutils literal notranslate"><span class="pre">SKIP=&lt;hook-id&gt;</span></code> like so: <code class="docutils literal notranslate"><span class="pre">SKIP=poetry-lock</span> <span class="pre">git</span> <span class="pre">commit</span></code>. You can disable all hooks for a commit by using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-n</span></code> or disable pre-commit entirely for the repository with <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">uninstall</span></code>.
 We welcome your contributions even if your workflow differs from what we recommend here.</p>
+</section>
+<section id="updating-dependencies">
+<h2>Updating Dependencies<a class="headerlink" href="#updating-dependencies" title="Permalink to this heading">¶</a></h2>
+<p>There are three categories of dependencies that can be found in this repository:
+<em>Github Actions</em>, <em>Poetry</em> and <em>pre-commit hooks</em>.
+Currently there is no programmatic way to update the github actions we depend on.
+One has to manually update the commit hashes used.</p>
+<section id="poetry-dependencies">
+<h3>Poetry dependencies<a class="headerlink" href="#poetry-dependencies" title="Permalink to this heading">¶</a></h3>
+<p>Poetry differentiates between direct and indirect dependencies.
+Direct dependencies are specified in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> – usually with a fixed version.
+Updating these can introduce bugs through breaking changes in the API exposed by
+these dependencies. That’s why we’ll focus on updating indirect dependencies first.
+Running the following and committing the resulting changes to <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code> will
+do the trick provided that set up <em>pre-commit</em> according to this guide.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Update indirect dependencies (stored in poetry.lock)</span>
+poetry<span class="w"> </span>update
+
+<span class="c1"># 2. Stage and commit (runs pre-commit hooks)</span>
+</pre></div>
+</div>
+<p>Direct dependencies are updated by changing the version specified in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.
+You will have to manually identify the latest version for a package by opening
+its project page on <a class="reference external" href="https://pypi.org/project/{name}/">pypi</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Determine latest version of a package.</span>
+<span class="c1"># 2. Update version requirement in `pyproject.toml`</span>
+<span class="c1"># 3. Update `poetry.lock` (`--no-update` will prevent updating indirect dependencies)</span>
+poetry<span class="w"> </span>lock<span class="w"> </span>--no-update
+
+<span class="c1"># 4. Install newest version (adjust options to your dev env)</span>
+poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>lint<span class="w"> </span>--all-extras
+
+<span class="c1"># 5. Stage and commit (runs pre-commit hooks)</span>
+</pre></div>
+</div>
+</section>
+<section id="pre-commit-hooks">
+<h3>Pre-commit hooks<a class="headerlink" href="#pre-commit-hooks" title="Permalink to this heading">¶</a></h3>
+<p>Pre-commit hooks require a bit more steps to update because they are partially
+synced with the versions specified in <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Update pre-commit hooks</span>
+pre-commit<span class="w"> </span>autoupdate<span class="w"> </span>--freeze
+
+<span class="c1"># 2. Stage `.pre-commit-config.yaml`</span>
+git<span class="w"> </span>add<span class="w"> </span>.pre-commit-config.yaml
+
+<span class="c1"># 3. Sync with poetry</span>
+pre-commit<span class="w"> </span>run
+
+<span class="c1"># 4. Remove `frozen: x.x.x` comments for unfrozen dependencies</span>
+<span class="c1"># 5. Stage and commit (runs pre-commit hooks)</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="publishing-a-release">
 <h2>Publishing a Release<a class="headerlink" href="#publishing-a-release" title="Permalink to this heading">¶</a></h2>
