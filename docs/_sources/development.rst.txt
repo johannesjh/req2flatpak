@@ -27,6 +27,7 @@ It can be useful to install a specific (older) version of python
 to make sure req2flatpak stays compatible with older targeted python versions.
 
 * Python versions targeted by req2flatpak are defined in the ``pyproject.toml`` file.
+
 * You can use `pyenv <https://github.com/pyenv/pyenv>`__
   to install various python versions for use in a virtual environment.
   It is a good practice to install and use the oldest still supported python version
@@ -40,7 +41,9 @@ Simply clone/open req2flatpak in the IDE of your choice.
 Features and languages that the IDE should ideally support include:
 
 * python
+
 * poetry for managing req2flatpak's dependencies in a virtual environment
+
 * restructured text (``*.rst``) for writing documentation
 
 
@@ -117,7 +120,7 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
    # follow instructions from https://pre-commit.com/, for example:
    pip install pre-commit  # install pre-commit using pip
 
-   # to install the pre-commit git hooks in the cloned favagtk repo
+   # to install the pre-commit git hooks in the cloned req2flatpak repo
    pre-commit install  # activates pre-commit in the current git repo
 
    # to prettify and lint all code
@@ -131,12 +134,84 @@ If this doesn't work, you can skip specific checks by prepending ``SKIP=<hook-id
 We welcome your contributions even if your workflow differs from what we recommend here.
 
 
+Updating Dependencies
+---------------------
+
+There are three categories of dependencies that can be found in this repository:
+*Github Actions*, *Poetry* and *pre-commit hooks*.
+Currently there is no programmatic way to update the github actions we depend on.
+One has to manually update the commit hashes used.
+
+Poetry dependencies
+```````````````````
+
+Poetry differentiates between direct and indirect dependencies.
+Direct dependencies are specified in ``pyproject.toml`` -- usually with a fixed version.
+Updating these can introduce bugs through breaking changes in the API exposed by
+these dependencies. That's why we'll focus on updating indirect dependencies first.
+Running the following and committing the resulting changes to ``poetry.lock`` will
+do the trick provided that set up *pre-commit* according to this guide.
+
+
+.. code:: bash
+
+   # 1. Update indirect dependencies (stored in poetry.lock)
+   poetry update
+
+   # 2. Stage and commit (runs pre-commit hooks)
+
+
+Direct dependencies are updated by changing the version specified in ``pyproject.toml``.
+You will have to manually identify the latest version for a package by opening
+its project page on `pypi <https://pypi.org/project/{name}/>`_.
+
+
+.. code:: bash
+
+   # 1. Determine latest version of a package.
+   # 2. Update version requirement in `pyproject.toml`
+   # 3. Update `poetry.lock` (`--no-update` will prevent updating indirect dependencies)
+   poetry lock --no-update
+
+   # 4. Install newest version (adjust options to your dev env)
+   poetry install --with lint --all-extras
+
+   # 5. Stage and commit (runs pre-commit hooks)
+
+
+Pre-commit hooks
+````````````````
+
+Pre-commit hooks require a bit more steps to update because they are partially
+synced with the versions specified in ``poetry.lock``.
+
+
+.. code:: bash
+
+   # 1. Update pre-commit hooks
+   pre-commit autoupdate --freeze
+
+   # 2. Stage `.pre-commit-config.yaml`
+   git add .pre-commit-config.yaml
+
+   # 3. Sync with poetry
+   pre-commit run
+
+   # 4. Remove `frozen: x.x.x` comments for unfrozen dependencies
+   # 5. Stage and commit (runs pre-commit hooks)
+
+
 Publishing a Release
 --------------------
 
 Use the following steps to publish a release of req2flatpak:
 
 * Enter the version number to be released in ``pyproject.toml``, e.g., ``version = "1.2.3"``. Commit and push this change to a branch and create a merge request.
-* Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch
+
+* Describe the release in ``docs/source/changelog.rst``. Commit and push the modified changelog in the same branch.
+
+* Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch.
+
 * Tag the main branch with the version to be released, e.g., push a tag named ``v1.2.3``.
+
 * Github CI will build the python package and publish it on PyPI.
