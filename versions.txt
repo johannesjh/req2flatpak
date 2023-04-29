@@ -1,1 +1,4 @@
+main
 docs
+docs-changelog
+v0.1
