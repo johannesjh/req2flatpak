@@ -1,4 +1,4 @@
 main
+v0.1
 docs
 docs-changelog
-v0.1
