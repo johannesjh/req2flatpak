@@ -96,28 +96,34 @@ A comparison will likely change over time.
 As in Oct, 2022, in my personal opinion (johannesjh),
 I see the following similarities and differences:
 
--  Both projects generate build modules for flatpak-builder.
--  Both projects consist of a single script file with minimal
+*  Both projects generate build modules for flatpak-builder.
+
+*  Both projects consist of a single script file with minimal
    dependencies, and are thus very easy to install.
--  ``flatpak-pip-generator`` resolves dependencies and freezes
+
+*  ``flatpak-pip-generator`` resolves dependencies and freezes
    dependency versions, whereas ``req2flatpak.py`` asks the user to
    provide a fully resolved list of dependencies with frozen dependency
    versions. Various tools exist which make this easy, e.g.,
    pip, pip-compile and poetry.
--  ``flatpak-pip-generator`` is older and thus likely to be more mature.
+
+*  ``flatpak-pip-generator`` is older and thus likely to be more mature.
    It supports more commandline options and probably has a more complete
    feature set.
--  ``req2flatpak.py`` is faster. The script itself runs faster because
+
+*  ``req2flatpak.py`` is faster. The script itself runs faster because
    it does not need to download package files in order to generate the
    build module. And the flatpak build runs faster because all packages
    (from the entire ``requirements.txt`` file) are installed in a single
    call to ``pip install``.
--  ``req2flatpak.py`` re-implements some functionality of pip. In
+
+*  ``req2flatpak.py`` re-implements some functionality of pip. In
    contrast, ``flatpak-pip-generator`` uses pip’s official
    functionality. Specifically, ``req2flatpak.py`` re-implements how pip
    queries available downloads from pypi and how pip chooses suitable
    downloads to match a given target platform.
--  ``req2flatpak.py`` prefers binary wheels, whereas
+
+*  ``req2flatpak.py`` prefers binary wheels, whereas
    ``flatpak-pip-generator`` prefers source packages.
 
 License

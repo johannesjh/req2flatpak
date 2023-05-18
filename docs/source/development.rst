@@ -27,6 +27,7 @@ It can be useful to install a specific (older) version of python
 to make sure req2flatpak stays compatible with older targeted python versions.
 
 * Python versions targeted by req2flatpak are defined in the ``pyproject.toml`` file.
+
 * You can use `pyenv <https://github.com/pyenv/pyenv>`__
   to install various python versions for use in a virtual environment.
   It is a good practice to install and use the oldest still supported python version
@@ -40,7 +41,9 @@ Simply clone/open req2flatpak in the IDE of your choice.
 Features and languages that the IDE should ideally support include:
 
 * python
+
 * poetry for managing req2flatpak's dependencies in a virtual environment
+
 * restructured text (``*.rst``) for writing documentation
 
 
@@ -204,7 +207,11 @@ Publishing a Release
 Use the following steps to publish a release of req2flatpak:
 
 * Enter the version number to be released in ``pyproject.toml``, e.g., ``version = "1.2.3"``. Commit and push this change to a branch and create a merge request.
+
 * Describe the release in ``docs/source/changelog.rst``. Commit and push the modified changelog in the same branch.
+
 * Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch.
+
 * Tag the main branch with the version to be released, e.g., push a tag named ``v1.2.3``.
+
 * Github CI will build the python package and publish it on PyPI.

@@ -23,6 +23,10 @@ runs:
         ls -la ".github/pages/${GITHUB_REF##*/}"
       shell: bash
 
+    - name: Fetch remote
+      run: git fetch origin -t gh-pages
+      shell: bash
+
     - name: Write versions.txt
       run: poetry run sphinx_rtd_theme_github_versions .github/pages
       shell: bash
