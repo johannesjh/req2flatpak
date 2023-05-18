@@ -37,7 +37,9 @@ to modify each step as you see fit.
 For example:
 
 * you may want to query other package indices instead of pypi,
+
 * you may prefer wheels or sdists for certain packages, or
+
 * you may want to exclude specific packages.
 
 The following subsections explain in detail how you can use req2flatpak's python api in your custom script.
