@@ -16,6 +16,7 @@ jobs:
         id: setup
         uses: ./.github/actions/setup
         with:
+          python-version: 3.7
           setup-pre-commit: true
           # lint group will be installed anyways because it is not optional
           install-options: --with lint --all-extras
@@ -26,7 +27,7 @@ jobs:
   generate_test_matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      extras: ${{ steps.set-matrix.outputs.extras }}
     steps:
       - name: Checkout
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
@@ -45,18 +46,21 @@ jobs:
           import json
           with open('pyproject.toml', 'rb') as f:
               manifest = tomllib.load(f)
-          yaml = { 'include' : [{ 'extras' : extra} for extra in [''] + list(manifest['tool']['poetry']['extras'])]}
+          yaml = [''] + list(manifest['tool']['poetry']['extras'])
           out = json.dumps(yaml)
           print(out)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-            f.write('matrix=' + out)
+            f.write('extras=' + out)
 
   test:
-    name: test ${{ matrix.extras && 'with' || '' }} ${{ matrix.extras }}
-    runs-on: ubuntu-latest
+    name: test ${{ matrix.extras && 'with' || '' }} ${{ matrix.extras }} on ${{ matrix.python-version }}, ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     needs: generate_test_matrix
     strategy:
-      matrix: ${{ fromJson(needs.generate_test_matrix.outputs.matrix) }}
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        extras: ${{ fromJson(needs.generate_test_matrix.outputs.extras) }}
       fail-fast: false
     steps:
       - name: Checkout
@@ -66,6 +70,7 @@ jobs:
         id: setup
         uses: ./.github/actions/setup
         with:
+          python-version: ${{ matrix.python-version }}
           install-options: --without lint ${{ matrix.extras && format('--extras "{0}"', matrix.extras) || '' }}
 
       - name: Run Tests
@@ -81,6 +86,7 @@ jobs:
         id: setup
         uses: ./.github/actions/setup
         with:
+          python-version: 3.11
           install-options: --with docs
 
       - name: Build Docs
