@@ -6,7 +6,7 @@ Changelog
    Newest releases are added to the top of the file.
 
 
-v0.2 (2023-06-04) "Yaml"
+v0.2 (2023-06-05) "Yaml"
 ------------------------
 
 Highlight: req2flatpak can now generate yaml output.
