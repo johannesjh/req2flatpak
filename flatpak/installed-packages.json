@@ -1,8 +1,7 @@
-/* Flatpak build manifest for running `req2flatpak --installed-packages` on flatpak target platforms.  */
 {
   "app-id": "io.github.johannesjh.req2flatpak.installedpackages",
   "runtime": "org.gnome.Platform",
-  "runtime-version": "43",
+  "runtime-version": "44",
   "sdk": "org.gnome.Sdk",
   "command": "installed-packages",
   "modules": [
@@ -27,7 +26,7 @@
       "sources": [
         {
           "type": "file",
-          "path": "req2flatpak.py"
+          "path": "../req2flatpak.py"
         }
       ]
     }

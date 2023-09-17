@@ -1,7 +1,10 @@
+.flatpak-builder/
 .idea
+.python-version
+_build
+_repo
 dist/
 pypi_cache
 __pycache__
 .pytest_cache
 docs/build
-.python-version
