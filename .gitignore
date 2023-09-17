@@ -1,6 +1,8 @@
 .flatpak-builder/
 .idea
 .python-version
+_build
+_repo
 dist/
 pypi_cache
 __pycache__
