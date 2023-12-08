@@ -48,7 +48,6 @@ from itertools import product
 from typing import (
     Any,
     Dict,
-    FrozenSet,
     Generator,
     Hashable,
     Iterable,
@@ -62,6 +61,8 @@ from typing import (
 from urllib.parse import urlparse
 
 import packaging.requirements as packaging_reqs
+import packaging.tags
+from packaging.utils import parse_wheel_filename
 
 logger = logging.getLogger(__name__)
 
@@ -110,64 +111,14 @@ class InvalidWheelFilename(Exception):
     """An invalid wheel filename was found, users should refer to PEP 427."""
 
 
-try:
-    # use packaging.tags functionality if available
-    from packaging.utils import parse_wheel_filename
+def tags_from_wheel_filename(filename: str) -> Set[str]:
+    """
+    Parses a wheel filename into a list of compatible platform tags.
 
-    def tags_from_wheel_filename(filename: str) -> Set[str]:
-        """
-        Parses a wheel filename into a list of compatible platform tags.
-
-        Implemented using functionality from ``packaging.utils.parse_wheel_filename``.
-        """
-        _, _, _, tags = parse_wheel_filename(filename)
-        return {str(tag) for tag in tags}
-
-except ModuleNotFoundError:
-    # fall back to a local implementation
-    # that is heavily inspired by / almost vendored from the `packaging` package:
-    def tags_from_wheel_filename(filename: str) -> Set[str]:
-        """
-        Parses a wheel filename into a list of compatible platform tags.
-
-        Implemented as (semi-)vendored functionality in req2flatpak.
-        """
-        Tag = Tuple[str, str, str]
-
-        # the following code is based on packaging.tags.parse_tag,
-        # it is needed for the parse_wheel_filename function:
-        def parse_tag(tag: str) -> FrozenSet[Tag]:
-            tags: Set[Tag] = set()
-            interpreters, abis, platforms = tag.split("-")
-            for interpreter in interpreters.split("."):
-                for abi in abis.split("."):
-                    for platform_ in platforms.split("."):
-                        tags.add((interpreter, abi, platform_))
-            return frozenset(tags)
-
-        # the following code is based on packaging.utils.parse_wheel_filename:
-        # pylint: disable=redefined-outer-name
-        def parse_wheel_filename(
-            wheel_filename: str,
-        ) -> Iterable[Tag]:
-            if not wheel_filename.endswith(".whl"):
-                raise InvalidWheelFilename(
-                    "Error parsing wheel filename: "
-                    "Invalid wheel filename (extension must be '.whl'): "
-                    f"{wheel_filename}"
-                )
-            wheel_filename = wheel_filename[:-4]
-            dashes = wheel_filename.count("-")
-            if dashes not in (4, 5):
-                raise InvalidWheelFilename(
-                    "Error parsing wheel filename: "
-                    "Invalid wheel filename (wrong number of parts): "
-                    f"{wheel_filename}"
-                )
-            parts = wheel_filename.split("-", dashes - 2)
-            return parse_tag(parts[-1])
-
-        return {"-".join(tag_tuple) for tag_tuple in parse_wheel_filename(filename)}
+    Implemented using functionality from ``packaging.utils.parse_wheel_filename``.
+    """
+    _, _, _, tags = parse_wheel_filename(filename)
+    return {str(tag) for tag in tags}
 
 
 # =============================================================================
@@ -272,17 +223,8 @@ class PlatformFactory:
 
     @staticmethod
     def _get_current_python_tags() -> List[str]:
-        try:
-            # pylint: disable=import-outside-toplevel
-            import packaging.tags
-
-            tags = [str(tag) for tag in packaging.tags.sys_tags()]
-            return tags
-        except ModuleNotFoundError as e:
-            logger.warning(
-                'Error trying to import the "packaging" package.', exc_info=e
-            )
-            return []
+        tags = [str(tag) for tag in packaging.tags.sys_tags()]
+        return tags
 
     @classmethod
     def from_current_interpreter(cls) -> Platform:
