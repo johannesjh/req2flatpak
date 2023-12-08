@@ -15,12 +15,11 @@ req2flatpak = 'req2flatpak:main'
 
 [tool.poetry.dependencies]
 python    = "^3.7.2"
-packaging = { version = "^21.3", optional = true }
+packaging = { version = "^21.3" }
 pyyaml    = { version = "^6.0", optional = true }
 
 [tool.poetry.extras]
-packaging = ["packaging"]
-yaml      = ["pyyaml"]
+yaml = ["pyyaml"]
 
 [tool.poetry.group.lint.dependencies]
 pylama = { extras = [

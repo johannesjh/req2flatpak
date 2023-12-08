@@ -43,6 +43,7 @@ import sys
 import urllib.request
 from contextlib import nullcontext, suppress
 from dataclasses import asdict, dataclass, field
+from importlib import metadata
 from itertools import product
 from typing import (
     Any,
@@ -60,7 +61,7 @@ from typing import (
 )
 from urllib.parse import urlparse
 
-import pkg_resources
+import packaging.requirements as packaging_reqs
 
 logger = logging.getLogger(__name__)
 
@@ -431,27 +432,32 @@ class RequirementsParser:
     resolve dependencies.
     """
 
-    # based on: https://stackoverflow.com/a/59971236
-    # using functionality from pkg_resources.parse_requirements
-
     @classmethod
     def parse_string(cls, requirements_txt: str) -> List[Requirement]:
         """Parses requirements.txt string content into a list of Requirement objects."""
 
-        def validate_requirement(req: pkg_resources.Requirement) -> None:
+        def validate_requirement(req: packaging_reqs.Requirement) -> None:
             assert (
-                len(req.specs) == 1
+                len(req.specifier) == 1
             ), "Error parsing requirements: A single version number must be specified."
             assert (
-                req.specs[0][0] == "=="
+                list(req.specifier)[0].operator == "=="
             ), "Error parsing requirements: The exact version must specified as 'package==version'."
 
-        def make_requirement(req: pkg_resources.Requirement) -> Requirement:
+        def make_requirement(req: packaging_reqs.Requirement) -> Requirement:
             validate_requirement(req)
-            return Requirement(package=req.project_name, version=req.specs[0][1])
+            return Requirement(package=req.name, version=list(req.specifier)[0].version)
 
-        reqs = pkg_resources.parse_requirements(requirements_txt)
-        return [make_requirement(req) for req in reqs]
+        requirements = []
+        for line in requirements_txt.splitlines():
+            if not (line := line.strip()):
+                continue
+            if line.startswith("#"):
+                continue
+            req = packaging_reqs.Requirement(line)
+            requirements.append(make_requirement(req))
+
+        return requirements
 
     @classmethod
     def parse_file(cls, file) -> List[Requirement]:
@@ -759,7 +765,9 @@ def main():  # pylint: disable=too-many-branches
     # print installed packages if requested, and exit
     if options.installed_packages:
         # pylint: disable=not-an-iterable
-        pkgs = {p.key: p.version for p in pkg_resources.working_set}
+        pkgs = {
+            p.metadata["Name"]: p.metadata["Version"] for p in metadata.distributions()
+        }
         for pkg, version in pkgs.items():
             print(f"{pkg}=={version}", file=output_stream)
         parser.exit()
