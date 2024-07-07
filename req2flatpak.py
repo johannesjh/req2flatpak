@@ -450,6 +450,8 @@ class PypiClient:
         url = f"https://pypi.org/pypi/{req.package}/{req.version}/json"
         json_string = cls._query(url)
         json_dict = json.loads(json_string)
+        if not json_dict["urls"]:
+            raise RuntimeError(f"Release {req} has no URLs: maybe too old?")
         return Release(
             package=req.package,
             version=req.version,
