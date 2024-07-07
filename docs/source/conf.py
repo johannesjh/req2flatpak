@@ -8,9 +8,9 @@
 # =============================================================================
 
 project = "req2flatpak"
-copyright = "2022, johannesjh"  # pylint: disable=redefined-builtin
+copyright = "2022-2024, johannesjh"  # pylint: disable=redefined-builtin
 author = "johannesjh"
-release = "0.0.1"
+release = "0.2.0"  # TODO: must be kept in-sync with pyproject.toml
 
 # =============================================================================
 # General configuration
