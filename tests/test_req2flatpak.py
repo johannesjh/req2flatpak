@@ -1,4 +1,5 @@
 """Tests for req2flatpak's commandline interface."""
+
 import json
 import subprocess
 import tempfile
