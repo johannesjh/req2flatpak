@@ -137,68 +137,41 @@ We welcome your contributions even if your workflow differs from what we recomme
 Updating Dependencies
 ---------------------
 
-There are three categories of dependencies that can be found in this repository:
-*Github Actions*, *Poetry* and *pre-commit hooks*.
+There are multiple categories of dependencies that can be found in this repository:
+CI, Poetry and pre-commit hooks.
+
+CI dependencies
+```````````````
+
+Github actions and workflows contain hardcoded versions of container images and packages.
+See the ``.github`` folder.
 Currently there is no programmatic way to update the github actions we depend on.
-One has to manually update the commit hashes used.
+One has to manually update the versions and/or commit hashes.
 
-Poetry dependencies
-```````````````````
-
-Poetry differentiates between direct and indirect dependencies.
-Direct dependencies are specified in ``pyproject.toml`` -- usually with a fixed version.
-Updating these can introduce bugs through breaking changes in the API exposed by
-these dependencies. That's why we'll focus on updating indirect dependencies first.
-Running the following and committing the resulting changes to ``poetry.lock`` will
-do the trick provided that set up *pre-commit* according to this guide.
+The devcontainer configuration file also contains versions,
+these are also manually kept up-to-date.
+See the ``.devcontainer`` folder.
 
 
-.. code:: bash
+Poetry and pre-commit dependencies
+``````````````````````````````````
 
-   # 1. Update indirect dependencies (stored in poetry.lock)
-   poetry update
+First update poetry dependencies, 
 
-   # 2. Stage and commit (runs pre-commit hooks)
-
-
-Direct dependencies are updated by changing the version specified in ``pyproject.toml``.
-You will have to manually identify the latest version for a package by opening
-its project page on `pypi <https://pypi.org/project/{name}/>`_.
+#. Manually bump the version constraints in the ``pyproject.toml`` file.
+#. Run ``poetry update --with lint`` to update installed packages and write the lock file.
+#. Stage changes by running ``git add pyproject.toml poetry.lock``.
 
 
-.. code:: bash
+Then update pre-commit dependencies,
 
-   # 1. Determine latest version of a package.
-   # 2. Update version requirement in `pyproject.toml`
-   # 3. Update `poetry.lock` (`--no-update` will prevent updating indirect dependencies)
-   poetry lock --no-update
-
-   # 4. Install newest version (adjust options to your dev env)
-   poetry install --with lint --all-extras
-
-   # 5. Stage and commit (runs pre-commit hooks)
-
-
-Pre-commit hooks
-````````````````
-
-Pre-commit hooks require a bit more steps to update because they are partially
-synced with the versions specified in ``poetry.lock``.
-
-
-.. code:: bash
-
-   # 1. Update pre-commit hooks
-   pre-commit autoupdate --freeze
-
-   # 2. Stage `.pre-commit-config.yaml`
-   git add .pre-commit-config.yaml
-
-   # 3. Sync with poetry
-   pre-commit run
-
-   # 4. Remove `frozen: x.x.x` comments for unfrozen dependencies
-   # 5. Stage and commit (runs pre-commit hooks)
+#. Run ``pre-commit install`` just to be sure that pre-commit is properly initialized.
+#. Run ``pre-commit autoupdate --freeze`` to update pre-commit's packages.
+#. Stage changes by running ``git add .pre-commit-config.yaml``.
+#. Run ``pre-commit run`` to sync package versions from poetry to pre-commit. Note that this is a one-way-sync, i.e., `sync_with_poetry <https://github.com/floatingpurr/sync_with_poetry>`_ will copy package versions from the poetry lock file into the pre-commit yaml file.
+#. Stage changes by running ``git add .pre-commit-config.yaml``.
+#. run ``pre-commit run`` to verify that pre-commit now happily leaves all files unchanged.
+#. Stage and commit all changes.
 
 
 Publishing a Release
