@@ -37,21 +37,23 @@ to make sure req2flatpak stays compatible with older targeted python versions.
 Setting up a Development Environment
 ------------------------------------
 
-Simply clone/open req2flatpak in the IDE of your choice.
+Clone the req2flatpak git repository in the IDE of your choice.
 Features and languages that the IDE should ideally support include:
 
-* python
+* python,
+* poetry (for managing req2flatpak's dependencies in a virtual environment),
+* devcontainers (optionally, for working inside a docker image instead of your local system), as well as
+* restructured text (optionally, for writing documentation).
 
-* poetry for managing req2flatpak's dependencies in a virtual environment
 
-* restructured text (``*.rst``) for writing documentation
+Install poetry and pre-commit using the python installer of your choice, 
+e.g., by running ``pipx install poetry`` and ``pipx install pre-commit``.
 
+Run ``poetry install --with lint --with docs --all-extras``.
+This will install all the python packages you need into a python virtual environment.
 
-Installing Dependencies
------------------------
-
-req2flatpak depends on very few other software packages, as documented in req2flatpak's ``pyproject.toml`` file.
-Run ``poetry install`` to install these packages into a python virtual environment.
+Run ``pre-commit install``.
+This will initialize pre-commit in your local development repository.
 
 
 Running a Development Version
@@ -118,7 +120,7 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
 
    # to install pre-commit on your system,
    # follow instructions from https://pre-commit.com/, for example:
-   pip install pre-commit  # install pre-commit using pip
+   pipx install pre-commit
 
    # to install the pre-commit git hooks in the cloned req2flatpak repo
    pre-commit install  # activates pre-commit in the current git repo
