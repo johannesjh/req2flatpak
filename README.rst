@@ -31,7 +31,7 @@ e.g., by running ``pip install req2flatpak``.
 Prepare a ``requirements.txt`` file with the packages that you want to install as part of a flatpak build.
 You need to specify exact versions for all the packages including their dependencies.
 (Various tools exist to help creating such a requirements file with fully resolved dependencies and frozen package versions;
-For example, you can use
+for example, you can use
 `pip-compile <https://pypi.org/project/pip-tools/>`_ or 
 `poetry export <https://pypi.org/project/poetry-plugin-export/>`_ to export a suitable ``requirements.txt`` file).
 
