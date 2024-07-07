@@ -25,15 +25,19 @@ using pip.
 Getting Started
 ---------------
 
-Run ``pip install req2flatpak``
-to install the latest release of req2flatpak.
+Install req2flatpak using pip (or any other python package installer),
+e.g., by running ``pip install req2flatpak``.
 
-It is possible to use req2flatpak from the commandline,
-as well as programmatically from a python script.
+Prepare a ``requirements.txt`` file with the packages that you want to install as part of a flatpak build.
+You need to specify exact versions for all the packages including their dependencies.
+(Various tools exist to help creating such a requirements file with fully resolved dependencies and frozen package versions;
+For example, you can use
+`pip-compile <https://pypi.org/project/pip-tools/>`_ or 
+`poetry export <https://pypi.org/project/poetry-plugin-export/>`_ to export a suitable ``requirements.txt`` file).
 
-Commandline usage means you can invoke req2flatpak’s commandline interface
-as follows, in order to generate a ``flatpak-builder`` build module
-from given python package requirements:
+Run req2flatpak. 
+For example, run this command to generate a ``flatpak-builder`` build module
+from your ``requirements.txt`` file:
 
 .. code:: bash
 
@@ -46,17 +50,17 @@ choose appropriate downloads for the specified target platforms,
 and generate a flatpak-builder build module.
 The module, if included in a flatpak-builder build manifest,
 will install the required packages using pip.
-
 The commandline option to define target platforms uses the format ``<pythonversion>-<architecture>``.
 To learn more about available commandline options,
 run ``req2flatpak.py --help``.
 
-Programmatic usage is also possible.
-This means you can invoke functionality from req2flatpak in your own python script,
-allowing you to tweak the desired behavior in many ways.
-The `documentation <https://johannesjh.github.io/req2flatpak/>`__
-describes req2flatpak's python api and includes code examples
-to help you get started quickly.
+Note that programmatic usage of req2flatpakis also possible.
+This means you can write a python script to invoke req2flatpak,
+which allows to tweak the desired behavior in many ways.
+
+Go read the `documentation <https://johannesjh.github.io/req2flatpak/>`__
+to learn more about req2flatpak's commandline and python APIs.
+The documentation includes further examples to help you get started quickly.
 
 
 Documentation
