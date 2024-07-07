@@ -53,9 +53,9 @@ class TestTagsFromWheelFilename(unittest.TestCase):
         # - how to ignore certain imports: https://stackoverflow.com/a/63353431
         with mock.patch.dict("sys.modules", {"packaging.utils": None}):
             reload(req2flatpak)
-            cls.implementations[
-                "without_packaging"
-            ] = req2flatpak.tags_from_wheel_filename
+            cls.implementations["without_packaging"] = (
+                req2flatpak.tags_from_wheel_filename
+            )
 
         # get the implementation that uses the ``packaging`` package
         reload(req2flatpak)
