@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/python-poetry/poetry
-    rev: "f631c22f715e0712d99a7493caab3f8088a582ab" # frozen: 1.6.0
+    rev: "c85477da8a610a87133299f996f8d8a593aa7bff" # frozen: 1.8.0
     hooks:
       - id: poetry-check
       - id: poetry-lock
@@ -22,7 +22,7 @@ repos:
         name: isort (python)
 
   - repo: https://github.com/psf/black
-    rev: e87737140f32d3cd7c44ede75f02dcd58e55820e # frozen: 23.9.1
+    rev: 3702ba224ecffbcec30af640c149f231d90aebdb # frozen: 24.4.2
     hooks:
       - id: black
 
