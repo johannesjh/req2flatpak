@@ -49,7 +49,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-python-package">Installing the Python Package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-from-git">Installing from Git</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#simply-downloading-and-copying-the-script">Simply Downloading and Copying the Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-the-almost-standalone-script">Downloading the (almost) Standalone Script</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
@@ -114,10 +114,14 @@ for example in order to install from a forked repository of req2flatpak.
 And it is possible to specify specific branches, commits and tags,
 see <a class="reference external" href="https://pip.pypa.io/en/stable/topics/vcs-support/">pip’s documentation on VCS support</a>.</p>
 </section>
-<section id="simply-downloading-and-copying-the-script">
-<h2>Simply Downloading and Copying the Script<a class="headerlink" href="#simply-downloading-and-copying-the-script" title="Permalink to this heading"></a></h2>
+<section id="downloading-the-almost-standalone-script">
+<h2>Downloading the (almost) Standalone Script<a class="headerlink" href="#downloading-the-almost-standalone-script" title="Permalink to this heading"></a></h2>
 <p>You can download the <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> script to your computer and run it.
-Simple as that.</p>
+You will need Python installed and the additional <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>packaging
+./req2flatpak.py<span class="w"> </span>--help
+</pre></div>
+</div>
 </section>
 </section>
 
