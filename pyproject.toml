@@ -28,7 +28,7 @@ pylama = { extras = [
     "eradicate",
     "toml",
 ], version = "^8.4.1" }
-bandit = { extras = ["toml"], version = "^1.7.4" }
+bandit = { extras = ["toml"], version = "^1.7.5" }
 
 # type stubs for mypy linting
 types-setuptools = "^65.5.0.2"
