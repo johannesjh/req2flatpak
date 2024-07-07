@@ -46,8 +46,13 @@ And it is possible to specify specific branches, commits and tags,
 see `pip's documentation on VCS support <https://pip.pypa.io/en/stable/topics/vcs-support/>`_.
 
 
-Simply Downloading and Copying the Script
------------------------------------------
+Downloading the (almost) Standalone Script
+------------------------------------------
 
 You can download the ``req2flatpak.py`` script to your computer and run it.
-Simple as that.
+You will need Python installed and the additional ``packaging`` package:
+
+.. code-block:: bash
+
+   pip install packaging
+   ./req2flatpak.py --help
