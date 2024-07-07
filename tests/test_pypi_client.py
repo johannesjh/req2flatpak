@@ -1,4 +1,5 @@
 """Automated tests for :class:req2flatpak.PypiClient."""
+
 import contextlib
 import unittest
 from pathlib import Path
