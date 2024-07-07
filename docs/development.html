@@ -54,7 +54,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#obtaining-the-source-code">Obtaining the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-python">Installing Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-a-development-environment">Setting up a Development Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-a-development-version">Running a Development Version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#understanding-the-architecture-and-design-goals">Understanding the Architecture and Design Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
@@ -124,18 +123,20 @@ when developing req2flatpak.</p></li>
 </section>
 <section id="setting-up-a-development-environment">
 <h2>Setting up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permalink to this heading"></a></h2>
-<p>Simply clone/open req2flatpak in the IDE of your choice.
+<p>Clone the req2flatpak git repository in the IDE of your choice.
 Features and languages that the IDE should ideally support include:</p>
 <ul class="simple">
-<li><p>python</p></li>
-<li><p>poetry for managing req2flatpak’s dependencies in a virtual environment</p></li>
-<li><p>restructured text (<code class="docutils literal notranslate"><span class="pre">*.rst</span></code>) for writing documentation</p></li>
+<li><p>python,</p></li>
+<li><p>poetry (for managing req2flatpak’s dependencies in a virtual environment),</p></li>
+<li><p>devcontainers (optionally, for working inside a docker image instead of your local system), as well as</p></li>
+<li><p>restructured text (optionally, for writing documentation).</p></li>
 </ul>
-</section>
-<section id="installing-dependencies">
-<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Permalink to this heading"></a></h2>
-<p>req2flatpak depends on very few other software packages, as documented in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
-Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span></code> to install these packages into a python virtual environment.</p>
+<p>Install poetry and pre-commit using the python installer of your choice,
+e.g., by running <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">poetry</span></code> and <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code>.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span> <span class="pre">--with</span> <span class="pre">lint</span> <span class="pre">--with</span> <span class="pre">docs</span> <span class="pre">--all-extras</span></code>.
+This will install all the python packages you need into a python virtual environment.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code>.
+This will initialize pre-commit in your local development repository.</p>
 </section>
 <section id="running-a-development-version">
 <h2>Running a Development Version<a class="headerlink" href="#running-a-development-version" title="Permalink to this heading"></a></h2>
@@ -197,7 +198,7 @@ You are very welcome to contribute improvements back to the original req2flatpak
 <p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the code before committing changes,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to install pre-commit on your system,</span>
 <span class="c1"># follow instructions from https://pre-commit.com/, for example:</span>
-pip<span class="w"> </span>install<span class="w"> </span>pre-commit<span class="w">  </span><span class="c1"># install pre-commit using pip</span>
+pipx<span class="w"> </span>install<span class="w"> </span>pre-commit
 
 <span class="c1"># to install the pre-commit git hooks in the cloned req2flatpak repo</span>
 pre-commit<span class="w"> </span>install<span class="w">  </span><span class="c1"># activates pre-commit in the current git repo</span>
