@@ -4,7 +4,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name        = "req2flatpak"
-# version must be kept in-sync with docs/sources/conf.py
 version     = "0.2.0"
 description = "Generates a flatpak-builder build module for installing python packages defined in requirements.txt files."
 authors     = ["johannesjh <johannesjh@users.noreply.github.com>"]
