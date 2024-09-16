@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Development &mdash; req2flatpak 0.0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -53,15 +54,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#obtaining-the-source-code">Obtaining the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-python">Installing Python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-a-development-environment">Setting up a Development Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installing-dependencies">Installing Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-a-development-version">Running a Development Version</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#understanding-the-architecture-and-design-goals">Understanding the Architecture and Design Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensuring-code-quality">Ensuring Code quality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-dependencies">Updating Dependencies</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#poetry-dependencies">Poetry dependencies</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pre-commit-hooks">Pre-commit hooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ci-dependencies">CI dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#poetry-and-pre-commit-dependencies">Poetry and pre-commit dependencies</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#publishing-a-release">Publishing a Release</a></li>
@@ -123,18 +123,20 @@ when developing req2flatpak.</p></li>
 </section>
 <section id="setting-up-a-development-environment">
 <h2>Setting up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Permalink to this heading"></a></h2>
-<p>Simply clone/open req2flatpak in the IDE of your choice.
+<p>Clone the req2flatpak git repository in the IDE of your choice.
 Features and languages that the IDE should ideally support include:</p>
 <ul class="simple">
-<li><p>python</p></li>
-<li><p>poetry for managing req2flatpak’s dependencies in a virtual environment</p></li>
-<li><p>restructured text (<code class="docutils literal notranslate"><span class="pre">*.rst</span></code>) for writing documentation</p></li>
+<li><p>python,</p></li>
+<li><p>poetry (for managing req2flatpak’s dependencies in a virtual environment),</p></li>
+<li><p>devcontainers (optionally, for working inside a docker image instead of your local system), as well as</p></li>
+<li><p>restructured text (optionally, for writing documentation).</p></li>
 </ul>
-</section>
-<section id="installing-dependencies">
-<h2>Installing Dependencies<a class="headerlink" href="#installing-dependencies" title="Permalink to this heading"></a></h2>
-<p>req2flatpak depends on very few other software packages, as documented in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.
-Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span></code> to install these packages into a python virtual environment.</p>
+<p>Install poetry and pre-commit using the python installer of your choice,
+e.g., by running <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">poetry</span></code> and <code class="docutils literal notranslate"><span class="pre">pipx</span> <span class="pre">install</span> <span class="pre">pre-commit</span></code>.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span> <span class="pre">--with</span> <span class="pre">lint</span> <span class="pre">--with</span> <span class="pre">docs</span> <span class="pre">--all-extras</span></code>.
+This will install all the python packages you need into a python virtual environment.</p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code>.
+This will initialize pre-commit in your local development repository.</p>
 </section>
 <section id="running-a-development-version">
 <h2>Running a Development Version<a class="headerlink" href="#running-a-development-version" title="Permalink to this heading"></a></h2>
@@ -196,7 +198,7 @@ You are very welcome to contribute improvements back to the original req2flatpak
 <p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the code before committing changes,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to install pre-commit on your system,</span>
 <span class="c1"># follow instructions from https://pre-commit.com/, for example:</span>
-pip<span class="w"> </span>install<span class="w"> </span>pre-commit<span class="w">  </span><span class="c1"># install pre-commit using pip</span>
+pipx<span class="w"> </span>install<span class="w"> </span>pre-commit
 
 <span class="c1"># to install the pre-commit git hooks in the cloned req2flatpak repo</span>
 pre-commit<span class="w"> </span>install<span class="w">  </span><span class="c1"># activates pre-commit in the current git repo</span>
@@ -213,56 +215,36 @@ We welcome your contributions even if your workflow differs from what we recomme
 </section>
 <section id="updating-dependencies">
 <h2>Updating Dependencies<a class="headerlink" href="#updating-dependencies" title="Permalink to this heading"></a></h2>
-<p>There are three categories of dependencies that can be found in this repository:
-<em>Github Actions</em>, <em>Poetry</em> and <em>pre-commit hooks</em>.
+<p>There are multiple categories of dependencies that can be found in this repository:
+CI, Poetry and pre-commit hooks.</p>
+<section id="ci-dependencies">
+<h3>CI dependencies<a class="headerlink" href="#ci-dependencies" title="Permalink to this heading"></a></h3>
+<p>Github actions and workflows contain hardcoded versions of container images and packages.
+See the <code class="docutils literal notranslate"><span class="pre">.github</span></code> folder.
 Currently there is no programmatic way to update the github actions we depend on.
-One has to manually update the commit hashes used.</p>
-<section id="poetry-dependencies">
-<h3>Poetry dependencies<a class="headerlink" href="#poetry-dependencies" title="Permalink to this heading"></a></h3>
-<p>Poetry differentiates between direct and indirect dependencies.
-Direct dependencies are specified in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> – usually with a fixed version.
-Updating these can introduce bugs through breaking changes in the API exposed by
-these dependencies. That’s why we’ll focus on updating indirect dependencies first.
-Running the following and committing the resulting changes to <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code> will
-do the trick provided that set up <em>pre-commit</em> according to this guide.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Update indirect dependencies (stored in poetry.lock)</span>
-poetry<span class="w"> </span>update
-
-<span class="c1"># 2. Stage and commit (runs pre-commit hooks)</span>
-</pre></div>
-</div>
-<p>Direct dependencies are updated by changing the version specified in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.
-You will have to manually identify the latest version for a package by opening
-its project page on <a class="reference external" href="https://pypi.org/project/{name}/">pypi</a>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Determine latest version of a package.</span>
-<span class="c1"># 2. Update version requirement in `pyproject.toml`</span>
-<span class="c1"># 3. Update `poetry.lock` (`--no-update` will prevent updating indirect dependencies)</span>
-poetry<span class="w"> </span>lock<span class="w"> </span>--no-update
-
-<span class="c1"># 4. Install newest version (adjust options to your dev env)</span>
-poetry<span class="w"> </span>install<span class="w"> </span>--with<span class="w"> </span>lint<span class="w"> </span>--all-extras
-
-<span class="c1"># 5. Stage and commit (runs pre-commit hooks)</span>
-</pre></div>
-</div>
+One has to manually update the versions and/or commit hashes.</p>
+<p>The devcontainer configuration file also contains versions,
+these are also manually kept up-to-date.
+See the <code class="docutils literal notranslate"><span class="pre">.devcontainer</span></code> folder.</p>
 </section>
-<section id="pre-commit-hooks">
-<h3>Pre-commit hooks<a class="headerlink" href="#pre-commit-hooks" title="Permalink to this heading"></a></h3>
-<p>Pre-commit hooks require a bit more steps to update because they are partially
-synced with the versions specified in <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Update pre-commit hooks</span>
-pre-commit<span class="w"> </span>autoupdate<span class="w"> </span>--freeze
-
-<span class="c1"># 2. Stage `.pre-commit-config.yaml`</span>
-git<span class="w"> </span>add<span class="w"> </span>.pre-commit-config.yaml
-
-<span class="c1"># 3. Sync with poetry</span>
-pre-commit<span class="w"> </span>run
-
-<span class="c1"># 4. Remove `frozen: x.x.x` comments for unfrozen dependencies</span>
-<span class="c1"># 5. Stage and commit (runs pre-commit hooks)</span>
-</pre></div>
-</div>
+<section id="poetry-and-pre-commit-dependencies">
+<h3>Poetry and pre-commit dependencies<a class="headerlink" href="#poetry-and-pre-commit-dependencies" title="Permalink to this heading"></a></h3>
+<p>First update poetry dependencies,</p>
+<ol class="arabic simple">
+<li><p>Manually bump the version constraints in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">update</span> <span class="pre">--with</span> <span class="pre">lint</span></code> to update installed packages and write the lock file.</p></li>
+<li><p>Stage changes by running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">pyproject.toml</span> <span class="pre">poetry.lock</span></code>.</p></li>
+</ol>
+<p>Then update pre-commit dependencies,</p>
+<ol class="arabic simple">
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> just to be sure that pre-commit is properly initialized.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">autoupdate</span> <span class="pre">--freeze</span></code> to update pre-commit’s packages.</p></li>
+<li><p>Stage changes by running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.pre-commit-config.yaml</span></code>.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span></code> to sync package versions from poetry to pre-commit. Note that this is a one-way-sync, i.e., <a class="reference external" href="https://github.com/floatingpurr/sync_with_poetry">sync_with_poetry</a> will copy package versions from the poetry lock file into the pre-commit yaml file.</p></li>
+<li><p>Stage changes by running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">.pre-commit-config.yaml</span></code>.</p></li>
+<li><p>run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span></code> to verify that pre-commit now happily leaves all files unchanged.</p></li>
+<li><p>Stage and commit all changes.</p></li>
+</ol>
 </section>
 </section>
 <section id="publishing-a-release">

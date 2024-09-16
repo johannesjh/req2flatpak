@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Introduction &mdash; req2flatpak 0.0.1 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -104,13 +105,17 @@ using pip.</p>
 </section>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
-<p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">req2flatpak</span></code>
-to install the latest release of req2flatpak.</p>
-<p>It is possible to use req2flatpak from the commandline,
-as well as programmatically from a python script.</p>
-<p>Commandline usage means you can invoke req2flatpak’s commandline interface
-as follows, in order to generate a <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code> build module
-from given python package requirements:</p>
+<p>Install req2flatpak using pip (or any other python package installer),
+e.g., by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">req2flatpak</span></code>.</p>
+<p>Prepare a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file with the packages that you want to install as part of a flatpak build.
+You need to specify exact versions for all the packages including their dependencies.
+(Various tools exist to help creating such a requirements file with fully resolved dependencies and frozen package versions;
+for example, you can use
+<a class="reference external" href="https://pypi.org/project/pip-tools/">pip-compile</a> or
+<a class="reference external" href="https://pypi.org/project/poetry-plugin-export/">poetry export</a> to export a suitable <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file).</p>
+<p>Run req2flatpak.
+For example, run this command to generate a <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code> build module
+from your <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span><span class="m">310</span>-x86_64<span class="w"> </span><span class="m">310</span>-aarch64
 </pre></div>
 </div>
@@ -120,16 +125,16 @@ query pypi about available downloads for the requirements,
 choose appropriate downloads for the specified target platforms,
 and generate a flatpak-builder build module.
 The module, if included in a flatpak-builder build manifest,
-will install the required packages using pip.</p>
-<p>The commandline option to define target platforms uses the format <code class="docutils literal notranslate"><span class="pre">&lt;pythonversion&gt;-&lt;architecture&gt;</span></code>.
+will install the required packages using pip.
+The commandline option to define target platforms uses the format <code class="docutils literal notranslate"><span class="pre">&lt;pythonversion&gt;-&lt;architecture&gt;</span></code>.
 To learn more about available commandline options,
 run <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span> <span class="pre">--help</span></code>.</p>
-<p>Programmatic usage is also possible.
-This means you can invoke functionality from req2flatpak in your own python script,
-allowing you to tweak the desired behavior in many ways.
-The <a class="reference external" href="https://johannesjh.github.io/req2flatpak/">documentation</a>
-describes req2flatpak’s python api and includes code examples
-to help you get started quickly.</p>
+<p>Note that programmatic usage of req2flatpak is also possible.
+This means you can write a python script to invoke req2flatpak,
+which allows to tweak the desired behavior in many ways.</p>
+<p>Go read the <a class="reference external" href="https://johannesjh.github.io/req2flatpak/">documentation</a>
+to learn more about req2flatpak’s commandline and Python APIs.
+The documentation includes further examples to help you get started quickly.</p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
