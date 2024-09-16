@@ -54,12 +54,12 @@ The commandline option to define target platforms uses the format ``<pythonversi
 To learn more about available commandline options,
 run ``req2flatpak.py --help``.
 
-Note that programmatic usage of req2flatpakis also possible.
+Note that programmatic usage of req2flatpak is also possible.
 This means you can write a python script to invoke req2flatpak,
 which allows to tweak the desired behavior in many ways.
 
 Go read the `documentation <https://johannesjh.github.io/req2flatpak/>`__
-to learn more about req2flatpak's commandline and python APIs.
+to learn more about req2flatpak's commandline and Python APIs.
 The documentation includes further examples to help you get started quickly.
 
 
