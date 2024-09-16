@@ -14,7 +14,7 @@ readme      = ["README.rst", "docs/source/changelog.rst"]
 req2flatpak = 'req2flatpak:main'
 
 [tool.poetry.dependencies]
-python    = "^3.7.2"
+python    = ">=3.8"
 packaging = { version = "^21.3" }
 pyyaml    = { version = "^6.0.1", optional = true }
 
@@ -41,9 +41,9 @@ pydocstyle = "<6.2"
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx                           = "^5.3.0"
+sphinx                           = "^6.2.1"
 sphinx-argparse                  = "^0.4.0"
-sphinx-rtd-theme                 = "^1.2.0"
+sphinx-rtd-theme                 = "^2.0.0"
 sphinx-rtd-theme-github-versions = "^1.1"
 
 [tool.isort]
