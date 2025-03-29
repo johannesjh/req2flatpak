@@ -2,15 +2,17 @@
 
 # pylint: disable=invalid-name
 
+import importlib.metadata
+
 # =============================================================================
 # Project information
 # see https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 # =============================================================================
 
 project = "req2flatpak"
-copyright = "2022, johannesjh"  # pylint: disable=redefined-builtin
+copyright = "2022-2024, johannesjh"  # pylint: disable=redefined-builtin
 author = "johannesjh"
-release = "0.0.1"
+release = importlib.metadata.version("req2flatpak")
 
 # =============================================================================
 # General configuration
