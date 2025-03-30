@@ -6,6 +6,34 @@ Changelog
    Newest releases are added to the top of the file.
 
 
+v0.3.1 (2025-03-30) "Python 3.12"
+---------------------------------
+
+Highlight: Compatibility with Python 3.12
+
+
+Improvements for Development:
+
+- Improved CI #73 #79 #82
+- Added devcontainers configuration #65
+- Now using ruff for linting #87
+
+
+Fixes:
+
+- Fixed an error when no urls are found in a pypi release in #71
+
+
+Maintenance and dependency updates:
+
+- Updated dependencies in #62 #74
+- Improved docs in #77 #81 #86 
+- Now using `packaging` instead of the deprecated `pkg_resources` package #76
+
+
+Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.2...v0.3
+
+
 v0.2 (2023-06-04) "Yaml"
 ------------------------
 

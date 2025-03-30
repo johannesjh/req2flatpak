@@ -51,6 +51,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2025-03-30-python-3-12">v0.3.1 (2025-03-30) “Python 3.12”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-2023-06-04-yaml">v0.2 (2023-06-04) “Yaml”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-1-2022-12-23-initial-release">v0.1 (2022-12-23) “Initial Release”</a></li>
 </ul>
@@ -83,6 +84,27 @@
              
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading"></a></h1>
+<section id="v0-3-1-2025-03-30-python-3-12">
+<h2>v0.3.1 (2025-03-30) “Python 3.12”<a class="headerlink" href="#v0-3-1-2025-03-30-python-3-12" title="Permalink to this heading"></a></h2>
+<p>Highlight: Compatibility with Python 3.12</p>
+<p>Improvements for Development:</p>
+<ul class="simple">
+<li><p>Improved CI #73 #79 #82</p></li>
+<li><p>Added devcontainers configuration #65</p></li>
+<li><p>Now using ruff for linting #87</p></li>
+</ul>
+<p>Fixes:</p>
+<ul class="simple">
+<li><p>Fixed an error when no urls are found in a pypi release in #71</p></li>
+</ul>
+<p>Maintenance and dependency updates:</p>
+<ul class="simple">
+<li><p>Updated dependencies in #62 #74</p></li>
+<li><p>Improved docs in #77 #81 #86</p></li>
+<li><p>Now using <cite>packaging</cite> instead of the deprecated <cite>pkg_resources</cite> package #76</p></li>
+</ul>
+<p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.2...v0.3">https://github.com/johannesjh/req2flatpak/compare/v0.2…v0.3</a></p>
+</section>
 <section id="v0-2-2023-06-04-yaml">
 <h2>v0.2 (2023-06-04) “Yaml”<a class="headerlink" href="#v0-2-2023-06-04-yaml" title="Permalink to this heading"></a></h2>
 <p>Highlight: req2flatpak can now generate yaml output.</p>
