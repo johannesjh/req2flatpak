@@ -379,12 +379,12 @@ class RequirementsParser:
         """Parses requirements.txt string content into a list of Requirement objects."""
 
         def validate_requirement(req: packaging_reqs.Requirement) -> None:
-            assert (
-                len(req.specifier) == 1
-            ), "Error parsing requirements: A single version number must be specified."
-            assert (
-                list(req.specifier)[0].operator == "=="
-            ), "Error parsing requirements: The exact version must specified as 'package==version'."
+            assert len(req.specifier) == 1, (
+                "Error parsing requirements: A single version number must be specified."
+            )
+            assert list(req.specifier)[0].operator == "==", (
+                "Error parsing requirements: The exact version must specified as 'package==version'."
+            )
 
         def make_requirement(req: packaging_reqs.Requirement) -> Requirement:
             validate_requirement(req)

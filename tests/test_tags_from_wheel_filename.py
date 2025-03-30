@@ -31,8 +31,6 @@ class TestTagsFromWheelFilename(unittest.TestCase):
         """Tests the behavior of ``tags_from_wheel_filename``."""
         for filename, expected_tags in self.data.items():
             with self.subTest(filename=filename):
-                parsed_tags = req2flatpak.tags_from_wheel_filename(
-                    filename
-                )  # pylint: disable=not-callable
+                parsed_tags = req2flatpak.tags_from_wheel_filename(filename)  # pylint: disable=not-callable
                 self.assertEqual(parsed_tags, expected_tags)
                 self.assertEqual(parsed_tags, expected_tags)
