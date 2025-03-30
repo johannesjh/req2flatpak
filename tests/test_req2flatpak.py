@@ -65,17 +65,17 @@ class ExampleUsageTest(unittest.TestCase):
             build_module = self.example_usage()
 
             # validate the generated build module
-            assert build_module[
-                "build-commands"
-            ], "No build-commands section was found in the build module."
+            assert build_module["build-commands"], (
+                "No build-commands section was found in the build module."
+            )
             assert build_module["sources"], "No sources were found in the build module."
             assert build_module["sources"][0]["type"] == "file"
-            assert (
-                "requests" in build_module["build-commands"][0]
-            ), "The requests package was not found in the build module's build command."
-            assert (
-                "requests" in build_module["sources"][0]["url"]
-            ), "The requests package was not found in the build module's sources."
+            assert "requests" in build_module["build-commands"][0], (
+                "The requests package was not found in the build module's build command."
+            )
+            assert "requests" in build_module["sources"][0]["url"], (
+                "The requests package was not found in the build module's sources."
+            )
 
 
 class ExampleCustomizationTest(ExampleUsageTest):
