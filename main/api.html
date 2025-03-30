@@ -100,6 +100,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#saving-the-generated-build-module">Saving the Generated Build Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customization-options">Customization Options</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
@@ -160,18 +161,10 @@ in order to install python packages on a specific flatpak target platform.</p>
 </ol>
 <p>…if you include the resulting build module in a flatpak build,
 the module will install the required packages.</p>
-<p>You will benefit from a writing a custom script
-(in contrast to simply using req2flatpak’s commandline interface)
-if you want to change the modify or tweak the behavior.
-In a custom script, you have all the freedom in the world
-to modify each step as you see fit.
-For example:</p>
-<ul class="simple">
-<li><p>you may want to query other package indices instead of pypi,</p></li>
-<li><p>you may prefer wheels or sdists for certain packages, or</p></li>
-<li><p>you may want to exclude specific packages.</p></li>
-</ul>
-<p>The following subsections explain in detail how you can use req2flatpak’s python api in your custom script.
+<p>Using the python API has the benefit that you can modify and tweak the behavior in a very flexible way.
+E.g., in each step in the above script, you could modify or tweak the data and/or invocations.
+For further details, see section <a class="reference internal" href="#customization"><span class="std std-ref">Customization Options</span></a>.</p>
+<p>The following sections explain in detail how you can use req2flatpak’s python api in your custom script.
 For further inspiration you can also have a look at how req2flatpak’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
 </section>
 <section id="specifying-target-platforms">
@@ -268,8 +261,18 @@ Acceptable values are the same as in
 </section>
 <section id="specifying-package-requirements">
 <h2>Specifying Package Requirements<a class="headerlink" href="#specifying-package-requirements" title="Permalink to this heading"></a></h2>
-<p>A requirement describes the name and exact version
-of a python package that shall be installed.</p>
+<p>A requirement describes the name and exact version of a python package that shall be installed.</p>
+<p>To provide some context, there are many options for how you may want to manage requirements in your projects.
+You will most likely want to use additional tools such as poetry or pip-compile in addition to req2flatpak.
+The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
+In other words, req2flatpak does not resolve or freeze abstract requirement specifications (such as, e.g., <code class="docutils literal notranslate"><span class="pre">packaging</span> <span class="pre">&gt;=</span> <span class="pre">24.1</span></code>) to specific version numbers (such as, e.g., <code class="docutils literal notranslate"><span class="pre">packaging==24.2</span></code>).
+Instead, you need to provide specific (“frozen”) version numbers to req2flatpak.
+You can use tools such
+<a class="reference external" href="https://pypi.org/project/pip-tools/">pip-compile</a> or
+<a class="reference external" href="https://pypi.org/project/poetry/">poetry export</a>
+to resolve and freeze dependencies and to export them into a requirements.txt file.
+This is where req2flatpak comes into play.
+It can read your requirements.txt file and convert it into a flatpak build manifest.</p>
 <section id="requirements">
 <h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
 <p>Package requirements are represented in req2flatpak as a dataclass, as follows:</p>
@@ -324,11 +327,6 @@ resolve dependencies.</p>
 <p>It is important to note that req2flatpak’s <code class="docutils literal notranslate"><span class="pre">RequirementsParser</span></code> expects all package versions to be fully specified.
 For example, it will not accept a package version specification such as <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">&gt;=</span> <span class="pre">2.0</span></code>.
 Instead, it expects all versions to be pinned using the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator, such as, e.g., s``requests == 2.0``.</p>
-<p>The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
-You can use other tools like
-<a class="reference external" href="https://pypi.org/project/pip-tools/">pip-compile</a> or
-<a class="reference external" href="https://pypi.org/project/poetry/">poetry export</a>
-to resolve and freeze dependencies and to export them into a requirements.txt file.</p>
 </section>
 </section>
 <section id="querying-package-indices-for-available-releases">
@@ -568,6 +566,60 @@ For example:</p>
 </div>
 <p>The above code assumes a build module has been generated and is stored as a dict in the variable <code class="docutils literal notranslate"><span class="pre">build_module</span></code>.
 The code shows how to serialize the dict and save it to an output file.</p>
+</section>
+<section id="customization-options">
+<span id="customization"></span><h2>Customization Options<a class="headerlink" href="#customization-options" title="Permalink to this heading"></a></h2>
+<p>Using req2flatpak’s Python API gives many options for customization.
+You have all the freedom in the world to modify each step as you see fit.</p>
+<p>For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># define your target platforms</span>
+<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">&quot;cp310-x86_64&quot;</span><span class="p">)]</span>
+
+<span class="c1"># Optionally pre-prepress or otherwise tweak your requirements</span>
+<span class="c1"># before feeding them into req2flatpak,</span>
+<span class="c1"># e.g., using pip-compile.</span>
+
+<span class="c1"># Read (or otherwise create) your requirements list:</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">&quot;requirements.txt&quot;</span><span class="p">)</span>
+
+<span class="c1"># Optionally tweak the requirements list that was parsed by req2flatpak.</span>
+<span class="c1"># For example, you may wish to remove package &quot;example&quot; because it comes pre-installed:</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">requirements</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">package</span> <span class="o">!=</span> <span class="s2">&quot;example&quot;</span><span class="p">}</span>
+
+<span class="c1"># Optionally query other package indices by implementing a class similar to PyPiClient:</span>
+<span class="k">class</span> <span class="nc">MyClient</span><span class="p">(</span><span class="n">PypiClient</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom client for querying another package index instead of PyPi.&quot;&quot;&quot;</span>
+
+<span class="n">releases</span> <span class="o">=</span> <span class="n">MyClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+
+<span class="c1"># If you prefer sdists over wheels, the various ``DownloadChooser`` methods have you covered:</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+
+<span class="c1"># Optionally tweak the downloads list.</span>
+
+<span class="c1"># Optionally modify the commandline options that will be passed to pip-install</span>
+<span class="c1"># by defining a custom pip_install template. E.g., to ignore preinstalled packages:</span>
+<span class="n">custom_template</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">pip_install_template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+    <span class="s2">&quot;pip3 install&quot;</span><span class="p">,</span> <span class="s2">&quot;pip3 install --ignore-installed&quot;</span>
+<span class="p">)</span>
+<span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">pip_install_template</span> <span class="o">=</span> <span class="n">custom_template</span>
+
+<span class="c1"># Generate the flatpak build module:</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+
+<span class="c1"># Optionally, tweak the build module that was generated by req2flatpak.</span>
+<span class="c1"># For example, to provide a meaningful name for your build module:</span>
+<span class="n">build_module</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;my-custom-name&quot;</span>
+
+<span class="c1"># Convert to JSON or YAML as you wish:</span>
+<span class="n">json_str</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module_as_str</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+<span class="n">yaml_str</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module_as_yaml_str</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 
