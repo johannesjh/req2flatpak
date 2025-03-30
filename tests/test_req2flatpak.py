@@ -77,6 +77,7 @@ class ExampleUsageTest(unittest.TestCase):
                 "The requests package was not found in the build module's sources."
             )
 
+
 class ExampleCustomizationTest(ExampleUsageTest):
     """Test to ensure that the customization code example keeps working."""
 
