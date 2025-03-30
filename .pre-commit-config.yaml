@@ -21,7 +21,7 @@ repos:
       - id: prettier
 
   - repo: https://github.com/rstcheck/rstcheck
-    rev: "445861c31d8134562e723d77115721038de2e687" # frozen: v6.2.0
+    rev: "1fb8ceaa49b8492ad630d689fcf216c8a53c9542" # frozen: v6.2.4
     hooks:
       - id: rstcheck
         additional_dependencies: [sphinx]

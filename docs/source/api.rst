@@ -29,21 +29,14 @@ The above code uses req2flatpak to generate a build module in five steps:
 ...if you include the resulting build module in a flatpak build,
 the module will install the required packages.
 
-You will benefit from a writing a custom script
-(in contrast to simply using req2flatpak's commandline interface)
-if you want to change the modify or tweak the behavior.
-In a custom script, you have all the freedom in the world
-to modify each step as you see fit.
-For example:
 
-* you may want to query other package indices instead of pypi,
+Using the python API has the benefit that you can modify and tweak the behavior in a very flexible way.
+E.g., in each step in the above script, you could modify or tweak the data and/or invocations.
+For further details, see section :ref:`Customization`.
 
-* you may prefer wheels or sdists for certain packages, or
-
-* you may want to exclude specific packages.
-
-The following subsections explain in detail how you can use req2flatpak's python api in your custom script.
+The following sections explain in detail how you can use req2flatpak's python api in your custom script.
 For further inspiration you can also have a look at how req2flatpak's :py:meth:`~req2flatpak.main` method is implemented.
+
 
 
 Specifying Target Platforms
@@ -91,8 +84,20 @@ Documentation of all methods provided by the ``PlatformFactory`` class:
 Specifying Package Requirements
 -------------------------------
 
-A requirement describes the name and exact version
-of a python package that shall be installed.
+A requirement describes the name and exact version of a python package that shall be installed.
+
+To provide some context, there are many options for how you may want to manage requirements in your projects.
+You will most likely want to use additional tools such as poetry or pip-compile in addition to req2flatpak.
+The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
+In other words, req2flatpak does not resolve or freeze abstract requirement specifications (such as, e.g., ``packaging >= 24.1``) to specific version numbers (such as, e.g., ``packaging==24.2``).
+Instead, you need to provide specific ("frozen") version numbers to req2flatpak. 
+You can use tools such 
+`pip-compile <https://pypi.org/project/pip-tools/>`__ or
+`poetry export <https://pypi.org/project/poetry/>`__
+to resolve and freeze dependencies and to export them into a requirements.txt file.
+This is where req2flatpak comes into play. 
+It can read your requirements.txt file and convert it into a flatpak build manifest.
+  
 
 Requirements
 ^^^^^^^^^^^^
@@ -128,11 +133,6 @@ It is important to note that req2flatpak's ``RequirementsParser`` expects all pa
 For example, it will not accept a package version specification such as ``requests >= 2.0``.
 Instead, it expects all versions to be pinned using the ``==`` operator, such as, e.g., s``requests == 2.0``.
 
-The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
-You can use other tools like
-`pip-compile <https://pypi.org/project/pip-tools/>`__ or
-`poetry export <https://pypi.org/project/poetry/>`__
-to resolve and freeze dependencies and to export them into a requirements.txt file.
 
 
 Querying Package Indices for Available Releases
@@ -301,3 +301,20 @@ For example:
 
 The above code assumes a build module has been generated and is stored as a dict in the variable ``build_module``.
 The code shows how to serialize the dict and save it to an output file.
+
+
+.. _Customization:
+
+Customization Options
+---------------------
+
+Using req2flatpak's Python API gives many options for customization. 
+You have all the freedom in the world to modify each step as you see fit.
+
+For example:
+
+.. literalinclude:: ../../tests/test_req2flatpak.py
+   :start-after: example_customization1_start
+   :end-before: example_customization1_end
+   :language: python
+   :dedent:

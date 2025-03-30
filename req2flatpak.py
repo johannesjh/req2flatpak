@@ -549,14 +549,18 @@ class DownloadChooser:
 class FlatpakGenerator:
     """Provides methods for generating a flatpak-builder build module."""
 
+    pip_install_template: str = (
+        "pip3 install --verbose --exists-action=i "
+        '--no-index --find-links="file://${PWD}" '
+        "--prefix=${FLATPAK_DEST} --no-build-isolation "
+    )
+
     @staticmethod
     def build_module(
         requirements: Iterable[Requirement],
         downloads: Iterable[Download],
         module_name="python3-package-installation",
-        pip_install_template: str = "pip3 install --verbose --exists-action=i "
-        '--no-index --find-links="file://${PWD}" '
-        "--prefix=${FLATPAK_DEST} --no-build-isolation ",
+        pip_install_template: str = pip_install_template,
     ) -> dict:
         """Generates a build module for inclusion in a flatpak-builder build manifest."""
 
