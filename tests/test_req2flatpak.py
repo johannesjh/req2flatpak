@@ -81,6 +81,7 @@ class ExampleUsageTest(unittest.TestCase):
 class ExampleCustomizationTest(ExampleUsageTest):
     """Test to ensure that the customization code example keeps working."""
 
+    @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
     def example_usage(self):
         """Example showing how to customize req2flatpak in your own script."""
         # example_customization1_start
