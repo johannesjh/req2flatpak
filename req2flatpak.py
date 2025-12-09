@@ -781,6 +781,7 @@ def main():  # pylint: disable=too-many-branches
         output_stream.write(
             FlatpakGenerator.build_module_as_str(requirements, downloads)
         )
+    output_stream.close()
 
 
 if __name__ == "__main__":
