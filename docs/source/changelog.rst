@@ -5,6 +5,16 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
+Unreleased (xxxx-xx-xx)
+-----------------------
+
+Fixes:
+
+- Close output stream which was causing empty outfile files on Python 3.14.
+
+
+Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.1...main
+
 
 v0.3.1 (2025-03-30) "Python 3.12"
 ---------------------------------
