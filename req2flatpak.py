@@ -40,6 +40,7 @@ import pathlib
 import re
 import shelve
 import sys
+import tomllib
 import urllib.request
 from contextlib import nullcontext, suppress
 from dataclasses import asdict, dataclass, field
@@ -473,6 +474,43 @@ class PypiClient:
         return [cls.get_release(req) for req in reqs]
 
 
+class PylockClient:
+    @classmethod
+    def _get_release(cls, package):
+        release = Release(
+            package=package['name'],
+            version=package['version'],
+        )
+
+        dists = list(package.get('wheels', []))
+        if package.get('sdist'):
+            dists.append(package['sdist'])
+        if package.get('archive'):
+            dists.append(package['archive'])
+
+        for dist in dists:
+            url = dist['url']
+            release.downloads.append(
+                Download(
+                    package=release.package,
+                    version=release.version,
+                    filename=urlparse(url).path.split('/')[-1],
+                    url=url,
+                    sha256=dist.get('hashes', {}).get('sha256')
+                )
+            )
+        return release
+
+    @classmethod
+    def get_releases(cls, lock_file) -> List[Release]:
+        lock_data = tomllib.load(lock_file)
+
+        if not lock_data.get("lock-version", "").startswith("1."):
+            raise ValueError("Unsupported lock file version or not a pylock.toml file")
+
+        return [cls._get_release(package) for package in lock_data.get('packages', [])]
+
+
 class DownloadChooser:
     """
     Provides methods for choosing package downloads.
@@ -638,6 +676,13 @@ def cli_parser() -> argparse.ArgumentParser:
         help="Requirements can be read from a specified requirements.txt file.",
     )
     parser.add_argument(
+        "--lock-file",
+        "-l",
+        nargs="?",
+        type=argparse.FileType("rb"),
+        help="The pylock.toml lock file to obtain sources from"
+    )
+    parser.add_argument(
         "--target-platforms",
         "-t",
         nargs="+",
@@ -720,19 +765,23 @@ def main():  # pylint: disable=too-many-branches
             print(f"{pkg}=={version}", file=output_stream)
         parser.exit()
 
-    # parse requirements
     requirements = []
-    with suppress(AttributeError):
-        if options.requirements:
-            requirements += RequirementsParser.parse_string(
-                "\n".join(options.requirements)
+    if options.lock_file:
+        if options.requirements or options.requirements_file:
+            parser.error("Can not specify requirements when working from a lock file")
+    else:
+        # parse requirements
+        with suppress(AttributeError):
+            if options.requirements:
+                requirements += RequirementsParser.parse_string(
+                    "\n".join(options.requirements)
+                )
+            if options.requirements_file:
+                requirements += RequirementsParser.parse_file(options.requirements_file)
+        if not requirements:
+            parser.error(
+                "Error parsing requirements: At least one requirement must be specified."
             )
-        if options.requirements_file:
-            requirements += RequirementsParser.parse_file(options.requirements_file)
-    if not requirements:
-        parser.error(
-            "Error parsing requirements: At least one requirement must be specified."
-        )
 
     # parse target platforms
     if not options.target_platforms:
@@ -751,12 +800,19 @@ def main():  # pylint: disable=too-many-branches
             "as, e.g., '39-x86_64' or '310-aarch64'."
         )
 
-    # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
-    with (
-        shelve.open("pypi_cache") if options.cache else nullcontext()  # nosec: B301
-    ) as cache:
-        PypiClient.cache = cache or {}
-        releases = PypiClient.get_releases(requirements)
+    if options.lock_file:
+        releases = PylockClient.get_releases(options.lock_file)
+        requirements = [
+            Requirement(package=release.package, version=release.version)
+            for release in releases
+        ]
+    else:
+        # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
+        with (
+            shelve.open("pypi_cache") if options.cache else nullcontext()  # nosec: B301
+        ) as cache:
+            PypiClient.cache = cache or {}
+            releases = PypiClient.get_releases(requirements)
 
     # choose suitable downloads for the target platforms
     downloads = {
