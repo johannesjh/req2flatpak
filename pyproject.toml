@@ -9,36 +9,85 @@ description = "Generates a flatpak-builder build module for installing python pa
 authors     = ["johannesjh <johannesjh@users.noreply.github.com>"]
 license     = "MIT"
 readme      = ["README.rst", "docs/source/changelog.rst"]
+classifiers = [
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Software Development :: Build Tools",
+]
 
 [tool.poetry.scripts]
 req2flatpak = 'req2flatpak:main'
 
 [tool.poetry.dependencies]
-python    = ">=3.8"
-packaging = { version = ">=21.3" }
-pyyaml    = { version = "^6.0.1", optional = true }
+# runtime dependencies: keep floors as low as the code allows, so that users
+# on older systems can install. Floors are raised only when the code needs a
+# newer api. The lock file always resolves to the newest releases.
+python    = ">=3.11"                                    # oldest python that is not end-of-life
+packaging = { version = ">=21.3" }                      # the version shipped with RHEL 9's python 3.11
+pyyaml    = { version = "^6.0", optional = true }       # only dump/safe_load are used
 
 [tool.poetry.extras]
 yaml = ["pyyaml"]
 
 [tool.poetry.group.lint.dependencies]
-ruff = "^0.11.2"
-
-# type stubs for mypy linting
-types-setuptools = "^65.5.0.2"
-types-pyyaml     = "^6.0.12.8"
-
-# [tool.poetry.group.tests.dependencies]
-pydocstyle = "<6.2"
+# dev tools: pinned tightly, updated deliberately with `poetry update --with lint`.
+# keep the ruff rev in .pre-commit-config.yaml in sync (sync_with_poetry).
+ruff = "~0.17.5"
+ty   = "^0.0.104"                                       # beta tool: pinned to the exact release, bump manually
 
 [tool.poetry.group.docs]
 optional = true
 
 [tool.poetry.group.docs.dependencies]
-sphinx                           = "^6.2.1"
-sphinx-argparse                  = "^0.4.0"
-sphinx-rtd-theme                 = "^2.0.0"
+# docs tooling: follows the latest major versions, only built in ci.
+# highest major that still supports our lowest python (3.11); sphinx 9.1 needs
+# python>=3.12 and 9.2 needs >=3.13, so the lock resolves to 9.0.x until the
+# floor is raised.
+sphinx                           = "^9.0"
+sphinx-argparse                  = "^0.6.1"
+sphinx-rtd-theme                 = "^3.1.0"
+
+# unmaintained since 2022 but working for now, todo replace in the future
 sphinx-rtd-theme-github-versions = "^1.1"
 
-[tool.bandit]
-exclude_dirs = ['tests']
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+# default rules plus rulesets D I UP S
+# when updating ruff, check if additional rulesets exist that we may want to enable.
+extend-select = ["D", "I", "UP", "S"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.per-file-ignores]
+# Why is this an exception configured here, and not a "# noqa" comment in the code?
+# The caching example in tests/test_pypi_client.py is included verbatim in the
+# published documentation (docs/source/api.rst, via literalinclude). It calls
+# shelve.open, which ruff flags as S301 because shelve uses pickle, and pickle is
+# unsafe for untrusted data. Here the cache file is written and read by the same
+# user, so the warning does not apply. A "# noqa: S301" comment inside the example
+# would be shown to the readers of the docs and confuse them, so the exception lives here.
+"tests/test_pypi_client.py" = ["S301"]
+
+[tool.ty.environment]
+python-version = "3.11"
+
+[tool.ty.src]
+include = ["req2flatpak.py", "tests"]
+
+[[tool.ty.overrides]]
+# Why is this an exception configured here, and not a suppression comment in the code?
+# The code examples in tests/test_req2flatpak.py are included verbatim in the published
+# documentation (docs/source/api.rst, via literalinclude). They pass the results of
+# PlatformFactory.from_string and DownloadChooser.wheel_or_sdist straight on to the next
+# step. Both are typed "X | None" (None means: no such platform or download), but the
+# functions that receive them expect "X", so ty reports invalid-argument-type.
+# The examples deliberately stay short, without None checks, to be easy to read, and a
+# "# ty: ignore" comment inside them would be shown to the readers of the docs.
+# So the exception lives here, and it is limited to this one rule and this one file.
+include = ["tests/test_req2flatpak.py"]
+
+[tool.ty.overrides.rules]
+invalid-argument-type = "ignore"
