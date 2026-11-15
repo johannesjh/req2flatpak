@@ -190,6 +190,21 @@ Then update pre-commit dependencies,
 #. Stage and commit all changes.
 
 
+Publishing the Documentation
+----------------------------
+
+CI builds the documentation on every push and publishes it to the ``gh-pages`` branch (GitHub Pages)
+for the ``main`` branch, for tags, and for branches whose name starts with ``doc``.
+Each ref is published in its own directory, e.g., ``main``, ``v0.3.2``, or the branch name.
+Directories that are already on ``gh-pages`` are kept.
+
+The version switcher in the documentation is a template, ``docs/source/_templates/layout.html``.
+It reads ``versions.txt`` from the root of ``gh-pages``,
+which ``.github/scripts/write_versions.py`` regenerates at every publish:
+all directories on ``gh-pages``, ``main`` first, then the tags with the newest first, then the rest.
+To remove a preview of a branch, delete its directory from ``gh-pages``.
+
+
 Publishing a Release
 --------------------
 

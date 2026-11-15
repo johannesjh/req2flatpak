@@ -32,6 +32,10 @@ Improvements for Development:
 - Type checking with ty.
 - Updated all dependencies. The pre-commit hooks and CI use the same pinned Poetry version (Poetry 2).
 - CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.
+- The online documentation has a menu for switching between the documentation of different releases.
+  It was provided by a package that is no longer maintained (``sphinx-rtd-theme-github-versions``).
+  We replaced it with a small template in this repository and a small script that lists the published versions when the documentation is published.
+  The documentation now uses the standard ``sphinx_rtd_theme``. The menu looks and works the same as before, and the addresses of already published documentation are unchanged.
 
 
 Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0

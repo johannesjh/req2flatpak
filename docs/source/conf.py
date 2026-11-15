@@ -23,7 +23,6 @@ extensions = []
 
 # automatically generated api docs
 extensions += ["sphinx.ext.autodoc"]
-extensions += ["sphinx_rtd_theme"]
 
 # automatically generated argparse commandline docs
 extensions += ["sphinxarg.ext"]
@@ -36,4 +35,4 @@ exclude_patterns = []
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 # =============================================================================
 
-html_theme = "sphinx_rtd_theme_github_versions"
+html_theme = "sphinx_rtd_theme"
