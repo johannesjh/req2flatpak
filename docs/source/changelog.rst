@@ -5,15 +5,20 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
-Unreleased (xxxx-xx-xx)
------------------------
+v0.3.2 (2026-11-15)
+-------------------
+
+Improvements:
+
+- Relaxed the version constraint for the ``packaging`` dependency from ``^21.3`` to ``>=21.3``, see #92
+
 
 Fixes:
 
-- Close output stream which was causing empty outfile files on Python 3.14.
+- Close output stream which was causing empty outfile files on Python 3.14, see #91
 
 
-Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.1...main
+Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.1...v0.3.2
 
 
 v0.3.1 (2025-03-30) "Python 3.12"
