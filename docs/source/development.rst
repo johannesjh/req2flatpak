@@ -48,6 +48,8 @@ Features and languages that the IDE should ideally support include:
 
 Install poetry and pre-commit using the python installer of your choice, 
 e.g., by running ``pipx install poetry`` and ``pipx install pre-commit``.
+CI and the pre-commit hooks pin a Poetry version (see ``.github/actions/setup`` and ``.pre-commit-config.yaml``),
+so it is best to use the same version. A different Poetry version may rewrite the lock file.
 
 Run ``poetry install --with lint --with docs --all-extras``.
 This will install all the python packages you need into a python virtual environment.
@@ -132,6 +134,10 @@ Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code befor
    pre-commit run
 
 
+The hooks run ruff (linting and formatting, including rules for docstrings, import order,
+python syntax upgrades and security issues) and ty (type checking) on the python files,
+and prettier, rstcheck and Poetry checks on the other files.
+
 If this doesn't work, you can skip specific checks by prepending ``SKIP=<hook-id>`` like so: ``SKIP=poetry-lock git commit``. You can disable all hooks for a commit by using ``git commit -n`` or disable pre-commit entirely for the repository with ``pre-commit uninstall``.
 We welcome your contributions even if your workflow differs from what we recommend here.
 
@@ -149,6 +155,8 @@ Github actions and workflows contain hardcoded versions of container images and 
 See the ``.github`` folder.
 Currently there is no programmatic way to update the github actions we depend on.
 One has to manually update the versions and/or commit hashes.
+CI installs a pinned Poetry version (see ``.github/actions/setup``),
+update it together with the Poetry hooks in ``.pre-commit-config.yaml``.
 
 The devcontainer configuration file also contains versions,
 these are also manually kept up-to-date.
@@ -158,10 +166,16 @@ See the ``.devcontainer`` folder.
 Poetry and pre-commit dependencies
 ``````````````````````````````````
 
+The constraints in the ``pyproject.toml`` file follow a strategy that is explained in comments there:
+runtime dependencies keep their lower bounds as low as the code allows and the lock file resolves to the newest releases,
+whereas development tools (ruff and ty) are pinned tightly and bumped deliberately.
+ty is a beta tool, so check every ty update for new findings.
+Sphinx is limited to the newest major version that still supports our lowest supported python version.
+
 First update poetry dependencies, 
 
 #. Manually bump the version constraints in the ``pyproject.toml`` file.
-#. Run ``poetry update --with lint`` to update installed packages and write the lock file.
+#. Run ``poetry update --with docs`` to update installed packages (including the optional docs group) and write the lock file.
 #. Stage changes by running ``git add pyproject.toml poetry.lock``.
 
 
@@ -186,6 +200,11 @@ Use the following steps to publish a release of req2flatpak:
 * Describe the release in ``docs/source/changelog.rst``. Commit and push the modified changelog in the same branch.
 
 * Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch.
+
+* Before tagging, check on GitHub (tab Actions) that the CI workflow is enabled.
+  GitHub automatically disables workflows in repositories without activity for some time (the workflow state is ``disabled_inactivity``).
+  A disabled workflow ignores pushes and tags, so nothing would be built or published.
+  Enable the workflow again if needed, and run it manually on the main branch to check that it passes.
 
 * Tag the main branch with the version to be released, e.g., push a tag named ``v1.2.3``.
 
