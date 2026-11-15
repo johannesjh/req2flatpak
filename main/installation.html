@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; req2flatpak 0.3.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+  <title>Installation &mdash; req2flatpak 0.4.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -84,13 +82,15 @@
            <div itemprop="articleBody">
              
   <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <p>Installing req2flatpak is easy.
 Multiple installation methods are available.</p>
 <section id="installing-the-python-package">
-<h2>Installing the Python Package<a class="headerlink" href="#installing-the-python-package" title="Permalink to this heading"></a></h2>
+<h2>Installing the Python Package<a class="headerlink" href="#installing-the-python-package" title="Link to this heading"></a></h2>
 <p>You can install req2flatpak as a python package.
-This is the default and recommended installation method.</p>
+This is the default and recommended installation method.
+The Python versions that req2flatpak supports are declared in its <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file
+and shown on PyPI.</p>
 <p>For example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>req2flatpak
 req2flatpak<span class="w"> </span>--help
@@ -101,7 +101,7 @@ The second command will display req2flatpak’s help,
 allowing you to verify that req2flatpak was installed successfully.</p>
 </section>
 <section id="installing-from-git">
-<h2>Installing from Git<a class="headerlink" href="#installing-from-git" title="Permalink to this heading"></a></h2>
+<h2>Installing from Git<a class="headerlink" href="#installing-from-git" title="Link to this heading"></a></h2>
 <p>It is possible to install req2flatpak from a git repository.
 This installation method is useful if you want to install and test
 a new, experimental version of req2flatpak that has not yet been officially released.</p>
@@ -116,9 +116,9 @@ And it is possible to specify specific branches, commits and tags,
 see <a class="reference external" href="https://pip.pypa.io/en/stable/topics/vcs-support/">pip’s documentation on VCS support</a>.</p>
 </section>
 <section id="downloading-the-almost-standalone-script">
-<h2>Downloading the (almost) Standalone Script<a class="headerlink" href="#downloading-the-almost-standalone-script" title="Permalink to this heading"></a></h2>
+<h2>Downloading the (almost) Standalone Script<a class="headerlink" href="#downloading-the-almost-standalone-script" title="Link to this heading"></a></h2>
 <p>You can download the <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span></code> script to your computer and run it.
-You will need Python installed and the additional <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package:</p>
+You will need a supported Python version installed and the additional <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>packaging
 ./req2flatpak.py<span class="w"> </span>--help
 </pre></div>

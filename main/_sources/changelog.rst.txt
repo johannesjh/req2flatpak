@@ -5,6 +5,53 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
+v0.4.0 (2026-11-15)
+-------------------
+
+Highlight: req2flatpak requires Python 3.11 or newer.
+
+
+Breaking changes:
+
+- Python 3.8, 3.9 and 3.10 are no longer supported. Python 3.10 reached end-of-life on 2026-10-01.
+  This applies to the Python that runs req2flatpak. Target platforms can still use other Python versions.
+- Invalid requirements and unsupported architectures now raise a ``ValueError`` instead of an ``AssertionError``.
+  The checks now also work when python runs with ``-O``.
+
+
+Fixes:
+
+- The ``--cache`` option now fills the persistent cache. An empty cache file was replaced by an in-memory dict before, so nothing was ever stored.
+- The ``--outfile`` is only created once the output is ready. A failing run no longer leaves an empty file behind.
+  (This also replaces the deprecated ``argparse.FileType``. ``-`` still means stdin or stdout.)
+
+
+Improvements for Development:
+
+- ruff now also checks docstrings, import order, python syntax upgrades and security issues. It replaces bandit and pydocstyle.
+- Type checking with ty.
+- Updated all dependencies. The pre-commit hooks and CI use the same pinned Poetry version (Poetry 2).
+- CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.
+
+
+Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0
+
+
+v0.3.2 (2026-11-15)
+-------------------
+
+Improvements:
+
+- Relaxed the version constraint for the ``packaging`` dependency from ``^21.3`` to ``>=21.3``, see #92
+
+
+Fixes:
+
+- Close output stream which was causing empty outfile files on Python 3.14, see #91
+
+
+Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.1...v0.3.2
+
 
 v0.3.1 (2025-03-30) "Python 3.12"
 ---------------------------------

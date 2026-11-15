@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Introduction &mdash; req2flatpak 0.3.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+  <title>Introduction &mdash; req2flatpak 0.4.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -87,13 +85,13 @@
            <div itemprop="articleBody">
              
   <section id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">req2flatpak</span></code> is a script to convert python package requirements
 to a flatpak-builder build module.
 The module will install the required python packages
 as part of a flatpak build.</p>
 <section id="intended-use">
-<h2>Intended Use<a class="headerlink" href="#intended-use" title="Permalink to this heading"></a></h2>
+<h2>Intended Use<a class="headerlink" href="#intended-use" title="Link to this heading"></a></h2>
 <p>req2flatpak is for programmers
 who want to package a python application using flatpak.</p>
 <p>The req2flatpak script takes python package requirements as input, e.g., as
@@ -104,9 +102,13 @@ into a flatpak-builder build manifest, will install the python packages
 using pip.</p>
 </section>
 <section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h2>
 <p>Install req2flatpak using pip (or any other python package installer),
-e.g., by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">req2flatpak</span></code>.</p>
+e.g., by running <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">req2flatpak</span></code>.
+The Python versions that req2flatpak supports are declared in its <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file
+and shown on PyPI.
+This applies to the Python that runs req2flatpak,
+the target platforms that you generate build modules for can use other Python versions.</p>
 <p>Prepare a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file with the packages that you want to install as part of a flatpak build.
 You need to specify exact versions for all the packages including their dependencies.
 (Various tools exist to help creating such a requirements file with fully resolved dependencies and frozen package versions;
@@ -137,11 +139,11 @@ to learn more about req2flatpak’s commandline and Python APIs.
 The documentation includes further examples to help you get started quickly.</p>
 </section>
 <section id="documentation">
-<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
+<h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h2>
 <p>See <a class="reference external" href="https://johannesjh.github.io/req2flatpak/">https://johannesjh.github.io/req2flatpak/</a></p>
 </section>
 <section id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h2>
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
 <p>req2flatpak is developed in an open-source, community-driven way, as a
 voluntary effort in the authors’ free time.</p>
 <p>All contributions are greatly appreciated… pull requests are welcome,
@@ -150,7 +152,7 @@ See req2flatpak’s documentation for how to set up a development environment
 and how to contribute back to req2flatpak.</p>
 </section>
 <section id="related-work">
-<h2>Related Work<a class="headerlink" href="#related-work" title="Permalink to this heading"></a></h2>
+<h2>Related Work<a class="headerlink" href="#related-work" title="Link to this heading"></a></h2>
 <p>The
 <a class="reference external" href="https://github.com/flatpak/flatpak-builder-tools/blob/master/pip/flatpak-pip-generator">flatpak-pip-generator</a>
 script is very similar to this project. Both scripts basically serve the same purpose,
@@ -193,7 +195,7 @@ downloads to match a given target platform.</p></li>
 </ul>
 </section>
 <section id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this heading"></a></h2>
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
 <p>req2flatpak is MIT-licensed, see the <code class="docutils literal notranslate"><span class="pre">COPYING</span></code> file.</p>
 </section>
 </section>

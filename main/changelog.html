@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; req2flatpak 0.3.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css" />
+  <title>Changelog &mdash; req2flatpak 0.4.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -51,6 +49,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-4-0-2026-11-15">v0.4.0 (2026-11-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-3-2-2026-11-15">v0.3.2 (2026-11-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2025-03-30-python-3-12">v0.3.1 (2025-03-30) “Python 3.12”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-2023-06-04-yaml">v0.2 (2023-06-04) “Yaml”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-1-2022-12-23-initial-release">v0.1 (2022-12-23) “Initial Release”</a></li>
@@ -83,9 +83,46 @@
            <div itemprop="articleBody">
              
   <section id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading"></a></h1>
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<section id="v0-4-0-2026-11-15">
+<h2>v0.4.0 (2026-11-15)<a class="headerlink" href="#v0-4-0-2026-11-15" title="Link to this heading"></a></h2>
+<p>Highlight: req2flatpak requires Python 3.11 or newer.</p>
+<p>Breaking changes:</p>
+<ul class="simple">
+<li><p>Python 3.8, 3.9 and 3.10 are no longer supported. Python 3.10 reached end-of-life on 2026-10-01.
+This applies to the Python that runs req2flatpak. Target platforms can still use other Python versions.</p></li>
+<li><p>Invalid requirements and unsupported architectures now raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> instead of an <code class="docutils literal notranslate"><span class="pre">AssertionError</span></code>.
+The checks now also work when python runs with <code class="docutils literal notranslate"><span class="pre">-O</span></code>.</p></li>
+</ul>
+<p>Fixes:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--cache</span></code> option now fills the persistent cache. An empty cache file was replaced by an in-memory dict before, so nothing was ever stored.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--outfile</span></code> is only created once the output is ready. A failing run no longer leaves an empty file behind.
+(This also replaces the deprecated <code class="docutils literal notranslate"><span class="pre">argparse.FileType</span></code>. <code class="docutils literal notranslate"><span class="pre">-</span></code> still means stdin or stdout.)</p></li>
+</ul>
+<p>Improvements for Development:</p>
+<ul class="simple">
+<li><p>ruff now also checks docstrings, import order, python syntax upgrades and security issues. It replaces bandit and pydocstyle.</p></li>
+<li><p>Type checking with ty.</p></li>
+<li><p>Updated all dependencies. The pre-commit hooks and CI use the same pinned Poetry version (Poetry 2).</p></li>
+<li><p>CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.</p></li>
+</ul>
+<p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0">https://github.com/johannesjh/req2flatpak/compare/v0.3.2…v0.4.0</a></p>
+</section>
+<section id="v0-3-2-2026-11-15">
+<h2>v0.3.2 (2026-11-15)<a class="headerlink" href="#v0-3-2-2026-11-15" title="Link to this heading"></a></h2>
+<p>Improvements:</p>
+<ul class="simple">
+<li><p>Relaxed the version constraint for the <code class="docutils literal notranslate"><span class="pre">packaging</span></code> dependency from <code class="docutils literal notranslate"><span class="pre">^21.3</span></code> to <code class="docutils literal notranslate"><span class="pre">&gt;=21.3</span></code>, see #92</p></li>
+</ul>
+<p>Fixes:</p>
+<ul class="simple">
+<li><p>Close output stream which was causing empty outfile files on Python 3.14, see #91</p></li>
+</ul>
+<p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.3.1...v0.3.2">https://github.com/johannesjh/req2flatpak/compare/v0.3.1…v0.3.2</a></p>
+</section>
 <section id="v0-3-1-2025-03-30-python-3-12">
-<h2>v0.3.1 (2025-03-30) “Python 3.12”<a class="headerlink" href="#v0-3-1-2025-03-30-python-3-12" title="Permalink to this heading"></a></h2>
+<h2>v0.3.1 (2025-03-30) “Python 3.12”<a class="headerlink" href="#v0-3-1-2025-03-30-python-3-12" title="Link to this heading"></a></h2>
 <p>Highlight: Compatibility with Python 3.12</p>
 <p>Improvements for Development:</p>
 <ul class="simple">
@@ -106,7 +143,7 @@
 <p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.2...v0.3">https://github.com/johannesjh/req2flatpak/compare/v0.2…v0.3</a></p>
 </section>
 <section id="v0-2-2023-06-04-yaml">
-<h2>v0.2 (2023-06-04) “Yaml”<a class="headerlink" href="#v0-2-2023-06-04-yaml" title="Permalink to this heading"></a></h2>
+<h2>v0.2 (2023-06-04) “Yaml”<a class="headerlink" href="#v0-2-2023-06-04-yaml" title="Link to this heading"></a></h2>
 <p>Highlight: req2flatpak can now generate yaml output.</p>
 <p>Features:</p>
 <ul class="simple">
@@ -121,7 +158,7 @@ or by specifying the <code class="docutils literal notranslate"><span class="pre
 </ul>
 </section>
 <section id="v0-1-2022-12-23-initial-release">
-<h2>v0.1 (2022-12-23) “Initial Release”<a class="headerlink" href="#v0-1-2022-12-23-initial-release" title="Permalink to this heading"></a></h2>
+<h2>v0.1 (2022-12-23) “Initial Release”<a class="headerlink" href="#v0-1-2022-12-23-initial-release" title="Link to this heading"></a></h2>
 <p>Highlight: This is the initial release of req2flatpak.</p>
 <p>Features:</p>
 <ul class="simple">
