@@ -2,12 +2,13 @@
 
 import io
 import json
+import os
 import subprocess
 import tempfile
 import unittest
 from abc import ABC
 from collections.abc import Generator, Sequence
-from contextlib import contextmanager, redirect_stdout
+from contextlib import contextmanager, nullcontext, redirect_stdout
 from itertools import product
 from pathlib import Path
 from unittest import skipUnless
@@ -318,6 +319,41 @@ class EggTest(unittest.TestCase, Req2FlatpakBaseTest):
         self.assertTrue(
             any("beancount" in source["url"] for source in build_module["sources"])
         )
+
+
+class CacheOptionTest(unittest.TestCase):
+    """Test that the ``--cache`` option also works when the cache is still empty."""
+
+    def test_empty_shelf_is_used_as_cache(self):
+        """Verify that an empty shelf is used, and not replaced by a plain dict."""
+        # an empty shelf is falsy, just like an empty dict:
+        empty_shelf: dict = {}
+        caches_used = []
+
+        def fake_get_releases(_requirements):
+            caches_used.append(PypiClient.cache)
+            return []
+
+        argv = [
+            "req2flatpak.py",
+            "--requirements",
+            "requests==2.28.1",
+            "--target-platforms",
+            "cp310-x86_64",
+            "--cache",
+        ]
+        with (
+            open(os.devnull, "w", encoding="utf-8") as devnull,
+            patch("sys.argv", argv),
+            patch("shelve.open", return_value=nullcontext(empty_shelf)),
+            patch.object(PypiClient, "cache", {}),
+            patch.object(PypiClient, "get_releases", side_effect=fake_get_releases),
+            redirect_stdout(devnull),
+        ):
+            main()
+
+        self.assertEqual(len(caches_used), 1)
+        self.assertIs(caches_used[0], empty_shelf)
 
 
 class FileOptionsTest(unittest.TestCase):

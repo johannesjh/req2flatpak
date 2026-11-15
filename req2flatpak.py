@@ -739,7 +739,7 @@ def main():  # pylint: disable=too-many-branches
     with (
         shelve.open("pypi_cache") if options.cache else nullcontext()  # noqa: S301  # cache file is written by this tool and read by the same user
     ) as cache:
-        PypiClient.cache = cache or {}
+        PypiClient.cache = cache if cache is not None else {}
         releases = PypiClient.get_releases(requirements)
 
     # choose suitable downloads for the target platforms
