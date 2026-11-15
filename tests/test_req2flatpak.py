@@ -1,21 +1,23 @@
 """Tests for req2flatpak's commandline interface."""
 
+import io
 import json
+import os
 import subprocess
 import tempfile
 import unittest
 from abc import ABC
-from contextlib import contextmanager
+from collections.abc import Generator, Sequence
+from contextlib import contextmanager, nullcontext, redirect_stdout
 from itertools import product
 from pathlib import Path
-from typing import Generator, List
 from unittest import skipUnless
 from unittest.mock import patch
 
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml = None
 
 from req2flatpak import (
     DownloadChooser,
@@ -23,6 +25,7 @@ from req2flatpak import (
     PlatformFactory,
     PypiClient,
     RequirementsParser,
+    main,
 )
 
 
@@ -35,7 +38,7 @@ class ExampleUsageTest(unittest.TestCase):
 
     # pylint: disable=duplicate-code
     def example_usage(self):
-        """Example showing how to use req2flatpak in your own script."""
+        """Show how to use req2flatpak in your own script."""
         # example_usage1_start
         platforms = [PlatformFactory.from_string("cp310-x86_64")]
         requirements = RequirementsParser.parse_file("requirements.txt")
@@ -51,7 +54,6 @@ class ExampleUsageTest(unittest.TestCase):
 
     def test(self):
         """Regression test to ensure that the example code above keeps working."""
-
         # mock the requirements.txt file:
         with patch.object(
             RequirementsParser,
@@ -65,16 +67,23 @@ class ExampleUsageTest(unittest.TestCase):
             build_module = self.example_usage()
 
             # validate the generated build module
-            assert build_module["build-commands"], (
-                "No build-commands section was found in the build module."
+            self.assertTrue(
+                build_module["build-commands"],
+                "No build-commands section was found in the build module.",
             )
-            assert build_module["sources"], "No sources were found in the build module."
-            assert build_module["sources"][0]["type"] == "file"
-            assert "requests" in build_module["build-commands"][0], (
-                "The requests package was not found in the build module's build command."
+            self.assertTrue(
+                build_module["sources"], "No sources were found in the build module."
             )
-            assert "requests" in build_module["sources"][0]["url"], (
-                "The requests package was not found in the build module's sources."
+            self.assertEqual(build_module["sources"][0]["type"], "file")
+            self.assertIn(
+                "requests",
+                build_module["build-commands"][0],
+                "The requests package was not found in the build module's build command.",
+            )
+            self.assertIn(
+                "requests",
+                build_module["sources"][0]["url"],
+                "The requests package was not found in the build module's sources.",
             )
 
 
@@ -83,7 +92,7 @@ class ExampleCustomizationTest(ExampleUsageTest):
 
     @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
     def example_usage(self):
-        """Example showing how to customize req2flatpak in your own script."""
+        """Show how to customize req2flatpak in your own script."""
         # example_customization1_start
         # define your target platforms
         platforms = [PlatformFactory.from_string("cp310-x86_64")]
@@ -132,16 +141,17 @@ class ExampleCustomizationTest(ExampleUsageTest):
         json_str = FlatpakGenerator.build_module_as_str(requirements, downloads)
         yaml_str = FlatpakGenerator.build_module_as_yaml_str(requirements, downloads)
         # example_customization1_end
-        assert json_str, yaml_str  # to silence pylint W0612 Unused variable
+        self.assertTrue(json_str)
+        self.assertTrue(yaml_str)
         return build_module
 
 
 class Req2FlatpakBaseTest(ABC):
     """Base class for testing req2flatpak using both its CLI and API."""
 
-    requirements: List[str]
+    requirements: Sequence[str]
 
-    target_platforms: List[str]
+    target_platforms: Sequence[str]
 
     def validate_build_module(self, build_module: dict) -> None:
         """To be implemented by subclasses."""
@@ -158,16 +168,18 @@ class Req2FlatpakBaseTest(ABC):
             req_file.seek(0)
             yield req_file
 
-    def _run_r2f(self, args: List[str]) -> subprocess.CompletedProcess:
-        """Runs req2flatpak's cli in a subprocess."""
+    def _run_r2f(self, args: list[str]) -> subprocess.CompletedProcess:
+        """Run req2flatpak's cli in a subprocess."""
         cwd = Path(__file__).parent / ".."
         cmd = ["python3", "req2flatpak.py"]
-        return subprocess.run(cmd + args, cwd=cwd, capture_output=True, check=True)
+        return subprocess.run(  # noqa: S603  # arguments are trusted test constants
+            cmd + args, cwd=cwd, capture_output=True, check=True
+        )
 
     def test_cli_with_reqs_as_args(self):
         """Runs req2flatpak by passing requirements as commandline arguments."""
-        args = ["--requirements"] + self.requirements
-        args += ["--target-platforms"] + self.target_platforms
+        args = ["--requirements", *self.requirements]
+        args += ["--target-platforms", *self.target_platforms]
         result = self._run_r2f(args)
         build_module = json.loads(result.stdout)
         self.validate_build_module(build_module)
@@ -175,10 +187,14 @@ class Req2FlatpakBaseTest(ABC):
     @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
     def test_cli_with_reqs_as_args_yaml(self):
         """Runs req2flatpak in yaml mode by passing requirements as cmdline arg."""
-        args = ["--requirements"] + self.requirements
-        args += ["--target-platforms"] + self.target_platforms
+        args = ["--requirements", *self.requirements]
+        args += ["--target-platforms", *self.target_platforms]
         args += ["--yaml"]
         result = self._run_r2f(args)
+        if yaml is None:
+            raise unittest.SkipTest(
+                "The yaml extra dependency is needed for this feature."
+            )
         build_module = yaml.safe_load(result.stdout)
         self.validate_build_module(build_module)
 
@@ -186,7 +202,7 @@ class Req2FlatpakBaseTest(ABC):
         """Runs req2flatpak by passing requirements as requirements.txt file."""
         with self.requirements_file() as req_file:
             args = ["--requirements-file", req_file.name]
-            args += ["--target-platforms"] + self.target_platforms
+            args += ["--target-platforms", *self.target_platforms]
             result = self._run_r2f(args)
             build_module = json.loads(result.stdout)
             self.validate_build_module(build_module)
@@ -196,24 +212,33 @@ class Req2FlatpakBaseTest(ABC):
         """Runs req2flatpak by passing requirements as requirements.txt file."""
         with self.requirements_file() as req_file:
             args = ["--requirements-file", req_file.name]
-            args += ["--target-platforms"] + self.target_platforms
+            args += ["--target-platforms", *self.target_platforms]
             args += ["--yaml"]
             result = self._run_r2f(args)
+            if yaml is None:
+                raise unittest.SkipTest(
+                    "The yaml extra dependency is needed for this feature."
+                )
             build_module = yaml.safe_load(result.stdout)
             self.validate_build_module(build_module)
 
     def test_api(self):
         """Runs req2flatpak by calling its python api."""
-        platforms = [
-            PlatformFactory.from_string(platform) for platform in self.target_platforms
-        ]
+        platforms = []
+        for platform_string in self.target_platforms:
+            platform = PlatformFactory.from_string(platform_string)
+            if platform is None:
+                raise AssertionError(f"Invalid target platform: {platform_string}")
+            platforms.append(platform)
         requirements = RequirementsParser.parse_string("\n".join(self.requirements))
         releases = PypiClient.get_releases(requirements)
-        downloads = {
-            DownloadChooser.wheel_or_sdist(release, platform)
-            for release in releases
-            for platform in platforms
-        }
+        downloads = set()
+        for release in releases:
+            for platform in platforms:
+                download = DownloadChooser.wheel_or_sdist(release, platform)
+                if download is None:
+                    raise AssertionError(f"No download found for {release.package}")
+                downloads.add(download)
         build_module = FlatpakGenerator.build_module(requirements, downloads)
         self.validate_build_module(build_module)
 
@@ -221,11 +246,11 @@ class Req2FlatpakBaseTest(ABC):
 class SinglePlatformTest(unittest.TestCase, Req2FlatpakBaseTest):
     """Test involving a single requirement and a single target platform."""
 
-    requirements = ["requests==2.28.1"]
-    target_platforms = ["cp310-x86_64"]
+    requirements = ("requests==2.28.1",)
+    target_platforms = ("cp310-x86_64",)
 
     def validate_build_module(self, build_module):
-        """Validates that the build module installs requests."""
+        """Validate that the build module installs requests."""
         self.assertIn("requests", build_module["build-commands"][0])
         self.assertIn("requests", build_module["sources"][0]["url"])
 
@@ -233,11 +258,11 @@ class SinglePlatformTest(unittest.TestCase, Req2FlatpakBaseTest):
 class MultiPlatformTest(unittest.TestCase, Req2FlatpakBaseTest):
     """Test involving a single requirement with platform-specific wheels."""
 
-    requirements = ["scikit-learn==1.1.3"]
-    target_platforms = ["cp310-x86_64", "cp310-aarch64"]
+    requirements = ("scikit-learn==1.1.3",)
+    target_platforms = ("cp310-x86_64", "cp310-aarch64")
 
     def validate_build_module(self, build_module):
-        """Validates that the build module installs scikit-learn."""
+        """Validate that the build module installs scikit-learn."""
         self.assertIn("scikit-learn", build_module["build-commands"][0])
         self.assertTrue(build_module["sources"])
 
@@ -256,13 +281,13 @@ class MultiPlatformTest(unittest.TestCase, Req2FlatpakBaseTest):
 class MultiReqTest(unittest.TestCase, Req2FlatpakBaseTest):
     """Test involving multiple requirements for multiple target platforms."""
 
-    requirements = ["numpy==1.23.4", "pandas==1.5.1"]
-    target_platforms = ["cp310-x86_64", "cp310-aarch64"]
+    requirements = ("numpy==1.23.4", "pandas==1.5.1")
+    target_platforms = ("cp310-x86_64", "cp310-aarch64")
 
     def validate_build_module(self, build_module):
-        """Validates that the build module installs the required packages."""
-        packages = map(lambda r: r.split("==")[0].strip(), self.requirements)
-        architectures = map(lambda a: a.split("-")[1], self.target_platforms)
+        """Validate that the build module installs the required packages."""
+        packages = [r.split("==")[0].strip() for r in self.requirements]
+        architectures = [a.split("-")[1] for a in self.target_platforms]
 
         # each package must be found in the build command:
         for package in packages:
@@ -282,12 +307,11 @@ class MultiReqTest(unittest.TestCase, Req2FlatpakBaseTest):
 class EggTest(unittest.TestCase, Req2FlatpakBaseTest):
     """Test involving a package that publishes eggs."""
 
-    requirements = ["beancount==2.3.5"]
-    target_platforms = ["cp310-x86_64", "cp310-aarch64"]
+    requirements = ("beancount==2.3.5",)
+    target_platforms = ("cp310-x86_64", "cp310-aarch64")
 
     def validate_build_module(self, build_module):
-        """Validates that the build module installs beancount."""
-
+        """Validate that the build module installs beancount."""
         # validate that the build command includes beancount:
         self.assertIn("beancount", build_module["build-commands"][0])
 
@@ -295,3 +319,115 @@ class EggTest(unittest.TestCase, Req2FlatpakBaseTest):
         self.assertTrue(
             any("beancount" in source["url"] for source in build_module["sources"])
         )
+
+
+class CacheOptionTest(unittest.TestCase):
+    """Test that the ``--cache`` option also works when the cache is still empty."""
+
+    def test_empty_shelf_is_used_as_cache(self):
+        """Verify that an empty shelf is used, and not replaced by a plain dict."""
+        # an empty shelf is falsy, just like an empty dict:
+        empty_shelf: dict = {}
+        caches_used = []
+
+        def fake_get_releases(_requirements):
+            caches_used.append(PypiClient.cache)
+            return []
+
+        argv = [
+            "req2flatpak.py",
+            "--requirements",
+            "requests==2.28.1",
+            "--target-platforms",
+            "cp310-x86_64",
+            "--cache",
+        ]
+        with (
+            open(os.devnull, "w", encoding="utf-8") as devnull,
+            patch("sys.argv", argv),
+            patch("shelve.open", return_value=nullcontext(empty_shelf)),
+            patch.object(PypiClient, "cache", {}),
+            patch.object(PypiClient, "get_releases", side_effect=fake_get_releases),
+            redirect_stdout(devnull),
+        ):
+            main()
+
+        self.assertEqual(len(caches_used), 1)
+        self.assertIs(caches_used[0], empty_shelf)
+
+
+class FileOptionsTest(unittest.TestCase):
+    """Test how the commandline options for input and output files are handled."""
+
+    requirement = "requests==2.28.1"
+
+    def run_main(self, *args: str) -> list:
+        """Run ``main`` offline, and return the requirements that were queried."""
+        queried = []
+
+        def fake_get_releases(requirements):
+            queried.append(requirements)
+            return []
+
+        argv = ["req2flatpak.py", "--target-platforms", "cp310-x86_64", *args]
+        with (
+            patch("sys.argv", argv),
+            patch.object(PypiClient, "cache", {}),
+            patch.object(PypiClient, "get_releases", side_effect=fake_get_releases),
+        ):
+            main()
+        return queried
+
+    def test_output_goes_to_stdout_by_default(self):
+        """Verify that json is written to stdout if no output file is given."""
+        stdout = io.StringIO()
+        with redirect_stdout(stdout):
+            self.run_main("--requirements", self.requirement)
+        self.assertIn("build-commands", json.loads(stdout.getvalue()))
+
+    def test_output_file_is_written(self):
+        """Verify that the build module is written to the output file."""
+        with tempfile.TemporaryDirectory() as tmp:
+            outfile = Path(tmp) / "build-module.json"
+            self.run_main("--requirements", self.requirement, "--outfile", str(outfile))
+            self.assertIn(
+                "build-commands", json.loads(outfile.read_text(encoding="utf-8"))
+            )
+
+    @skipUnless(yaml, "The yaml extra dependency is needed for this feature.")
+    def test_yaml_extension_selects_yaml_output(self):
+        """Verify that a .yaml extension of the output file selects yaml output."""
+        with tempfile.TemporaryDirectory() as tmp:
+            outfile = Path(tmp) / "build-module.yaml"
+            self.run_main("--requirements", self.requirement, "--outfile", str(outfile))
+            self.assertTrue(
+                outfile.read_text(encoding="utf-8").startswith("# Generated by")
+            )
+
+    def test_no_output_file_is_created_on_error(self):
+        """Verify that a failing run does not leave an empty output file behind."""
+        with tempfile.TemporaryDirectory() as tmp:
+            outfile = Path(tmp) / "build-module.json"
+            with self.assertRaises(ValueError):
+                self.run_main(
+                    "--requirements", "requests>=2", "--outfile", str(outfile)
+                )
+            self.assertFalse(outfile.exists())
+
+    def test_requirements_file(self):
+        """Verify that requirements are read from the requirements file."""
+        with tempfile.TemporaryDirectory() as tmp:
+            req_file = Path(tmp) / "requirements.txt"
+            req_file.write_text(self.requirement, encoding="utf-8")
+            with redirect_stdout(io.StringIO()):
+                queried = self.run_main("--requirements-file", str(req_file))
+        self.assertEqual([r.package for r in queried[0]], ["requests"])
+
+    def test_requirements_from_stdin(self):
+        """Verify that "-" as requirements file reads the requirements from stdin."""
+        with (
+            patch("sys.stdin", io.StringIO(self.requirement)),
+            redirect_stdout(io.StringIO()),
+        ):
+            queried = self.run_main("--requirements-file", "-")
+        self.assertEqual([r.package for r in queried[0]], ["requests"])

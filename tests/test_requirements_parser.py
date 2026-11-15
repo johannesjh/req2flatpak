@@ -29,10 +29,10 @@ class ExampleUsageTest(unittest.TestCase):
         """Ensures that the code example keeps working."""
 
         def mocked_pathlib_path_read_text(*_, **__) -> str:
-            """A mock version of pathlib.Path.read_text."""
+            """Mock pathlib.Path.read_text."""
             return self.requirements_txt
 
         with patch.object(pathlib.Path, "read_text", mocked_pathlib_path_read_text):
             requirements = self.example_usage()
 
-        assert len(requirements) == 4
+        self.assertEqual(len(requirements), 4)

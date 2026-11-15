@@ -10,6 +10,8 @@ Installing the Python Package
 
 You can install req2flatpak as a python package.
 This is the default and recommended installation method.
+The Python versions that req2flatpak supports are declared in its ``pyproject.toml`` file
+and shown on PyPI.
 
 For example:
 
@@ -50,7 +52,7 @@ Downloading the (almost) Standalone Script
 ------------------------------------------
 
 You can download the ``req2flatpak.py`` script to your computer and run it.
-You will need Python installed and the additional ``packaging`` package:
+You will need a supported Python version installed and the additional ``packaging`` package:
 
 .. code-block:: bash
 

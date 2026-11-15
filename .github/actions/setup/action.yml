@@ -25,14 +25,14 @@ runs:
       shell: bash
 
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Install poetry
-      run: pipx install poetry
+      run: pipx install poetry==2.5.1
       shell: bash
 
     - name: setup python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v7
       with:
         python-version: "3.11"
         cache: "poetry"
@@ -54,7 +54,7 @@ runs:
       shell: bash
     - name: Configure Caching for Pre-Commit
       if: ${{ inputs.setup-pre-commit }}
-      uses: actions/cache@v4
+      uses: actions/cache@v6
       with:
         path: ~/.cache/pre-commit
         key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}

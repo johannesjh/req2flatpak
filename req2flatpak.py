@@ -41,23 +41,13 @@ import re
 import shelve
 import sys
 import urllib.request
-from contextlib import nullcontext, suppress
+from collections.abc import Generator, Hashable, Iterable, Iterator
+from contextlib import contextmanager, nullcontext, suppress
 from dataclasses import asdict, dataclass, field
+from functools import cached_property
 from importlib import metadata
 from itertools import product
-from typing import (
-    Any,
-    Dict,
-    Generator,
-    Hashable,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Set,
-    Tuple,
-    Union,
-)
+from typing import Any, ClassVar, TextIO
 from urllib.parse import urlparse
 
 import packaging.requirements as packaging_reqs
@@ -69,51 +59,20 @@ logger = logging.getLogger(__name__)
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore
+    yaml = None
 
 # =============================================================================
 # Helper functions / semi vendored code
 # =============================================================================
-
-try:
-    # added with py 3.8
-    from functools import cached_property  # type: ignore[attr-defined]
-except ImportError:
-    # Inspired by the implementation in the standard library
-    # pylint: disable=invalid-name,too-few-public-methods
-    class cached_property:  # type: ignore[no-redef]
-        """A property-like wrapper that caches the value."""
-
-        def __init__(self, func):
-            """Init."""
-            self.func = func
-            self.attrname = None
-            self.__doc__ = func.__doc__
-
-        def __set_name__(self, owner, name):
-            """Set name of the attribute this instance is assigned to."""
-            self.attrname = name
-
-        def __get__(self, instance, owner=None):
-            """Return value if this is set as an attribute."""
-            if not self.attrname:
-                raise TypeError("cached_property must be used as an attribute.")
-            _None = object()
-            cache = instance.__dict__
-            val = cache.get(self.attrname, _None)
-            if val is _None:
-                val = self.func(instance)
-                cache[self.attrname] = val
-            return val
 
 
 class InvalidWheelFilename(Exception):
     """An invalid wheel filename was found, users should refer to PEP 427."""
 
 
-def tags_from_wheel_filename(filename: str) -> Set[str]:
+def tags_from_wheel_filename(filename: str) -> set[str]:
     """
-    Parses a wheel filename into a list of compatible platform tags.
+    Parse a wheel filename into a list of compatible platform tags.
 
     Implemented using functionality from ``packaging.utils.parse_wheel_filename``.
     """
@@ -130,10 +89,10 @@ def tags_from_wheel_filename(filename: str) -> Set[str]:
 class Platform:
     """Represents a target platform for python package installations."""
 
-    python_version: List[str]
+    python_version: list[str]
     """A list of python version numbers, similar to ``platform.python_version_tuple()``."""
 
-    python_tags: List[str]
+    python_tags: list[str]
     """A list of platform tags, similar to ``packaging.tags.sys_tags()``."""
 
 
@@ -158,17 +117,17 @@ class Download(Requirement):
 
     @cached_property
     def is_wheel(self):
-        """True if this download is a wheel."""
+        """Return True if this download is a wheel."""
         return self.filename.endswith(".whl")
 
     @cached_property
     def is_sdist(self):
-        """True if this download is a source distribution."""
+        """Return True if this download is a source distribution."""
         return not self.is_wheel and not self.filename.endswith(".egg")
 
     @cached_property
-    def tags(self) -> Optional[Set[str]]:
-        """Returns a list of tags that this download is compatible for."""
+    def tags(self) -> set[str] | None:
+        """Return a list of tags that this download is compatible for."""
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_wheel_filename
         # https://packaging.pypa.io/en/latest/utils.html#packaging.utils.parse_sdist_filename
         if not self.is_sdist and self.filename.endswith(".whl"):
@@ -176,8 +135,8 @@ class Download(Requirement):
         return None
 
     @cached_property
-    def arch(self) -> Optional[str]:
-        """Returns a wheel's target architecture, and None for sdists."""
+    def arch(self) -> str | None:
+        """Return a wheel's target architecture, and None for sdists."""
         if not self.is_sdist and self.is_wheel and self.tags:
             if any(tag.endswith("x86_64") for tag in self.tags):
                 return "x86_64"
@@ -186,12 +145,12 @@ class Download(Requirement):
         return None
 
     def __lt__(self, other):
-        """Makes this class sortable."""
+        """Make this class sortable."""
         # Note: Implementing __lt__ is sufficient to make a class sortable,
         # see, e.g., https://stackoverflow.com/a/7152796
 
-        def sort_keys(download: Download) -> Tuple[str, str, str]:
-            """A tuple of package, version and architecture is used as key for sorting."""
+        def sort_keys(download: Download) -> tuple[str, str, str]:
+            """Use a tuple of package, version and architecture as key for sorting."""
             return download.package, download.version, download.arch or ""
 
         return sort_keys(self) < sort_keys(other)
@@ -203,7 +162,7 @@ class Release(Requirement):
 
     package: str
     version: str
-    downloads: List[Download] = field(default_factory=list)
+    downloads: list[Download] = field(default_factory=list)
 
 
 # =============================================================================
@@ -214,22 +173,32 @@ class Release(Requirement):
 class PlatformFactory:
     """Provides methods for creating platform objects."""
 
+    _ARCHITECTURES = ("x86_64", "aarch64")
+
+    @classmethod
+    def _check_arch(cls, arch: str) -> None:
+        if arch not in cls._ARCHITECTURES:
+            raise ValueError(
+                f"Unsupported architecture {arch!r}, "
+                f"must be one of {', '.join(cls._ARCHITECTURES)}."
+            )
+
     @staticmethod
-    def _get_current_python_version() -> List[str]:
+    def _get_current_python_version() -> list[str]:
         # pylint: disable=import-outside-toplevel
         import platform
 
         return list(platform.python_version_tuple())
 
     @staticmethod
-    def _get_current_python_tags() -> List[str]:
+    def _get_current_python_tags() -> list[str]:
         tags = [str(tag) for tag in packaging.tags.sys_tags()]
         return tags
 
     @classmethod
     def from_current_interpreter(cls) -> Platform:
         """
-        Returns a platform object that describes the current interpreter and system.
+        Return a platform object that describes the current interpreter and system.
 
         This method requires the ``packaging`` package to be installed
         because functionality from this package is used to generate the list of
@@ -246,9 +215,9 @@ class PlatformFactory:
         )
 
     @classmethod
-    def from_string(cls, platform_string: str) -> Optional[Platform]:
+    def from_string(cls, platform_string: str) -> Platform | None:
         """
-        Returns a platform object by parsing a platform string.
+        Return a platform object by parsing a platform string.
 
         :param platform_string: A string specifying python version and system
           architecture. The string format is
@@ -257,21 +226,19 @@ class PlatformFactory:
           Acceptable values are the same as in
           :py:meth:`~req2flatpak.PlatformFactory.from_python_version_and_arch`.
         """
-        try:
-            _, minor, arch = re.match(  # type: ignore[union-attr]
-                r"^(?:py|cp)?(\d)(\d+)-(.*)$", platform_string
-            ).groups()
-            return cls.from_python_version_and_arch(minor_version=int(minor), arch=arch)
-        except AttributeError:
+        match = re.match(r"^(?:py|cp)?(\d)(\d+)-(.*)$", platform_string)
+        if match is None:
             logger.warning("Could not parse platform string %s", platform_string)
             return None
+        _, minor, arch = match.groups()
+        return cls.from_python_version_and_arch(minor_version=int(minor), arch=arch)
 
     @classmethod
     def from_python_version_and_arch(
-        cls, minor_version: Optional[int] = None, arch="x86_64"
+        cls, minor_version: int | None = None, arch="x86_64"
     ) -> Platform:
         """
-        Returns a platform object that roughly describes a cpython installation on linux.
+        Return a platform object that roughly describes a cpython installation on linux.
 
         The tags in the platform object are a rough approximation, trying to match what
         `packaging.tags.sys_tags` would return if invoked on a linux system with cpython.
@@ -283,7 +250,7 @@ class PlatformFactory:
         """
         if not minor_version:
             minor_version = int(cls._get_current_python_version()[1])
-        assert arch in ["x86_64", "aarch64"]
+        cls._check_arch(arch)
         return Platform(
             python_version=["3", str(minor_version)],
             python_tags=list(
@@ -293,16 +260,17 @@ class PlatformFactory:
 
     @classmethod
     def _cp3_linux_tags(
-        cls, minor_version: Optional[int] = None, arch="x86_64"
+        cls, minor_version: int | None = None, arch="x86_64"
     ) -> Generator[str, None, None]:
-        """Yields python platform tags for cpython3 on linux."""
+        """Yield python platform tags for cpython3 on linux."""
         # pylint: disable=too-many-branches
 
-        assert minor_version is not None
-        assert arch in ["x86_64", "aarch64"]
+        if minor_version is None:
+            raise ValueError("The python minor version must be specified.")
+        cls._check_arch(arch)
 
         def seq(start: int, end: int) -> Iterable[int]:
-            """Returns a range of numbers, from start to end, in steps of +/- 1."""
+            """Return a range of numbers, from start to end, in steps of +/- 1."""
             step = 1 if start < end else -1
             return range(start, end + step, step)
 
@@ -375,20 +343,24 @@ class RequirementsParser:
     """
 
     @classmethod
-    def parse_string(cls, requirements_txt: str) -> List[Requirement]:
-        """Parses requirements.txt string content into a list of Requirement objects."""
+    def parse_string(cls, requirements_txt: str) -> list[Requirement]:
+        """Parse requirements.txt string content into a list of Requirement objects."""
 
         def validate_requirement(req: packaging_reqs.Requirement) -> None:
-            assert len(req.specifier) == 1, (
-                "Error parsing requirements: A single version number must be specified."
-            )
-            assert list(req.specifier)[0].operator == "==", (
-                "Error parsing requirements: The exact version must specified as 'package==version'."
-            )
+            if len(req.specifier) != 1:
+                raise ValueError(
+                    "Error parsing requirements: A single version number must be specified."
+                )
+            if next(iter(req.specifier)).operator != "==":
+                raise ValueError(
+                    "Error parsing requirements: The exact version must specified as 'package==version'."
+                )
 
         def make_requirement(req: packaging_reqs.Requirement) -> Requirement:
             validate_requirement(req)
-            return Requirement(package=req.name, version=list(req.specifier)[0].version)
+            return Requirement(
+                package=req.name, version=next(iter(req.specifier)).version
+            )
 
         requirements = []
         for line in requirements_txt.splitlines():
@@ -402,8 +374,8 @@ class RequirementsParser:
         return requirements
 
     @classmethod
-    def parse_file(cls, file) -> List[Requirement]:
-        """Parses a requirements.txt file into a list of Requirement objects."""
+    def parse_file(cls, file) -> list[Requirement]:
+        """Parse a requirements.txt file into a list of Requirement objects."""
         if hasattr(file, "read"):
             req_txt = file.read()
         else:
@@ -414,17 +386,17 @@ class RequirementsParser:
 # Cache typealias
 # This is meant for caching responses when querying package information.
 # A cache can either be a dict for in-memory caching, or a shelve.Shelf
-Cache = Union[dict, shelve.Shelf]
+Cache = dict | shelve.Shelf
 
 
 class PypiClient:
     """Queries package information from the PyPi package index."""
 
-    cache: Cache = {}
+    cache: ClassVar[Cache] = {}
     """A dict-like object for caching responses from PyPi."""
 
     @classmethod
-    def _query_from_cache(cls, url) -> Optional[str]:
+    def _query_from_cache(cls, url) -> str | None:
         try:
             return cls.cache[url]
         except KeyError:
@@ -435,7 +407,7 @@ class PypiClient:
         # url scheme might be `file:/`
         if not urlparse(url).scheme == "https":
             raise ValueError("URL scheme not `https`.")
-        with urllib.request.urlopen(url) as response:  # nosec: B310
+        with urllib.request.urlopen(url) as response:  # noqa: S310  # scheme is restricted to https above
             json_string = response.read().decode("utf-8")
         cls.cache[url] = json_string
         return json_string
@@ -446,7 +418,7 @@ class PypiClient:
 
     @classmethod
     def get_release(cls, req: Requirement) -> Release:
-        """Queries pypi regarding available releases for this requirement."""
+        """Query pypi regarding available releases for this requirement."""
         url = f"https://pypi.org/pypi/{req.package}/{req.version}/json"
         json_string = cls._query(url)
         json_dict = json.loads(json_string)
@@ -468,8 +440,8 @@ class PypiClient:
         )
 
     @classmethod
-    def get_releases(cls, reqs: Iterable[Requirement]) -> List[Release]:
-        """Queries pypi regarding available releases for these requirements."""
+    def get_releases(cls, reqs: Iterable[Requirement]) -> list[Release]:
+        """Query pypi regarding available releases for these requirements."""
         return [cls.get_release(req) for req in reqs]
 
 
@@ -483,7 +455,7 @@ class DownloadChooser:
 
     @classmethod
     def matches(cls, download: Download, platform_tag: str) -> bool:
-        """Returns whether a download is compatible with a target platform tag."""
+        """Return whether a download is compatible with a target platform tag."""
         if download.is_sdist:
             return True
 
@@ -498,7 +470,7 @@ class DownloadChooser:
         sdists_only=False,
     ) -> Iterator[Download]:
         """
-        Yields suitable downloads for a specific platform.
+        Yield suitable downloads for a specific platform.
 
         The order of downloads matches the order of platform tags, i.e.,
         preferred downloads are returned first.
@@ -520,29 +492,29 @@ class DownloadChooser:
         cls,
         release: Release,
         platform: Platform,
-    ) -> Optional[Download]:
-        """Returns the preferred wheel download for this release."""
+    ) -> Download | None:
+        """Return the preferred wheel download for this release."""
         try:
             return next(cls.downloads(release, platform, wheels_only=True))
         except StopIteration:
             return None
 
     @classmethod
-    def sdist(cls, release: Release) -> Optional[Download]:
-        """Returns the source package download for this release."""
+    def sdist(cls, release: Release) -> Download | None:
+        """Return the source package download for this release."""
         try:
             return next(filter(lambda d: d.is_sdist, release.downloads))
         except StopIteration:
             return None
 
     @classmethod
-    def wheel_or_sdist(cls, release: Release, platform: Platform) -> Optional[Download]:
-        """Returns a wheel or an sdist for this release, in this order of preference."""
+    def wheel_or_sdist(cls, release: Release, platform: Platform) -> Download | None:
+        """Return a wheel or an sdist for this release, in this order of preference."""
         return cls.wheel(release, platform) or cls.sdist(release)
 
     @classmethod
-    def sdist_or_wheel(cls, release: Release, platform: Platform) -> Optional[Download]:
-        """Returns an sdist or a wheel for this release, in this order of preference."""
+    def sdist_or_wheel(cls, release: Release, platform: Platform) -> Download | None:
+        """Return an sdist or a wheel for this release, in this order of preference."""
         return cls.sdist(release) or cls.wheel(release, platform)
 
 
@@ -562,10 +534,10 @@ class FlatpakGenerator:
         module_name="python3-package-installation",
         pip_install_template: str = pip_install_template,
     ) -> dict:
-        """Generates a build module for inclusion in a flatpak-builder build manifest."""
+        """Generate a build module for inclusion in a flatpak-builder build manifest."""
 
         def source(download: Download) -> dict:
-            source: Dict[str, Any] = {
+            source: dict[str, Any] = {
                 "type": "file",
                 "url": download.url,
                 "sha256": download.sha256,
@@ -574,7 +546,7 @@ class FlatpakGenerator:
                 source["only-arches"] = [download.arch]
             return source
 
-        def sources(downloads: Iterable[Download]) -> List[dict]:
+        def sources(downloads: Iterable[Download]) -> list[dict]:
             return [source(download) for download in sorted(downloads)]
 
         return {
@@ -621,7 +593,7 @@ class FlatpakGenerator:
 
 
 def cli_parser() -> argparse.ArgumentParser:
-    """Returns the req2flatpak commandline interface parser."""
+    """Return the req2flatpak commandline interface parser."""
     parser = argparse.ArgumentParser(
         description="req2flatpak generates a flatpak-builder build module for installing required python packages."
     )
@@ -634,7 +606,6 @@ def cli_parser() -> argparse.ArgumentParser:
         "--requirements-file",
         "-r",
         nargs="?",
-        type=argparse.FileType("r"),
         help="Requirements can be read from a specified requirements.txt file.",
     )
     parser.add_argument(
@@ -659,8 +630,6 @@ def cli_parser() -> argparse.ArgumentParser:
         "--outfile",
         "-o",
         nargs="?",
-        type=argparse.FileType("w"),
-        default=sys.stdout,
         help="""
             By default, writes JSON but specify a '.yaml' extension and YAML
             will be written instead, provided you have the 'pyyaml' package.
@@ -681,20 +650,27 @@ def cli_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():  # pylint: disable=too-many-branches
-    """Main function that provides req2flatpak's commandline interface."""
+@contextmanager
+def _open_output(path: str | None) -> Generator[TextIO, None, None]:
+    """Open the output file, or use stdout if no file (or the file name "-") is given."""
+    if path is None or path == "-":
+        yield sys.stdout
+    else:
+        with open(path, "w", encoding="utf-8") as stream:
+            yield stream
 
+
+def main():  # pylint: disable=too-many-branches
+    """Provide req2flatpak's commandline interface."""
     # process commandline arguments
     parser = cli_parser()
     options = parser.parse_args()
 
-    # stream output to a file or to stdout
-    if hasattr(options.outfile, "write"):
-        output_stream = options.outfile
-        if pathlib.Path(output_stream.name).suffix.casefold() in (".yaml", ".yml"):
-            options.yaml = True
-    else:
-        output_stream = sys.stdout
+    # output goes to a file or to stdout, the file is only opened once there is output
+    if options.outfile not in (None, "-") and pathlib.Path(
+        options.outfile
+    ).suffix.casefold() in (".yaml", ".yml"):
+        options.yaml = True
 
     if options.yaml and not yaml:
         parser.error(
@@ -704,10 +680,13 @@ def main():  # pylint: disable=too-many-branches
     # print platform info if requested, and exit
     if options.platform_info:
         info = asdict(PlatformFactory.from_current_interpreter())
-        if options.yaml:
-            yaml.dump(info, output_stream, default_flow_style=False, sort_keys=False)
-        else:
-            json.dump(info, output_stream, indent=4)
+        with _open_output(options.outfile) as output_stream:
+            if options.yaml and yaml is not None:
+                yaml.dump(
+                    info, output_stream, default_flow_style=False, sort_keys=False
+                )
+            else:
+                json.dump(info, output_stream, indent=4)
         parser.exit()
 
     # print installed packages if requested, and exit
@@ -716,8 +695,9 @@ def main():  # pylint: disable=too-many-branches
         pkgs = {
             p.metadata["Name"]: p.metadata["Version"] for p in metadata.distributions()
         }
-        for pkg, version in pkgs.items():
-            print(f"{pkg}=={version}", file=output_stream)
+        with _open_output(options.outfile) as output_stream:
+            for pkg, version in pkgs.items():
+                print(f"{pkg}=={version}", file=output_stream)
         parser.exit()
 
     # parse requirements
@@ -728,7 +708,11 @@ def main():  # pylint: disable=too-many-branches
                 "\n".join(options.requirements)
             )
         if options.requirements_file:
-            requirements += RequirementsParser.parse_file(options.requirements_file)
+            requirements += RequirementsParser.parse_file(
+                sys.stdin
+                if options.requirements_file == "-"
+                else options.requirements_file
+            )
     if not requirements:
         parser.error(
             "Error parsing requirements: At least one requirement must be specified."
@@ -753,9 +737,9 @@ def main():  # pylint: disable=too-many-branches
 
     # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
     with (
-        shelve.open("pypi_cache") if options.cache else nullcontext()  # nosec: B301
+        shelve.open("pypi_cache") if options.cache else nullcontext()  # noqa: S301  # cache file is written by this tool and read by the same user
     ) as cache:
-        PypiClient.cache = cache or {}
+        PypiClient.cache = cache if cache is not None else {}
         releases = PypiClient.get_releases(requirements)
 
     # choose suitable downloads for the target platforms
@@ -767,21 +751,21 @@ def main():  # pylint: disable=too-many-branches
     }
 
     # generate flatpak-builder build module
-    if options.yaml:
-        try:
-            name = pathlib.Path(__file__).name
-        except NameError:
-            name = "req2flatpak"
-        output_stream.write(f"# Generated by {name} {' '.join(sys.argv[1:])}\n")
-        output_stream.write(
-            FlatpakGenerator.build_module_as_yaml_str(requirements, downloads)
-        )
-    else:
-        # write json
-        output_stream.write(
-            FlatpakGenerator.build_module_as_str(requirements, downloads)
-        )
-    output_stream.close()
+    with _open_output(options.outfile) as output_stream:
+        if options.yaml:
+            try:
+                name = pathlib.Path(__file__).name
+            except NameError:
+                name = "req2flatpak"
+            output_stream.write(f"# Generated by {name} {' '.join(sys.argv[1:])}\n")
+            output_stream.write(
+                FlatpakGenerator.build_module_as_yaml_str(requirements, downloads)
+            )
+        else:
+            # write json
+            output_stream.write(
+                FlatpakGenerator.build_module_as_str(requirements, downloads)
+            )
 
 
 if __name__ == "__main__":

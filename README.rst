@@ -27,6 +27,10 @@ Getting Started
 
 Install req2flatpak using pip (or any other python package installer),
 e.g., by running ``pip install req2flatpak``.
+The Python versions that req2flatpak supports are declared in its ``pyproject.toml`` file
+and shown on PyPI.
+This applies to the Python that runs req2flatpak,
+the target platforms that you generate build modules for can use other Python versions.
 
 Prepare a ``requirements.txt`` file with the packages that you want to install as part of a flatpak build.
 You need to specify exact versions for all the packages including their dependencies.
