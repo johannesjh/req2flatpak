@@ -711,24 +711,6 @@ sphinxcontrib-jquery = ">=4,<5"
 dev = ["bump2version", "transifex-client", "twine", "wheel"]
 
 [[package]]
-name = "sphinx-rtd-theme-github-versions"
-version = "1.1"
-description = "Sphinx readthedocs theme with support for documentation versions from github.io"
-optional = false
-python-versions = ">=3.7"
-groups = ["docs"]
-files = [
-    {file = "sphinx_rtd_theme_github_versions-1.1-py3-none-any.whl", hash = "sha256:23018e51a5d27ef4f69dd86314f73b19088f2cfd91c74a24db1517832233dc07"},
-    {file = "sphinx_rtd_theme_github_versions-1.1.tar.gz", hash = "sha256:7f67ba75cac8ddd51326f0b2f314bf653e72b4c96a5adc6e779acc8c01da81ab"},
-]
-
-[package.dependencies]
-sphinx-rtd-theme = "*"
-
-[package.extras]
-dev = ["black (==21.9b0)", "flake8-isort", "isort (>5.0)", "mypy", "pre-commit", "pytest-cov", "types-docutils"]
-
-[[package]]
 name = "sphinxcontrib-applehelp"
 version = "2.0.0"
 description = "sphinxcontrib-applehelp is a Sphinx extension which outputs Apple help books"
@@ -897,4 +879,4 @@ yaml = ["pyyaml"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "31a0b74253cdcd885b09ef00854dba0186a5c41b69c5c3683ef002c8e5d35496"
+content-hash = "a811f8253b829dbb3174088a44418a6f9d6556d8d7f75a1d13b5771ac02f7330"

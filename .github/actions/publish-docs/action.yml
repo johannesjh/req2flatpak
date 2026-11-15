@@ -28,7 +28,7 @@ runs:
       shell: bash
 
     - name: Write versions.txt
-      run: poetry run sphinx_rtd_theme_github_versions .github/pages
+      run: python .github/scripts/write_versions.py .github/pages
       shell: bash
 
     - name: Publish Docs to gh-pages
