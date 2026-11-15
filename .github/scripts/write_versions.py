@@ -12,8 +12,11 @@ from pathlib import Path
 
 def git_lines(*args: str) -> list[str]:
     """Run git and return the non-empty output lines."""
-    out = subprocess.run(
-        ["git", *args], check=True, capture_output=True, text=True
+    out = subprocess.run(  # noqa: S603  # arguments are fixed by this script
+        ["git", *args],  # noqa: S607  # git is expected on the PATH
+        check=True,
+        capture_output=True,
+        text=True,
     ).stdout
     return [line for line in out.splitlines() if line]
 
