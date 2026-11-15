@@ -1,8 +1,17 @@
-"""Writes versions.txt, which lists all published docs versions.
+"""Helper script for publishing the documentation: writes versions.txt.
 
-The version switcher in docs/source/_templates/layout.html reads this file.
+The documentation is published on GitHub Pages, with one directory per version
+(e.g., main, v0.3.2, or a docs branch). The CI action .github/actions/publish-docs
+runs this script before it publishes, to update the list of all versions.
+The script is not part of the req2flatpak package, and it is not used at runtime.
+
+The script writes the list to versions.txt, one version per line. The version
+switcher menu in docs/source/_templates/layout.html reads this file in the browser.
+
 Versions are the directories on the gh-pages branch plus the directories that
 are about to be published. They are sorted as: main, tags (newest first), rest.
+
+Usage: python .github/scripts/write_versions.py <directory-to-be-published>
 """
 
 import subprocess
