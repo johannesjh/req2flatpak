@@ -3,9 +3,9 @@
 import json
 import re
 import unittest
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Union
 
 from req2flatpak import PlatformFactory
 
@@ -23,9 +23,11 @@ class ExampleUsageTest(unittest.TestCase):
     def test(self):
         """Ensures that the code example keeps working."""
         platform = self.example_usage()
-        assert platform.python_version == ["3", "10"]
-        assert any("x86_64" in tag for tag in platform.python_tags)
-        assert all("aarch" not in tag for tag in platform.python_tags)
+        if platform is None:
+            self.fail("No platform was created.")
+        self.assertEqual(platform.python_version, ["3", "10"])
+        self.assertTrue(any("x86_64" in tag for tag in platform.python_tags))
+        self.assertTrue(all("aarch" not in tag for tag in platform.python_tags))
 
 
 @dataclass
@@ -34,7 +36,7 @@ class RegressionTestData:
 
     minor_version: int
     architecture: str
-    platforminfo_file: Union[str, Path]
+    platforminfo_file: str | Path
 
 
 class RegressionTest(unittest.TestCase):
@@ -44,15 +46,15 @@ class RegressionTest(unittest.TestCase):
     filename_pattern = r"^(?:py|cp)?(\d)(\d+)-(.*)\.platforminfo.json$"
 
     @staticmethod
-    def _load_platform_tags_from_file(filename: Union[Path, str]) -> List[str]:
-        """Returns the list of platform tags from a platforminfo .json file."""
-        with open(filename, "r", encoding="utf-8") as f:
+    def _load_platform_tags_from_file(filename: Path | str) -> list[str]:
+        """Return the list of platform tags from a platforminfo .json file."""
+        with open(filename, encoding="utf-8") as f:
             data = json.load(f)
         return data["python_tags"]
 
     @classmethod
     def _testdata(cls) -> Iterable[RegressionTestData]:
-        """Yields testdata for subtests."""
+        """Yield testdata for subtests."""
         platforminfo_files = [
             entry
             for entry in Path(__file__).parent.iterdir()
@@ -61,21 +63,23 @@ class RegressionTest(unittest.TestCase):
         for file in platforminfo_files:
             # parse platform string from filename:
             platform_string_match = re.match(r"(.*)\.platforminfo\.json", file.name)
-            assert platform_string_match is not None
+            if platform_string_match is None:
+                raise ValueError(f"Unexpected platforminfo file name: {file.name}")
             platform_string = platform_string_match.group(1)
 
             # parse version and architecture from platform string:
             platform_string_match = re.match(cls.platform_pattern, platform_string)
-            assert platform_string_match is not None
+            if platform_string_match is None:
+                raise ValueError(f"Unexpected platform string: {platform_string}")
             major, minor, arch = platform_string_match.groups()
-            assert major == "3"
+            if major != "3":
+                raise ValueError(f"Unexpected python major version: {major}")
             yield RegressionTestData(
                 minor_version=int(minor), architecture=arch, platforminfo_file=file
             )
 
     def test(self):
         """Runs the test case."""
-
         for data in self._testdata():
             with self.subTest(platforminfo=data.platforminfo_file):
                 expected_tags = self._load_platform_tags_from_file(
@@ -84,7 +88,7 @@ class RegressionTest(unittest.TestCase):
                 generated_tags = PlatformFactory.from_python_version_and_arch(
                     minor_version=int(data.minor_version), arch=data.architecture
                 ).python_tags
-                assert expected_tags == generated_tags
+                self.assertEqual(expected_tags, generated_tags)
 
 
 if __name__ == "__main__":

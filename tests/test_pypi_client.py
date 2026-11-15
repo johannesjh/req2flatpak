@@ -3,7 +3,6 @@
 import contextlib
 import unittest
 from pathlib import Path
-from typing import List
 from unittest.mock import patch
 
 from req2flatpak import PypiClient, Release, Requirement, RequirementsParser
@@ -14,13 +13,15 @@ class ExampleUsageTest(unittest.TestCase):
 
     requirements = RequirementsParser.parse_string("requests == 2.28.1")
 
-    cache = {
-        "https://pypi.org/pypi/requests/2.28.1/json": (
-            Path(__file__).parent / "test_pypi_client_requests2.28.1.json"
-        ).read_text(encoding="utf-8")
-    }
+    def setUp(self):
+        """Create a fresh cache for each test."""
+        self.cache = {
+            "https://pypi.org/pypi/requests/2.28.1/json": (
+                Path(__file__).parent / "test_pypi_client_requests2.28.1.json"
+            ).read_text(encoding="utf-8")
+        }
 
-    def example_usage(self, requirements: List[Requirement]) -> List[Release]:
+    def example_usage(self, requirements: list[Requirement]) -> list[Release]:
         """Demonstrates how to use PypiClient."""
         # example_usage1_start
         releases = PypiClient.get_releases(requirements)
@@ -28,8 +29,8 @@ class ExampleUsageTest(unittest.TestCase):
         return releases
 
     def example_usage_with_caching(
-        self, requirements: List[Requirement]
-    ) -> List[Release]:
+        self, requirements: list[Requirement]
+    ) -> list[Release]:
         """Demonstrates how to use caching when querying pypi."""
         # pylint: disable=import-outside-toplevel
         # example_usage2_start
@@ -45,19 +46,19 @@ class ExampleUsageTest(unittest.TestCase):
         """Ensures that example_usage keeps working."""
         PypiClient.cache = self.cache
         releases = self.example_usage(self.requirements)
-        assert len(releases) == 1
-        assert releases[0].package == "requests"
+        self.assertEqual(len(releases), 1)
+        self.assertEqual(releases[0].package, "requests")
 
     def test_example_usage_with_caching(self):
         """Ensures that example_usage keeps working."""
 
         # prepare mocked cache
         def mocked_shelve_open(*_, **__):
-            """A mock version of ``shelve.open`` that returns a simple dict to be used as cache."""
+            """Mock ``shelve.open`` by returning a simple dict to be used as cache."""
             return contextlib.nullcontext(enter_result=self.cache)
 
         # test with caching
         with patch("shelve.open", new=mocked_shelve_open):
             releases = self.example_usage_with_caching(self.requirements)
-            assert len(releases) == 1
-            assert releases[0].package == "requests"
+            self.assertEqual(len(releases), 1)
+            self.assertEqual(releases[0].package, "requests")

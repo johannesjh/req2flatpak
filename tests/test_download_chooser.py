@@ -1,7 +1,6 @@
 """Automated tests for :class:req2flatpak.DownloadChooser."""
 
 import unittest
-from typing import Optional
 
 from req2flatpak import Download, DownloadChooser, Platform, PlatformFactory, Release
 
@@ -66,7 +65,7 @@ scikit_learn_release = Release(
 class ExampleUsageTest(unittest.TestCase):
     """Test to ensure that code examples in the documentation keep working."""
 
-    def example_usage(self, release: Release, platform: Platform) -> Optional[Download]:
+    def example_usage(self, release: Release, platform: Platform) -> Download | None:
         """Demonstrates how to use the DownloadChooser class."""
         # example_usage1_start
         # choose the best wheel for a target platform:
@@ -76,11 +75,14 @@ class ExampleUsageTest(unittest.TestCase):
 
     def test(self):
         """Ensures that the code example keeps working."""
-        wheel = self.example_usage(
-            scikit_learn_release, PlatformFactory.from_string("cp310-x86_64")
-        )
-        assert wheel.is_wheel
-        assert wheel.arch == "x86_64"
-        assert "scikit_learn" in wheel.filename
-        assert "cp310" in wheel.filename
-        assert "manylinux" in wheel.filename
+        platform = PlatformFactory.from_string("cp310-x86_64")
+        if platform is None:
+            self.fail("The platform string could not be parsed.")
+        wheel = self.example_usage(scikit_learn_release, platform)
+        if wheel is None:
+            self.fail("No wheel was chosen.")
+        self.assertTrue(wheel.is_wheel)
+        self.assertEqual(wheel.arch, "x86_64")
+        self.assertIn("scikit_learn", wheel.filename)
+        self.assertIn("cp310", wheel.filename)
+        self.assertIn("manylinux", wheel.filename)
