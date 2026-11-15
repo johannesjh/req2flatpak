@@ -5,7 +5,7 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
-v0.4.0 (xxxx-xx-xx)
+v0.4.0 (2026-11-15)
 -------------------
 
 Highlight: req2flatpak requires Python 3.11 or newer.
@@ -34,7 +34,7 @@ Improvements for Development:
 - CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.
 
 
-Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.2...main
+Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0
 
 
 v0.3.2 (2026-11-15)
