@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Development &mdash; req2flatpak 0.4.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
@@ -62,6 +62,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#poetry-and-pre-commit-dependencies">Poetry and pre-commit dependencies</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-the-documentation">Publishing the Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#publishing-a-release">Publishing a Release</a></li>
 </ul>
 </li>
@@ -257,6 +258,18 @@ Sphinx is limited to the newest major version that still supports our lowest sup
 </ol>
 </section>
 </section>
+<section id="publishing-the-documentation">
+<h2>Publishing the Documentation<a class="headerlink" href="#publishing-the-documentation" title="Link to this heading"></a></h2>
+<p>CI builds the documentation on every push and publishes it to the <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> branch (GitHub Pages)
+for the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch, for tags, and for branches whose name starts with <code class="docutils literal notranslate"><span class="pre">doc</span></code>.
+Each ref is published in its own directory, e.g., <code class="docutils literal notranslate"><span class="pre">main</span></code>, <code class="docutils literal notranslate"><span class="pre">v0.3.2</span></code>, or the branch name.
+Directories that are already on <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> are kept.</p>
+<p>The version switcher in the documentation is a template, <code class="docutils literal notranslate"><span class="pre">docs/source/_templates/layout.html</span></code>.
+It reads <code class="docutils literal notranslate"><span class="pre">versions.txt</span></code> from the root of <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code>,
+which <code class="docutils literal notranslate"><span class="pre">.github/scripts/write_versions.py</span></code> regenerates at every publish:
+all directories on <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code>, <code class="docutils literal notranslate"><span class="pre">main</span></code> first, then the tags with the newest first, then the rest.
+To remove a preview of a branch, delete its directory from <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code>.</p>
+</section>
 <section id="publishing-a-release">
 <h2>Publishing a Release<a class="headerlink" href="#publishing-a-release" title="Link to this heading"></a></h2>
 <p>Use the following steps to publish a release of req2flatpak:</p>
@@ -305,35 +318,46 @@ and a version that has been uploaded to PyPI can never be uploaded again.</p></l
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
-  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      <span class="fa fa-book"> Other Versions</span>
-      
-      <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-      <dl id="other-versions-dl"/>
-    </div>
+  </script>  
+<div
+  id="other-versions-div"
+  class="rst-versions"
+  data-toggle="rst-versions"
+  role="note"
+  aria-label="Versions"
+  style="visibility: hidden"
+>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl id="other-versions-dl"></dl>
   </div>
-  <script>
-    function addVersion(name) {
-      var dd = document.createElement("dd");
-      var a = document.createElement("a");
-      a.href = "../" + name;
-      a.innerText = name;
-      dd.appendChild(a);
-      document.getElementById('other-versions-dl').appendChild(dd);
+</div>
+<script>
+  function addVersion(name) {
+    var dd = document.createElement("dd");
+    var a = document.createElement("a");
+    a.href = "../" + name;
+    a.innerText = name;
+    dd.appendChild(a);
+    document.getElementById("other-versions-dl").appendChild(dd);
+  }
+  // Get versions.txt and add a version for each line
+  fetch("../versions.txt").then((response) => {
+    if (response.ok) {
+      document.getElementById("other-versions-div").style.visibility =
+        "visible";
+      return response
+        .text()
+        .then((text) =>
+          text.split(/\r?\n/).filter(Boolean).forEach(addVersion),
+        );
     }
-    // Get versions.txt and add a version for each line
-    fetch("../versions.txt").then(response => {
-      if (response.ok) {
-        document.getElementById('other-versions-div').style.visibility = "visible";
-        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
-      }
-    });
-  </script>
+  });
+</script>
 
 
 </body>

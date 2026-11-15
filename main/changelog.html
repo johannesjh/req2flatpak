@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Changelog &mdash; req2flatpak 0.4.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
@@ -106,6 +106,10 @@ The checks now also work when python runs with <code class="docutils literal not
 <li><p>Type checking with ty.</p></li>
 <li><p>Updated all dependencies. The pre-commit hooks and CI use the same pinned Poetry version (Poetry 2).</p></li>
 <li><p>CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.</p></li>
+<li><p>The online documentation has a menu for switching between the documentation of different releases.
+It was provided by a package that is no longer maintained (<code class="docutils literal notranslate"><span class="pre">sphinx-rtd-theme-github-versions</span></code>).
+We replaced it with a small template in this repository and a small script that lists the published versions when the documentation is published.
+The documentation now uses the standard <code class="docutils literal notranslate"><span class="pre">sphinx_rtd_theme</span></code>. The menu looks and works the same as before, and the addresses of already published documentation are unchanged.</p></li>
 </ul>
 <p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0">https://github.com/johannesjh/req2flatpak/compare/v0.3.2…v0.4.0</a></p>
 </section>
@@ -195,35 +199,46 @@ or by specifying the <code class="docutils literal notranslate"><span class="pre
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-   
-  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-      <span class="fa fa-book"> Other Versions</span>
-      
-      <span class="fa fa-caret-down"></span>
-    </span>
-    <div class="rst-other-versions">
-      <dl id="other-versions-dl"/>
-    </div>
+  </script>  
+<div
+  id="other-versions-div"
+  class="rst-versions"
+  data-toggle="rst-versions"
+  role="note"
+  aria-label="Versions"
+  style="visibility: hidden"
+>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl id="other-versions-dl"></dl>
   </div>
-  <script>
-    function addVersion(name) {
-      var dd = document.createElement("dd");
-      var a = document.createElement("a");
-      a.href = "../" + name;
-      a.innerText = name;
-      dd.appendChild(a);
-      document.getElementById('other-versions-dl').appendChild(dd);
+</div>
+<script>
+  function addVersion(name) {
+    var dd = document.createElement("dd");
+    var a = document.createElement("a");
+    a.href = "../" + name;
+    a.innerText = name;
+    dd.appendChild(a);
+    document.getElementById("other-versions-dl").appendChild(dd);
+  }
+  // Get versions.txt and add a version for each line
+  fetch("../versions.txt").then((response) => {
+    if (response.ok) {
+      document.getElementById("other-versions-div").style.visibility =
+        "visible";
+      return response
+        .text()
+        .then((text) =>
+          text.split(/\r?\n/).filter(Boolean).forEach(addVersion),
+        );
     }
-    // Get versions.txt and add a version for each line
-    fetch("../versions.txt").then(response => {
-      if (response.ok) {
-        document.getElementById('other-versions-div').style.visibility = "visible";
-        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
-      }
-    });
-  </script>
+  });
+</script>
 
 
 </body>
