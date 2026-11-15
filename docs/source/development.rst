@@ -199,7 +199,7 @@ Use the following steps to publish a release of req2flatpak:
 
 * Describe the release in ``docs/source/changelog.rst``. Commit and push the modified changelog in the same branch.
 
-* Verify that the branch builds correctly. Ideally run some manual tests. Optionally tag a release candidate by pushing a tag such as v1.2.3-rc1. If the quality looks good, merge the branch.
+* Verify that the branch builds correctly. Ideally run some manual tests. If the quality looks good, merge the branch.
 
 * Before tagging, check on GitHub (tab Actions) that the CI workflow is enabled.
   GitHub automatically disables workflows in repositories without activity for some time (the workflow state is ``disabled_inactivity``).
@@ -207,5 +207,8 @@ Use the following steps to publish a release of req2flatpak:
   Enable the workflow again if needed, and run it manually on the main branch to check that it passes.
 
 * Tag the main branch with the version to be released, e.g., push a tag named ``v1.2.3``.
+  Do not push tags for release candidates or for testing:
+  CI builds and publishes every tag that starts with ``v`` to PyPI, using the version from ``pyproject.toml``,
+  and a version that has been uploaded to PyPI can never be uploaded again.
 
 * Github CI will build the python package and publish it on PyPI.
