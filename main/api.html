@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Development" href="development.html" />
+    <link rel="next" title="Recipes" href="recipes.html" />
     <link rel="prev" title="Using the Commandline Interface" href="cli.html" /> 
 </head>
 
@@ -101,6 +101,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#customization-options">Customization Options</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -138,7 +139,15 @@ This allows to programmatically tweak and tune the behavior as needed.</p>
 <p>You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp310-x86_64"</span><span class="p">)]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">req2flatpak</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DownloadChooser</span><span class="p">,</span>
+    <span class="n">FlatpakGenerator</span><span class="p">,</span>
+    <span class="n">PlatformFactory</span><span class="p">,</span>
+    <span class="n">PypiClient</span><span class="p">,</span>
+    <span class="n">RequirementsParser</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
 <span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
 <span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
 <span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
@@ -149,7 +158,8 @@ in order to install python packages on a specific flatpak target platform.</p>
 <span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The above code uses req2flatpak to generate a build module in five steps:</p>
+<p>The code starts with the imports from req2flatpak that you need.
+It then uses req2flatpak to generate a build module in five steps:</p>
 <ol class="arabic simple">
 <li><p>define the target platforms,</p></li>
 <li><p>specify the python packages to be installed,</p></li>
@@ -161,7 +171,8 @@ in order to install python packages on a specific flatpak target platform.</p>
 the module will install the required packages.</p>
 <p>Using the python API has the benefit that you can modify and tweak the behavior in a very flexible way.
 E.g., in each step in the above script, you could modify or tweak the data and/or invocations.
-For further details, see section <a class="reference internal" href="#customization"><span class="std std-ref">Customization Options</span></a>.</p>
+For further details, see section <a class="reference internal" href="#customization"><span class="std std-ref">Customization Options</span></a>
+and the <a class="reference internal" href="recipes.html"><span class="doc">Recipes</span></a>.</p>
 <p>The following sections explain in detail how you can use req2flatpak’s python api in your custom script.
 For further inspiration you can also have a look at how req2flatpak’s <code class="xref py py-meth docutils literal notranslate"><span class="pre">main()</span></code> method is implemented.</p>
 </section>
@@ -198,7 +209,7 @@ And you can use functionality from req2flatpak, as described below.</p>
 <h3>PlatformFactory<a class="headerlink" href="#platformfactory" title="Link to this heading"></a></h3>
 <p>The PlatformFactory provides methods for creating platform objects.</p>
 <p>For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platform</span> <span class="o">=</span> <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp310-x86_64"</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platform</span> <span class="o">=</span> <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Documentation of all methods provided by the <code class="docutils literal notranslate"><span class="pre">PlatformFactory</span></code> class:</p>
@@ -246,7 +257,7 @@ Defaults to the current python version.</p></li>
 <dd class="field-odd"><p><strong>platform_string</strong> – A string specifying python version and system
 architecture. The string format is
 “{python_version}-{system_architecture}”.
-For example: “cp39-x86_64” or “cp310-aarch64”.
+For example: “cp313-x86_64” or “cp314-aarch64”.
 Acceptable values are the same as in
 <a class="reference internal" href="#req2flatpak.PlatformFactory.from_python_version_and_arch" title="req2flatpak.PlatformFactory.from_python_version_and_arch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_python_version_and_arch()</span></code></a>.</p>
 </dd>
@@ -545,6 +556,12 @@ that will instruct flatpak-builder to install the required python packages.</p>
 <a class="reference internal" href="#req2flatpak.FlatpakGenerator.build_module" title="req2flatpak.FlatpakGenerator.build_module"><code class="xref py py-meth docutils literal notranslate"><span class="pre">build_module()</span></code></a></p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="req2flatpak.FlatpakGenerator.default_pip_install_template">
+<span class="sig-name descname"><span class="pre">default_pip_install_template</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pip3</span> <span class="pre">install</span> <span class="pre">--verbose</span> <span class="pre">--exists-action=i</span> <span class="pre">--no-index</span> <span class="pre">--find-links=&quot;file://${PWD}&quot;</span> <span class="pre">--prefix=${FLATPAK_DEST}</span> <span class="pre">--no-build-isolation</span> <span class="pre">'</span></span><a class="headerlink" href="#req2flatpak.FlatpakGenerator.default_pip_install_template" title="Link to this definition"></a></dt>
+<dd><p>The default pip command. To use another command, pass it as <code class="docutils literal notranslate"><span class="pre">pip_install_template</span></code> argument.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -571,9 +588,9 @@ The code shows how to serialize the dict and save it to an output file.</p>
 You have all the freedom in the world to modify each step as you see fit.</p>
 <p>For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># define your target platforms</span>
-<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp310-x86_64"</span><span class="p">)]</span>
+<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
 
-<span class="c1"># Optionally pre-prepress or otherwise tweak your requirements</span>
+<span class="c1"># Optionally pre-process or otherwise tweak your requirements</span>
 <span class="c1"># before feeding them into req2flatpak,</span>
 <span class="c1"># e.g., using pip-compile.</span>
 
@@ -590,7 +607,8 @@ You have all the freedom in the world to modify each step as you see fit.</p>
 
 <span class="n">releases</span> <span class="o">=</span> <span class="n">MyClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
 
-<span class="c1"># If you prefer sdists over wheels, the various ``DownloadChooser`` methods have you covered:</span>
+<span class="c1"># Choose downloads with one of the ``DownloadChooser`` methods.</span>
+<span class="c1"># (Use ``sdist_or_wheel`` instead if you prefer source packages over wheels.)</span>
 <span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
@@ -601,23 +619,31 @@ You have all the freedom in the world to modify each step as you see fit.</p>
 
 <span class="c1"># Optionally modify the commandline options that will be passed to pip-install</span>
 <span class="c1"># by defining a custom pip_install template. E.g., to ignore preinstalled packages:</span>
-<span class="n">custom_template</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">pip_install_template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+<span class="n">custom_template</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">default_pip_install_template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
     <span class="s2">"pip3 install"</span><span class="p">,</span> <span class="s2">"pip3 install --ignore-installed"</span>
 <span class="p">)</span>
-<span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">pip_install_template</span> <span class="o">=</span> <span class="n">custom_template</span>
 
 <span class="c1"># Generate the flatpak build module:</span>
-<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span>
+    <span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">,</span> <span class="n">pip_install_template</span><span class="o">=</span><span class="n">custom_template</span>
+<span class="p">)</span>
 
 <span class="c1"># Optionally, tweak the build module that was generated by req2flatpak.</span>
 <span class="c1"># For example, to provide a meaningful name for your build module:</span>
 <span class="n">build_module</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"my-custom-name"</span>
 
 <span class="c1"># Convert to JSON or YAML as you wish:</span>
-<span class="n">json_str</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module_as_str</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
-<span class="n">yaml_str</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module_as_yaml_str</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+<span class="n">json_str</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module_as_str</span><span class="p">(</span>
+    <span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">,</span> <span class="n">pip_install_template</span><span class="o">=</span><span class="n">custom_template</span>
+<span class="p">)</span>
+<span class="n">yaml_str</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module_as_yaml_str</span><span class="p">(</span>
+    <span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">,</span> <span class="n">pip_install_template</span><span class="o">=</span><span class="n">custom_template</span>
+<span class="p">)</span>
 </pre></div>
 </div>
+<p>You can find more examples of how to use and customize req2flatpak in the <a class="reference internal" href="recipes.html"><span class="doc">Recipes</span></a> page.
+It shows how to solve common needs,
+for example how to prefer source packages over wheels, and how to pass additional options to the <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> command.</p>
 </section>
 </section>
 
@@ -626,7 +652,7 @@ You have all the freedom in the world to modify each step as you see fit.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="cli.html" class="btn btn-neutral float-left" title="Using the Commandline Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="recipes.html" class="btn btn-neutral float-right" title="Recipes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -11,6 +11,7 @@ req2flatpak Documentation
    installation
    cli
    api
+   recipes
    development
    changelog
 

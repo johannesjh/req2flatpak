@@ -13,7 +13,7 @@ You can, for example, invoke req2flatpak’s commandline interface like this:
 
 .. code:: bash
 
-   ./req2flatpak.py --requirements-file requirements.txt --target-platforms cp310-x86_64 cp310-aarch64
+   req2flatpak --requirements-file requirements.txt --target-platforms cp314-x86_64 cp314-aarch64
 
 When invoked like this, req2flatpak will read the requirements file,
 query pypi about available downloads, choose appropriate downloads for
@@ -62,7 +62,7 @@ in the flatpak-builder build module that it generates.
 
 The string format for specifying target platforms is ``<python_version>-<system-architecture>``:
 
-- The python version is specified as, e.g., ``cp39`` for cpython 3.9 or ``cp310`` for cpython 3.10, and so on.
+- The python version is specified as, e.g., ``cp313`` for cpython 3.13 or ``cp314`` for cpython 3.14, and so on.
   Other python interpreters instead of cpython are not supported.
 - The system architecture can either be ``x86_64`` or ``aarch64``.
 
@@ -84,7 +84,7 @@ Example:
 
 .. code:: bash
 
-   ./req2flatpak.py --platform-info
+   req2flatpak --platform-info
 
 
 This will generate output like this:
@@ -94,13 +94,13 @@ This will generate output like this:
    {
        "python_version": [
    	"3",
-   	"10",
-   	"6"
+   	"14",
+   	"0"
        ],
        "python_tags": [
-   	"cp310-cp310-manylinux_2_35_x86_64",
-   	"cp310-cp310-manylinux_2_34_x86_64",
-   	"cp310-cp310-manylinux_2_33_x86_64",
+   	"cp314-cp314-manylinux_2_41_x86_64",
+   	"cp314-cp314-manylinux_2_40_x86_64",
+   	"cp314-cp314-manylinux_2_39_x86_64",
    	"..."
        ]
    }

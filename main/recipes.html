@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Recipes &mdash; req2flatpak 0.4.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Development" href="development.html" />
+    <link rel="prev" title="Using the Python API" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            req2flatpak
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Recipes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#should-i-use-the-cli-or-the-python-api">Should I use the CLI or the Python API?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-get-started-using-the-cli">How do I get started using the CLI?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-get-started-using-the-python-api">How do I get started using the Python API?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-i-do-if-my-requirements-are-not-pinned">What can I do if my requirements are not pinned?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-choose-the-target-platform">How do I choose the target platform?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-use-source-packages-instead-of-binary-wheels">How do I use source packages instead of binary wheels?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-use-source-packages-except-for-some-packages">How do I use source packages, except for some packages?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-skip-packages">How do I skip packages?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-pass-additional-options-to-pip-for-example-ignore-installed">How do I pass additional options to pip, for example <code class="docutils literal notranslate"><span class="pre">--ignore-installed</span></code>?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">req2flatpak</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Recipes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/recipes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="recipes">
+<h1>Recipes<a class="headerlink" href="#recipes" title="Link to this heading"></a></h1>
+<p>This documentation page provides recipes for common questions (FAQs).
+In other words, it shows how you can use and adapt req2flatpak for specific common needs.
+For example, you may prefer source packages over wheels, for all or just some packages.
+Or you may need to pass additional options to the pip install command.</p>
+<section id="should-i-use-the-cli-or-the-python-api">
+<h2>Should I use the CLI or the Python API?<a class="headerlink" href="#should-i-use-the-cli-or-the-python-api" title="Link to this heading"></a></h2>
+<p>req2flatpak can be invoked using two ways,
+either through its commandline interface (CLI)
+or through its python programming interface (API).</p>
+<ul class="simple">
+<li><p>The commandline interface (CLI, see <a class="reference internal" href="cli.html"><span class="doc">Using the Commandline Interface</span></a>) of req2flatpak is deliberately simple.
+It covers the basic use case and has only a few options.
+This simplicity is on purpose.
+It allows to get started quickly, and for many users that’s all they need.</p></li>
+<li><p>The python programming interface (API, see <a class="reference internal" href="api.html"><span class="doc">Using the Python API</span></a>) is powerful and flexible without being complicated.
+It allows to modify data and behavior in a flexible way.</p></li>
+</ul>
+<p>Overall, we recommend using the API because of its higher flexibility.</p>
+</section>
+<section id="how-do-i-get-started-using-the-cli">
+<h2>How do I get started using the CLI?<a class="headerlink" href="#how-do-i-get-started-using-the-cli" title="Link to this heading"></a></h2>
+<p>Invoking req2flatpak’s CLI is a simple one-liner that you can run in a terminal or in a Makefile.
+To get started, your typical workflow has three steps:</p>
+<ol class="arabic simple">
+<li><p>List the python packages that your application needs in a file <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code>.
+Use abstract requirements here, such as <code class="docutils literal notranslate"><span class="pre">requests&gt;=2.0</span></code>.</p></li>
+<li><p>Resolve and pin the requirements, i.e., create a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file
+in which all packages, including their dependencies, have exact versions.
+Use the python version of the flatpak runtime that you build for.</p></li>
+<li><p>Run req2flatpak to generate a build module for flatpak-builder.
+Specify the target platforms, i.e., the python version and the architectures that you build for.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># first resolve and pin your requirements, here using uv (other tools work as well, see below):</span>
+uv<span class="w"> </span>pip<span class="w"> </span>compile<span class="w"> </span>requirements.in<span class="w"> </span>-o<span class="w"> </span>requirements.txt<span class="w"> </span>--python-version<span class="w"> </span><span class="m">3</span>.14
+
+<span class="c1"># then generate a build module for flatpak-builder:</span>
+uvx<span class="w"> </span>req2flatpak<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span><span class="m">314</span>-x86_64<span class="w"> </span><span class="m">314</span>-aarch64<span class="w"> </span>-o<span class="w"> </span>python3-packages.json
+</pre></div>
+</div>
+<p>The above example code will write <code class="docutils literal notranslate"><span class="pre">python3-packages.json</span></code>.
+This is a json file with instructions for installing all the python packages from your requirements.txt file.
+To use this build module in your app, you include it in your app’s flatpak build manifest.</p>
+<p>For further information about using req2flatpak and its commandline interface, see <a class="reference internal" href="cli.html"><span class="doc">Using the Commandline Interface</span></a>.</p>
+</section>
+<section id="how-do-i-get-started-using-the-python-api">
+<h2>How do I get started using the Python API?<a class="headerlink" href="#how-do-i-get-started-using-the-python-api" title="Link to this heading"></a></h2>
+<p>Using req2flatpak’s python API takes a few lines of python code in your build script.
+The overall workflow is the same as in the CLI example above:</p>
+<ol class="arabic simple">
+<li><p>List the python packages that your application needs in a file <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code>.
+Use abstract requirements here, such as <code class="docutils literal notranslate"><span class="pre">requests&gt;=2.0</span></code>.</p></li>
+<li><p>Resolve and pin the requirements, i.e., create a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file
+in which all packages, including their dependencies, have exact versions.
+Use the python version of the flatpak runtime that you build for.</p></li>
+<li><p>Run req2flatpak to generate a build module for flatpak-builder.
+Specify the target platforms, i.e., the python version and the architectures that you build for.</p></li>
+</ol>
+<p>The following script generates a build module in five simple steps:
+it defines the target platforms,
+reads the requirements,
+queries PyPI about available downloads,
+chooses downloads that are compatible with the target platforms,
+and generates the build module.
+The script starts with the imports from req2flatpak. The other examples on this page use the same imports, and do not repeat them.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">req2flatpak</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DownloadChooser</span><span class="p">,</span>
+    <span class="n">FlatpakGenerator</span><span class="p">,</span>
+    <span class="n">PlatformFactory</span><span class="p">,</span>
+    <span class="n">PypiClient</span><span class="p">,</span>
+    <span class="n">RequirementsParser</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The python API gives a lot of flexibility because you can change the behavior and modify the data between each step.
+The recipes below provide further examples for that.
+The same example is explained in more detail in <a class="reference internal" href="api.html"><span class="doc">Using the Python API</span></a>.
+For one example that combines several customizations in a single script,
+see <a class="reference internal" href="api.html#customization"><span class="std std-ref">customization options</span></a> in the API guide.</p>
+</section>
+<section id="what-can-i-do-if-my-requirements-are-not-pinned">
+<span id="pinning-requirements"></span><h2>What can I do if my requirements are not pinned?<a class="headerlink" href="#what-can-i-do-if-my-requirements-are-not-pinned" title="Link to this heading"></a></h2>
+<p>req2flatpak expects every requirement to be pinned to an exact version with <code class="docutils literal notranslate"><span class="pre">==</span></code>.
+It rejects, for example, <code class="docutils literal notranslate"><span class="pre">requests&gt;=2.0</span></code> with an error.
+This is by design: req2flatpak does not resolve dependencies.</p>
+<p>Use another tool to create a fully pinned <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> first.
+Each of the following also includes the dependencies of your dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip-tools</span>
+pip-compile<span class="w"> </span>requirements.in<span class="w"> </span>-o<span class="w"> </span>requirements.txt
+
+<span class="c1"># uv</span>
+uv<span class="w"> </span>pip<span class="w"> </span>compile<span class="w"> </span>requirements.in<span class="w"> </span>-o<span class="w"> </span>requirements.txt
+
+<span class="c1"># poetry (needs the poetry-plugin-export plugin)</span>
+poetry<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--without-hashes<span class="w"> </span>-o<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+<p>Then pass the resulting file to req2flatpak.
+Make sure that the versions are resolved for the python version of the flatpak runtime, not for your development machine.
+For example, <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">compile</span></code> has the option <code class="docutils literal notranslate"><span class="pre">--python-version</span></code> for this.</p>
+</section>
+<section id="how-do-i-choose-the-target-platform">
+<h2>How do I choose the target platform?<a class="headerlink" href="#how-do-i-choose-the-target-platform" title="Link to this heading"></a></h2>
+<p>A target platform describes the python and the system on which the packages will be used:
+the python version and the system architecture.
+req2flatpak uses this to choose downloads that are compatible with it.</p>
+<p>The string format is <code class="docutils literal notranslate"><span class="pre">&lt;python</span> <span class="pre">version&gt;-&lt;architecture&gt;</span></code>, for example <code class="docutils literal notranslate"><span class="pre">cp314-x86_64</span></code> or <code class="docutils literal notranslate"><span class="pre">cp314-aarch64</span></code>.
+Use the python version of the flatpak runtime, for example 3.14 if the runtime ships python 3.14.
+Wheels that are built for another python version typically cannot be installed.</p>
+<p>If you build for more than one platform, create one platform object for each platform.
+On the commandline, pass the platforms as separate arguments, as in <code class="docutils literal notranslate"><span class="pre">--target-platforms</span> <span class="pre">cp314-x86_64</span> <span class="pre">cp314-aarch64</span></code>.
+Do not pass them as one quoted argument.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The format is "&lt;python version&gt;-&lt;architecture&gt;".</span>
+<span class="c1"># Create one platform object per target platform:</span>
+<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">),</span>
+    <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-aarch64"</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># The same, without parsing a string:</span>
+<span class="n">platform</span> <span class="o">=</span> <span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_python_version_and_arch</span><span class="p">(</span>
+    <span class="n">minor_version</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">arch</span><span class="o">=</span><span class="s2">"aarch64"</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>If you want to be exact, run <code class="docutils literal notranslate"><span class="pre">req2flatpak</span> <span class="pre">--platform-info</span></code> on the target system and save the output to a file.
+The output contains the python version and the complete list of tags that the system supports.
+You can create a platform object from it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">req2flatpak</span><span class="w"> </span><span class="kn">import</span> <span class="n">Platform</span>
+
+<span class="c1"># Run "req2flatpak --platform-info" on the target system and save the output to a file.</span>
+<span class="c1"># Then create a platform object from the data in this file:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"platform-info.json"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">platform</span> <span class="o">=</span> <span class="n">Platform</span><span class="p">(</span><span class="o">**</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">--platform-info</span></code> describes the system that it runs on.
+Run it on, or in an environment that matches, the platform that you are building for.</p>
+</section>
+<section id="how-do-i-use-source-packages-instead-of-binary-wheels">
+<h2>How do I use source packages instead of binary wheels?<a class="headerlink" href="#how-do-i-use-source-packages-instead-of-binary-wheels" title="Link to this heading"></a></h2>
+<p>By default, req2flatpak prefers wheels (prebuilt binary packages) and uses a source package (sdist) only if no suitable wheel exists.
+To prefer source packages, choose downloads with <code class="docutils literal notranslate"><span class="pre">sdist_or_wheel</span></code> instead of <code class="docutils literal notranslate"><span class="pre">wheel_or_sdist</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+
+<span class="c1"># sdist_or_wheel prefers the source package,</span>
+<span class="c1"># and falls back to a wheel if a release has no source package:</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">sdist_or_wheel</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Things to keep in mind:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sdist_or_wheel</span></code> falls back to a wheel if a release has no source package.
+Use <code class="docutils literal notranslate"><span class="pre">DownloadChooser.sdist</span></code> if you never want a wheel.
+It returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if a release has no source package.</p></li>
+<li><p>The generated pip command uses <code class="docutils literal notranslate"><span class="pre">--no-index</span></code> and <code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code>.
+Packages built from source therefore find their build dependencies
+(for example <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>, <code class="docutils literal notranslate"><span class="pre">wheel</span></code> or <code class="docutils literal notranslate"><span class="pre">cython</span></code>) only if these are installed already
+or if you add them to your requirements.</p></li>
+<li><p>A source package is not specific to an architecture,
+so the same download is used for all target platforms.</p></li>
+</ul>
+</section>
+<section id="how-do-i-use-source-packages-except-for-some-packages">
+<h2>How do I use source packages, except for some packages?<a class="headerlink" href="#how-do-i-use-source-packages-except-for-some-packages" title="Link to this heading"></a></h2>
+<p>Some packages are difficult to build from source, for example packages with compiled extensions
+that need a compiler, system libraries or a long build time.
+You may want source packages for most packages, but binary wheels for these few.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DownloadChooser</span></code> methods used above are not the only way to choose a download.
+A download chooser is simply a function that takes a release and a platform and returns one download of this release.
+You can write your own function with any logic that you need, and use it instead of <code class="docutils literal notranslate"><span class="pre">DownloadChooser.sdist_or_wheel</span></code>.
+Your function can also call the <code class="docutils literal notranslate"><span class="pre">DownloadChooser</span></code> methods.
+The following example prefers source packages, except for the packages that are listed in <code class="docutils literal notranslate"><span class="pre">install_as_wheel</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+
+<span class="c1"># Packages that are difficult to build from source,</span>
+<span class="c1"># and that shall be installed from binary wheels:</span>
+<span class="n">install_as_wheel</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"bar"</span><span class="p">,</span> <span class="s2">"scipy"</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">choose_download</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Prefer source packages, except for the packages listed above."""</span>
+    <span class="k">if</span> <span class="n">release</span><span class="o">.</span><span class="n">package</span> <span class="ow">in</span> <span class="n">install_as_wheel</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">sdist_or_wheel</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">choose_download</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more complex rules, <code class="docutils literal notranslate"><span class="pre">DownloadChooser.downloads(release,</span> <span class="pre">platform)</span></code> yields all downloads that are compatible with the platform,
+in the order of preference, and you can pick from them as you wish, for example by looking at a download’s <code class="docutils literal notranslate"><span class="pre">filename</span></code>.
+See <a class="reference internal" href="api.html"><span class="doc">Using the Python API</span></a> for details about choosing downloads.</p>
+</section>
+<section id="how-do-i-skip-packages">
+<h2>How do I skip packages?<a class="headerlink" href="#how-do-i-skip-packages" title="Link to this heading"></a></h2>
+<p>There are several reasons why you may not want req2flatpak to install a package.
+For example:</p>
+<ul class="simple">
+<li><p>The flatpak runtime or the base app already provides the package.
+(Check the runtime that your app runs on, not the SDK that it is built in, because the SDK contains more packages.
+The next recipe explains this in more detail.)</p></li>
+<li><p>You install the package in another way, for example with a separate flatpak module or an install script of your own.</p></li>
+<li><p>You do not need the package in your flatpak, for example because it is only needed for development.</p></li>
+</ul>
+<p>With the commandline interface, remove the packages from the requirements file before you run req2flatpak.
+For example, to skip <code class="docutils literal notranslate"><span class="pre">jinja2</span></code> and <code class="docutils literal notranslate"><span class="pre">markupsafe</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span>-v<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^(jinja2|markupsafe)=='</span><span class="w"> </span>requirements.txt<span class="w"> </span>&gt;<span class="w"> </span>requirements-flatpak.txt
+uvx<span class="w"> </span>req2flatpak<span class="w"> </span>--requirements-file<span class="w"> </span>requirements-flatpak.txt<span class="w"> </span>--target-platforms<span class="w"> </span>cp314-x86_64
+</pre></div>
+</div>
+<p>With the Python API, filter the list of requirements before querying PyPI:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
+
+<span class="c1"># Remove the packages that this build module shall not install,</span>
+<span class="c1"># for example because the runtime provides them already.</span>
+<span class="c1"># Do this before querying PyPI, so that nothing is downloaded or installed for them.</span>
+<span class="c1"># (canonicalize_name makes "Jinja2", "jinja2" and "JINJA2" the same name.)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">packaging.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">canonicalize_name</span>
+
+<span class="n">skipped_packages</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"jinja2"</span><span class="p">,</span> <span class="s2">"markupsafe"</span><span class="p">}</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">r</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">requirements</span>
+    <span class="k">if</span> <span class="n">canonicalize_name</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">package</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skipped_packages</span>
+<span class="p">]</span>
+
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span><span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The filter can use any criterion, and you can also add requirements, for example build dependencies.</p>
+<p>Note that req2flatpak installs exactly the packages that are in your list of requirements.
+A fully pinned <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> also lists the dependencies of your packages.
+If you skip a package, then check whether you also want to skip its dependencies.</p>
+</section>
+<section id="how-do-i-pass-additional-options-to-pip-for-example-ignore-installed">
+<h2>How do I pass additional options to pip, for example <code class="docutils literal notranslate"><span class="pre">--ignore-installed</span></code>?<a class="headerlink" href="#how-do-i-pass-additional-options-to-pip-for-example-ignore-installed" title="Link to this heading"></a></h2>
+<p>The generated build module runs <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span></code> with a fixed set of options.
+Sometimes you need more options.
+A typical example is <code class="docutils literal notranslate"><span class="pre">--ignore-installed</span></code>,
+which makes pip install a package even if a package of the same name is already installed.</p>
+<p>If you are using req2flatpak’s commandline interface,
+you can add commandline options for the pip install command
+by post-processing the build module generated by req2flatpak,
+for example with <code class="docutils literal notranslate"><span class="pre">sed</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>req2flatpak<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span>cp314-x86_64<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">'s/pip3 install/pip3 install --ignore-installed/'</span><span class="w"> </span>&gt;<span class="w"> </span>build-module.json
+</pre></div>
+</div>
+<p>If you are using the Python API, you can modify the pip install command
+as shown in the following example,
+by modifying the pip_install_template:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+
+<span class="c1"># The build module runs a pip command to install the downloaded packages.</span>
+<span class="c1"># To change it, pass your own command as the pip_install_template argument.</span>
+<span class="c1"># Here, the default command is extended by one option:</span>
+<span class="n">pip_install_template</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">default_pip_install_template</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+    <span class="s2">"pip3 install"</span><span class="p">,</span> <span class="s2">"pip3 install --ignore-installed"</span>
+<span class="p">)</span>
+<span class="n">build_module</span> <span class="o">=</span> <span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">build_module</span><span class="p">(</span>
+    <span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span><span class="p">,</span> <span class="n">pip_install_template</span><span class="o">=</span><span class="n">pip_install_template</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api.html" class="btn btn-neutral float-left" title="Using the Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="development.html" class="btn btn-neutral float-right" title="Development" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2024, johannesjh.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+<div
+  id="other-versions-div"
+  class="rst-versions"
+  data-toggle="rst-versions"
+  role="note"
+  aria-label="Versions"
+  style="visibility: hidden"
+>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl id="other-versions-dl"></dl>
+  </div>
+</div>
+<script>
+  function addVersion(name) {
+    var dd = document.createElement("dd");
+    var a = document.createElement("a");
+    a.href = "../" + name;
+    a.innerText = name;
+    dd.appendChild(a);
+    document.getElementById("other-versions-dl").appendChild(dd);
+  }
+  // Get versions.txt and add a version for each line
+  fetch("../versions.txt").then((response) => {
+    if (response.ok) {
+      document.getElementById("other-versions-div").style.visibility =
+        "visible";
+      return response
+        .text()
+        .then((text) =>
+          text.split(/\r?\n/).filter(Boolean).forEach(addVersion),
+        );
+    }
+  });
+</script>
+
+
+</body>
+</html>

@@ -56,6 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -118,7 +119,7 @@ for example, you can use
 <p>Run req2flatpak.
 For example, run this command to generate a <code class="docutils literal notranslate"><span class="pre">flatpak-builder</span></code> build module
 from your <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./req2flatpak.py<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span><span class="m">310</span>-x86_64<span class="w"> </span><span class="m">310</span>-aarch64
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>req2flatpak<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span><span class="m">314</span>-x86_64<span class="w"> </span><span class="m">314</span>-aarch64
 </pre></div>
 </div>
 <p>When invoked like this, req2flatpak will
@@ -130,7 +131,7 @@ The module, if included in a flatpak-builder build manifest,
 will install the required packages using pip.
 The commandline option to define target platforms uses the format <code class="docutils literal notranslate"><span class="pre">&lt;pythonversion&gt;-&lt;architecture&gt;</span></code>.
 To learn more about available commandline options,
-run <code class="docutils literal notranslate"><span class="pre">req2flatpak.py</span> <span class="pre">--help</span></code>.</p>
+run <code class="docutils literal notranslate"><span class="pre">req2flatpak</span> <span class="pre">--help</span></code>.</p>
 <p>Note that programmatic usage of req2flatpak is also possible.
 This means you can write a python script to invoke req2flatpak,
 which allows to tweak the desired behavior in many ways.</p>

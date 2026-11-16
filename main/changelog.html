@@ -47,9 +47,10 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#v0-4-0-2026-11-15">v0.4.0 (2026-11-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-4-0-2026-11-16">v0.4.0 (2026-11-16)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-2-2026-11-15">v0.3.2 (2026-11-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2025-03-30-python-3-12">v0.3.1 (2025-03-30) “Python 3.12”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-2023-06-04-yaml">v0.2 (2023-06-04) “Yaml”</a></li>
@@ -84,32 +85,37 @@
              
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
-<section id="v0-4-0-2026-11-15">
-<h2>v0.4.0 (2026-11-15)<a class="headerlink" href="#v0-4-0-2026-11-15" title="Link to this heading"></a></h2>
+<section id="v0-4-0-2026-11-16">
+<h2>v0.4.0 (2026-11-16)<a class="headerlink" href="#v0-4-0-2026-11-16" title="Link to this heading"></a></h2>
 <p>Highlight: req2flatpak requires Python 3.11 or newer.</p>
 <p>Breaking changes:</p>
 <ul class="simple">
-<li><p>Python 3.8, 3.9 and 3.10 are no longer supported. Python 3.10 reached end-of-life on 2026-10-01.
+<li><p>Python 3.8, 3.9 and 3.10 are no longer supported.
+That’s because Python 3.10 reached end-of-life on 2026-10-01 and we upgraded dependencies.
 This applies to the Python that runs req2flatpak. Target platforms can still use other Python versions.</p></li>
-<li><p>Invalid requirements and unsupported architectures now raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> instead of an <code class="docutils literal notranslate"><span class="pre">AssertionError</span></code>.
-The checks now also work when python runs with <code class="docutils literal notranslate"><span class="pre">-O</span></code>.</p></li>
+<li><p>Refactored assertions to raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> instead of an <code class="docutils literal notranslate"><span class="pre">AssertionError</span></code>.
+As a benefit, the assertions now also work when python runs with <code class="docutils literal notranslate"><span class="pre">-O</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.pip_install_template</span></code> is renamed to <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.default_pip_install_template</span></code>.</p></li>
 </ul>
 <p>Fixes:</p>
 <ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">--cache</span></code> option now fills the persistent cache. An empty cache file was replaced by an in-memory dict before, so nothing was ever stored.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">--outfile</span></code> is only created once the output is ready. A failing run no longer leaves an empty file behind.
-(This also replaces the deprecated <code class="docutils literal notranslate"><span class="pre">argparse.FileType</span></code>. <code class="docutils literal notranslate"><span class="pre">-</span></code> still means stdin or stdout.)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">--outfile</span></code> is only created once the output is ready. A failing run no longer leaves an empty file behind.</p></li>
+</ul>
+<p>Documentation improvements:</p>
+<ul class="simple">
+<li><p>New page “Recipes” with tested examples for the Python API.</p></li>
+<li><p>Removed the “standalone script” installation option from the installation instructions (#85).
+Install req2flatpak as a python package instead, so that its dependencies are installed too.</p></li>
+<li><p>Fixed the customization example in the API guide.</p></li>
 </ul>
 <p>Improvements for Development:</p>
 <ul class="simple">
-<li><p>ruff now also checks docstrings, import order, python syntax upgrades and security issues. It replaces bandit and pydocstyle.</p></li>
-<li><p>Type checking with ty.</p></li>
+<li><p>ruff now performs additional linting checks, replacing bandit and pydocstyle.</p></li>
+<li><p>Type checking is done using ty.</p></li>
 <li><p>Updated all dependencies. The pre-commit hooks and CI use the same pinned Poetry version (Poetry 2).</p></li>
-<li><p>CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.</p></li>
-<li><p>The online documentation has a menu for switching between the documentation of different releases.
-It was provided by a package that is no longer maintained (<code class="docutils literal notranslate"><span class="pre">sphinx-rtd-theme-github-versions</span></code>).
-We replaced it with a small template in this repository and a small script that lists the published versions when the documentation is published.
-The documentation now uses the standard <code class="docutils literal notranslate"><span class="pre">sphinx_rtd_theme</span></code>. The menu looks and works the same as before, and the addresses of already published documentation are unchanged.</p></li>
+<li><p>Updated CI. It now uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.</p></li>
+<li><p>Got rid of the unmaintained documentation dependency <code class="docutils literal notranslate"><span class="pre">sphinx-rtd-theme-github-versions</span></code>.</p></li>
 </ul>
 <p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0">https://github.com/johannesjh/req2flatpak/compare/v0.3.2…v0.4.0</a></p>
 </section>
