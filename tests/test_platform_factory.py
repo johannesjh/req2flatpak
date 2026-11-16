@@ -16,7 +16,7 @@ class ExampleUsageTest(unittest.TestCase):
     def example_usage(self):
         """Demonstrates how to create a platform object from string."""
         # example_usage1_start
-        platform = PlatformFactory.from_string("cp310-x86_64")
+        platform = PlatformFactory.from_string("cp314-x86_64")
         # example_usage1_end
         return platform
 
@@ -25,7 +25,7 @@ class ExampleUsageTest(unittest.TestCase):
         platform = self.example_usage()
         if platform is None:
             self.fail("No platform was created.")
-        self.assertEqual(platform.python_version, ["3", "10"])
+        self.assertEqual(platform.python_version, ["3", "14"])
         self.assertTrue(any("x86_64" in tag for tag in platform.python_tags))
         self.assertTrue(all("aarch" not in tag for tag in platform.python_tags))
 

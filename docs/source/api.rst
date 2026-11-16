@@ -12,13 +12,14 @@ You can use the following code as an example to get started with your script.
 The code demonstrates how to generate a flatpak-builder build module
 in order to install python packages on a specific flatpak target platform.
 
-.. literalinclude:: ../../tests/test_req2flatpak.py
-   :start-after: example_usage1_start
-   :end-before: example_usage1_end
+.. literalinclude:: ../../tests/test_getting_started.py
+   :start-after: example_getting_started_start
+   :end-before: example_getting_started_end
    :language: python
    :dedent:
 
-The above code uses req2flatpak to generate a build module in five steps:
+The code starts with the imports from req2flatpak that you need.
+It then uses req2flatpak to generate a build module in five steps:
 
 #. define the target platforms,
 #. specify the python packages to be installed,
@@ -32,7 +33,8 @@ the module will install the required packages.
 
 Using the python API has the benefit that you can modify and tweak the behavior in a very flexible way.
 E.g., in each step in the above script, you could modify or tweak the data and/or invocations.
-For further details, see section :ref:`Customization`.
+For further details, see section :ref:`Customization`
+and the :doc:`recipes`.
 
 The following sections explain in detail how you can use req2flatpak's python api in your custom script.
 For further inspiration you can also have a look at how req2flatpak's :py:meth:`~req2flatpak.main` method is implemented.
@@ -318,3 +320,8 @@ For example:
    :end-before: example_customization1_end
    :language: python
    :dedent:
+
+
+You can find more examples of how to use and customize req2flatpak in the :doc:`recipes` page.
+It shows how to solve common needs,
+for example how to prefer source packages over wheels, and how to pass additional options to the ``pip install`` command.

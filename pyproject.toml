@@ -76,15 +76,19 @@ include = ["req2flatpak.py", "tests"]
 
 [[tool.ty.overrides]]
 # Why is this an exception configured here, and not a suppression comment in the code?
-# The code examples in tests/test_req2flatpak.py are included verbatim in the published
+# The code examples in tests/test_req2flatpak.py, tests/test_recipes.py and tests/test_getting_started.py are included verbatim in the published
 # documentation (docs/source/api.rst, via literalinclude). They pass the results of
 # PlatformFactory.from_string and DownloadChooser.wheel_or_sdist straight on to the next
 # step. Both are typed "X | None" (None means: no such platform or download), but the
 # functions that receive them expect "X", so ty reports invalid-argument-type.
 # The examples deliberately stay short, without None checks, to be easy to read, and a
 # "# ty: ignore" comment inside them would be shown to the readers of the docs.
-# So the exception lives here, and it is limited to this one rule and this one file.
-include = ["tests/test_req2flatpak.py"]
+# So the exception lives here, and it is limited to this one rule and to these files.
+include = [
+    "tests/test_req2flatpak.py",
+    "tests/test_recipes.py",
+    "tests/test_getting_started.py",
+]
 
 [tool.ty.overrides.rules]
 invalid-argument-type = "ignore"
