@@ -5,7 +5,7 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
-v0.4.0 (2026-11-15)
+v0.4.0 (2026-11-16)
 -------------------
 
 Highlight: req2flatpak requires Python 3.11 or newer.
@@ -13,30 +13,32 @@ Highlight: req2flatpak requires Python 3.11 or newer.
 
 Breaking changes:
 
-- Python 3.8, 3.9 and 3.10 are no longer supported. Python 3.10 reached end-of-life on 2026-10-01.
+- Python 3.8, 3.9 and 3.10 are no longer supported. 
+  That's because Python 3.10 reached end-of-life on 2026-10-01 and we upgraded dependencies.
   This applies to the Python that runs req2flatpak. Target platforms can still use other Python versions.
-- Invalid requirements and unsupported architectures now raise a ``ValueError`` instead of an ``AssertionError``.
-  The checks now also work when python runs with ``-O``.
-
+- Refactored assertions to raise a ``ValueError`` instead of an ``AssertionError``.
+  As a benefit, the assertions now also work when python runs with ``-O``.
+- ``FlatpakGenerator.pip_install_template`` is renamed to ``FlatpakGenerator.default_pip_install_template``.
 
 Fixes:
 
 - The ``--cache`` option now fills the persistent cache. An empty cache file was replaced by an in-memory dict before, so nothing was ever stored.
 - The ``--outfile`` is only created once the output is ready. A failing run no longer leaves an empty file behind.
-  (This also replaces the deprecated ``argparse.FileType``. ``-`` still means stdin or stdout.)
 
+Documentation improvements:
+
+- New page "Recipes" with tested examples for the Python API.
+- Removed the "standalone script" installation option from the installation instructions (#85).
+  Install req2flatpak as a python package instead, so that its dependencies are installed too.
+- Fixed the customization example in the API guide. 
 
 Improvements for Development:
 
-- ruff now also checks docstrings, import order, python syntax upgrades and security issues. It replaces bandit and pydocstyle.
-- Type checking with ty.
+- ruff now performs additional linting checks, replacing bandit and pydocstyle.
+- Type checking is done using ty.
 - Updated all dependencies. The pre-commit hooks and CI use the same pinned Poetry version (Poetry 2).
-- CI uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.
-- The online documentation has a menu for switching between the documentation of different releases.
-  It was provided by a package that is no longer maintained (``sphinx-rtd-theme-github-versions``).
-  We replaced it with a small template in this repository and a small script that lists the published versions when the documentation is published.
-  The documentation now uses the standard ``sphinx_rtd_theme``. The menu looks and works the same as before, and the addresses of already published documentation are unchanged.
-
+- Updated CI. It now uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.
+- Got rid of the unmaintained documentation dependency ``sphinx-rtd-theme-github-versions``.
 
 Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0
 

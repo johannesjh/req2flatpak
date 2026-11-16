@@ -1,0 +1,7 @@
+{
+  // Pylance's diagnostics are disabled, because the project checks code with ruff and ty
+  // (see "make lint"), and Pylance would report duplicate and conflicting findings.
+  // Pylance's language features (completion, navigation, rename, ...) keep working.
+  // See https://bexli.dev/posts/vscode/ruff-pylance/
+  "python.analysis.ignore": ["*"]
+}

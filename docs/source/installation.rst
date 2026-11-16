@@ -46,15 +46,3 @@ You can, of course, specify other git repositories,
 for example in order to install from a forked repository of req2flatpak.
 And it is possible to specify specific branches, commits and tags,
 see `pip's documentation on VCS support <https://pip.pypa.io/en/stable/topics/vcs-support/>`_.
-
-
-Downloading the (almost) Standalone Script
-------------------------------------------
-
-You can download the ``req2flatpak.py`` script to your computer and run it.
-You will need a supported Python version installed and the additional ``packaging`` package:
-
-.. code-block:: bash
-
-   pip install packaging
-   ./req2flatpak.py --help

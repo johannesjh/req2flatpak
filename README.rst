@@ -45,7 +45,7 @@ from your ``requirements.txt`` file:
 
 .. code:: bash
 
-   ./req2flatpak.py --requirements-file requirements.txt --target-platforms 310-x86_64 310-aarch64
+   req2flatpak --requirements-file requirements.txt --target-platforms 314-x86_64 314-aarch64
 
 When invoked like this, req2flatpak will
 read the requirements file,
@@ -56,7 +56,7 @@ The module, if included in a flatpak-builder build manifest,
 will install the required packages using pip.
 The commandline option to define target platforms uses the format ``<pythonversion>-<architecture>``.
 To learn more about available commandline options,
-run ``req2flatpak.py --help``.
+run ``req2flatpak --help``.
 
 Note that programmatic usage of req2flatpak is also possible.
 This means you can write a python script to invoke req2flatpak,

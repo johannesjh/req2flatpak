@@ -222,7 +222,7 @@ class PlatformFactory:
         :param platform_string: A string specifying python version and system
           architecture. The string format is
           "{python_version}-{system_architecture}".
-          For example: "cp39-x86_64" or "cp310-aarch64".
+          For example: "cp313-x86_64" or "cp314-aarch64".
           Acceptable values are the same as in
           :py:meth:`~req2flatpak.PlatformFactory.from_python_version_and_arch`.
         """
@@ -521,18 +521,19 @@ class DownloadChooser:
 class FlatpakGenerator:
     """Provides methods for generating a flatpak-builder build module."""
 
-    pip_install_template: str = (
+    default_pip_install_template: str = (
         "pip3 install --verbose --exists-action=i "
         '--no-index --find-links="file://${PWD}" '
         "--prefix=${FLATPAK_DEST} --no-build-isolation "
     )
+    """The default pip command. To use another command, pass it as ``pip_install_template`` argument."""
 
     @staticmethod
     def build_module(
         requirements: Iterable[Requirement],
         downloads: Iterable[Download],
         module_name="python3-package-installation",
-        pip_install_template: str = pip_install_template,
+        pip_install_template: str = default_pip_install_template,
     ) -> dict:
         """Generate a build module for inclusion in a flatpak-builder build manifest."""
 
@@ -612,7 +613,7 @@ def cli_parser() -> argparse.ArgumentParser:
         "--target-platforms",
         "-t",
         nargs="+",
-        help="Target platforms can be specified as, e.g., '39-x86_64' or '310-aarch64'.",
+        help="Target platforms can be specified as, e.g., '313-x86_64' or '314-aarch64'.",
     )
     parser.add_argument(
         "--cache",
@@ -723,7 +724,7 @@ def main():  # pylint: disable=too-many-branches
         parser.error(
             "Error parsing target platforms. "
             "Missing commandline argument, at least one target platform must "
-            "be specified as, e.g., '39-x86_64' or '310-aarch64'."
+            "be specified as, e.g., '313-x86_64' or '314-aarch64'."
         )
     platforms = [
         PlatformFactory.from_string(platform) for platform in options.target_platforms
@@ -732,7 +733,7 @@ def main():  # pylint: disable=too-many-branches
         parser.error(
             "Error parsing target platforms. "
             "At least one target platform must be specified "
-            "as, e.g., '39-x86_64' or '310-aarch64'."
+            "as, e.g., '313-x86_64' or '314-aarch64'."
         )
 
     # query released downloads from PyPi, optionally using a shelve.Shelf to cache responses:
