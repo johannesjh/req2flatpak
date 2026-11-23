@@ -20,10 +20,12 @@ except ImportError:
     yaml = None
 
 from req2flatpak import (
+    Download,
     DownloadChooser,
     FlatpakGenerator,
     PlatformFactory,
     PypiClient,
+    Release,
     RequirementsParser,
     main,
 )
@@ -418,3 +420,48 @@ class FileOptionsTest(unittest.TestCase):
         ):
             queried = self.run_main("--requirements-file", "-")
         self.assertEqual([r.package for r in queried[0]], ["requests"])
+
+
+class MissingDownloadTest(unittest.TestCase):
+    """Test the error for packages without a suitable download."""
+
+    windows_only = Release(
+        package="winonly",
+        version="1.0",
+        downloads=[
+            Download(
+                package="winonly",
+                version="1.0",
+                filename="winonly-1.0-cp310-cp310-win_amd64.whl",
+                url="https://example.org/winonly-1.0-cp310-cp310-win_amd64.whl",
+                sha256="0" * 64,
+            )
+        ],
+    )
+
+    def run_main(self, releases) -> str:
+        """Run ``main`` offline with the given releases and return stdout."""
+        argv = [
+            "req2flatpak.py",
+            "--requirements",
+            "winonly==1.0",
+            "--target-platforms",
+            "cp310-x86_64",
+        ]
+        stdout = io.StringIO()
+        with (
+            patch("sys.argv", argv),
+            patch.object(PypiClient, "cache", {}),
+            patch.object(PypiClient, "get_releases", return_value=releases),
+            redirect_stdout(stdout),
+        ):
+            main()
+        return stdout.getvalue()
+
+    def test_no_suitable_download_gives_clear_error(self):
+        """Verify the error message names package, version and python version."""
+        with self.assertRaises(ValueError) as context:
+            self.run_main([self.windows_only])
+        message = str(context.exception)
+        self.assertIn("winonly==1.0", message)
+        self.assertIn("3.10", message)

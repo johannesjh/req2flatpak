@@ -52,3 +52,26 @@ class ExampleUsageTest(unittest.TestCase):
         self.assertTrue(
             any("requests" in source["url"] for source in build_module["sources"])
         )
+
+
+class MissingDownloadTest(unittest.TestCase):
+    """Test the handling of missing downloads."""
+
+    def setUp(self):
+        """Create fresh data for each test."""
+        self.requirements = [Requirement(package="requests", version="2.28.1")]
+        self.downloads = {
+            Download(
+                package="requests",
+                version="2.28.1",
+                filename="requests-2.28.1-py3-none-any.whl",
+                url="https://example.org/requests-2.28.1-py3-none-any.whl",
+                sha256="0" * 64,
+            )
+        }
+
+    def test_missing_download_raises_value_error(self):
+        """Verify that a missing download gives a clear error instead of a TypeError."""
+        for downloads in ({None}, {None, *self.downloads}):
+            with self.subTest(downloads=downloads), self.assertRaises(ValueError):
+                FlatpakGenerator.build_module(self.requirements, downloads)  # ty: ignore[invalid-argument-type]
