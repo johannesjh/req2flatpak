@@ -1,4 +1,4 @@
-"""Test the getting-started example of the recipes, using exactly the imports shown in the docs.
+"""Test the getting-started example of the python API guide, using exactly the imports shown in the docs.
 
 Do not import anything from req2flatpak at module level in this file.
 The example function imports everything that it needs by itself.
@@ -37,6 +37,9 @@ class GettingStartedTest(unittest.TestCase):
     def example(self):
         """Show how to get started with req2flatpak's python api."""
         # example_getting_started_start
+        # /// script
+        # dependencies = ["req2flatpak"]
+        # ///
         from req2flatpak import (
             DownloadChooser,
             FlatpakGenerator,
@@ -53,9 +56,10 @@ class GettingStartedTest(unittest.TestCase):
             for release in releases
             for platform in platforms
         }
-        build_module = FlatpakGenerator.build_module(requirements, downloads)
+        FlatpakGenerator.write_build_module_as_json(
+            "python3-packages.json", requirements, downloads
+        )
         # example_getting_started_end
-        return build_module
 
     def test(self):
         """Run the example in a directory with a requirements file, without network access."""
@@ -65,7 +69,10 @@ class GettingStartedTest(unittest.TestCase):
             patch.dict("req2flatpak.PypiClient.cache", {PYPI_URL: PYPI_RESPONSE}),
         ):
             Path("requirements.txt").write_text("requests==2.28.1\n", encoding="utf-8")
-            build_module = self.example()
+            self.example()
+            build_module = json.loads(
+                Path("python3-packages.json").read_text(encoding="utf-8")
+            )
 
         self.assertIn("requests", build_module["build-commands"][0])
         self.assertEqual(len(build_module["sources"]), 1)

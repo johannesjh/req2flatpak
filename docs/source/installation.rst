@@ -10,8 +10,6 @@ Installing the Python Package
 
 You can install req2flatpak as a python package.
 This is the default and recommended installation method.
-The Python versions that req2flatpak supports are declared in its ``pyproject.toml`` file
-and shown on PyPI.
 
 For example:
 
@@ -24,6 +22,45 @@ For example:
 The first command will install the latest release of req2flatpak.
 The second command will display req2flatpak's help,
 allowing you to verify that req2flatpak was installed successfully.
+
+
+.. _running-without-installing:
+
+Running without Installing
+--------------------------
+
+You can also run req2flatpak without installing it first.
+Tools like `uv <https://docs.astral.sh/uv/>`_ and `pipx <https://pipx.pypa.io/>`_
+download req2flatpak into a temporary environment and run it there.
+Use the same arguments as you would use for ``req2flatpak``.
+
+For example:
+
+.. code-block:: bash
+
+   uvx req2flatpak --help
+   pipx run req2flatpak --help
+
+If you use req2flatpak's python API in a script,
+you can declare req2flatpak as a dependency in a header at the top of the script
+(see `inline script metadata <https://packaging.python.org/en/latest/specifications/inline-script-metadata/>`_).
+When you run the script with ``uv run``, uv installs the declared dependencies first
+and then runs the script, so you do not need to install req2flatpak yourself.
+For example, this script declares req2flatpak as a dependency, and it generates a build module:
+
+.. literalinclude:: ../../tests/test_getting_started.py
+   :start-after: example_getting_started_start
+   :end-before: example_getting_started_end
+   :language: python
+   :dedent:
+
+Save it as ``build_module.py`` and run it:
+
+.. code-block:: bash
+
+   uv run build_module.py
+
+See :doc:`api` for an explanation of this script.
 
 
 Installing from Git

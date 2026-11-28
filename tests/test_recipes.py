@@ -1,9 +1,10 @@
-"""Tests for the code examples in the recipes section of the documentation.
+"""Tests for the code examples in the python API guide (api.rst).
 
-All recipes run offline: the responses of PyPI are replaced by prepared data.
+All examples run offline: the responses of PyPI are replaced by prepared data.
 """
 
 import json
+import subprocess
 import unittest
 from unittest.mock import mock_open, patch
 
@@ -257,8 +258,18 @@ class PlatformStringRecipeTest(unittest.TestCase):
         platform = PlatformFactory.from_python_version_and_arch(
             minor_version=14, arch="aarch64"
         )
+
+        # The tags are generated for glibc up to version 2.35 by default.
+        # If the target platform has a newer glibc, set manylinux_max
+        # to its minor version, e.g., to 44 for glibc 2.44:
+        newer_platform = PlatformFactory.from_python_version_and_arch(
+            minor_version=14, arch="x86_64", manylinux_max=44
+        )
         # recipe_platforms_end
         self.assertEqual(platforms[1], platform)
+        self.assertEqual(
+            newer_platform.python_tags[0], "cp314-cp314-manylinux_2_44_x86_64"
+        )
         self.assertEqual(platform.python_version, ["3", "14"])
         self.assertIn("cp314-cp314-manylinux_2_28_aarch64", platform.python_tags)
 
@@ -275,17 +286,60 @@ class PlatformStringRecipeTest(unittest.TestCase):
         )
         with patch("builtins.open", mock_open(read_data=platform_info)):
             # recipe_platform_info_start
-            import json
-
-            from req2flatpak import Platform
-
             # Run "req2flatpak --platform-info" on the target system and save the output to a file.
             # Then create a platform object from the data in this file:
-            with open("platform-info.json", encoding="utf-8") as file:
-                platform = Platform(**json.load(file))
+            platform = PlatformFactory.from_file("platform-info.json")
             # recipe_platform_info_end
         self.assertEqual(platform.python_version, ["3", "14", "0"])
         self.assertEqual(len(platform.python_tags), 2)
+
+
+class FlatpakRuntimeRecipeTest(RecipeTestCase):
+    """Recipe: read the target platform from a flatpak runtime."""
+
+    def recipe(self):
+        """Show how to read the platform from a runtime, and how to skip packages it provides."""
+        # recipe_flatpak_runtime_start
+        # The runtime must be installed. Its ref has the form NAME/ARCH/BRANCH,
+        # and an empty ARCH means the architecture of this machine:
+        platform = PlatformFactory.from_flatpak_runtime(
+            "org.gnome.Platform//51", installation="user"
+        )
+
+        # The platform knows the python packages that the runtime provides.
+        # Leave out the requirements that the runtime already satisfies:
+        requirements = RequirementsParser.parse_file("requirements.txt")
+        requirements = platform.without_installed(requirements)
+
+        releases = PypiClient.get_releases(requirements)
+        downloads = {
+            DownloadChooser.wheel_or_sdist(release, platform) for release in releases
+        }
+        build_module = FlatpakGenerator.build_module(requirements, downloads)
+        # recipe_flatpak_runtime_end
+        return build_module, platform
+
+    def test(self):
+        """Ensure that the platform is read, and the installed package is skipped."""
+        probe_output = {
+            "implementation": "CPython",
+            "python_version": ["3", "14", "9"],
+            "glibc": "glibc 2.44",
+            "machine": "x86_64",
+            "packages": {"Jinja2": "3.1.6"},
+            "tags": [
+                "cp314-cp314-manylinux_2_44_x86_64",
+                "cp314-cp314-manylinux_2_17_x86_64",
+                "py3-none-any",
+            ],
+        }
+        result = subprocess.CompletedProcess([], 0, json.dumps(probe_output), "")
+        with patch("subprocess.run", return_value=result):
+            build_module, platform = self.recipe()
+        self.assertEqual(platform.runtime, "org.gnome.Platform//51")
+        self.assertEqual(platform.installed_packages, {"jinja2": "3.1.6"})
+        self.assertEqual(self.urls(build_module), [FOO_FILENAMES[0]])
+        self.assertNotIn("Jinja2", build_module["build-commands"][0])
 
 
 class UnpinnedRequirementsRecipeTest(unittest.TestCase):
