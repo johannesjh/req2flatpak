@@ -8,12 +8,12 @@ lint:
 
 .PHONY: test
 test:
-	poetry run python3 -m unittest
+	poetry run python3 -m unittest -v
 
 # Like "test", but without tests_flatpak/, which needs flatpak and an installed GNOME runtime.
 .PHONY: test-no-flatpak
 test-no-flatpak:
-	poetry run python3 -m unittest discover -s tests -t .
+	poetry run python3 -m unittest discover -v -s tests -t .
 
 .PHONY: docs
 docs:
