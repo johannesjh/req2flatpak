@@ -5,7 +5,7 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
-v0.4.0 (2026-11-16)
+v0.4.0 (2026-11-28)
 -------------------
 
 Highlight: req2flatpak requires Python 3.11 or newer.
@@ -17,11 +17,20 @@ Breaking changes:
   That's because Python 3.10 reached end-of-life on 2026-10-01 and we upgraded dependencies.
   This applies to the Python that runs req2flatpak. Target platforms can still use other Python versions.
 - Refactored assertions to raise a ``ValueError`` instead of an ``AssertionError``.
-  As a benefit, the assertions now also work when python runs with ``-O``.
+  As a benefit, the assertions now also work when python runs with ``-O`` optimizations.
 - ``FlatpakGenerator.pip_install_template`` is renamed to ``FlatpakGenerator.default_pip_install_template``.
+- Made req2flatpak's output compliant to the ``.editorconfig`` settings with two spaces for indentation.
+  Specifically, the JSON output is now indented with 2 spaces instead of 4. The YAML output keeps its 2 spaces.
+  To change the indentation, use the new ``indent`` argument of ``FlatpakGenerator.build_module_as_str``
+  and ``FlatpakGenerator.build_module_as_yaml_str``, or the new ``--indent`` commandline option.
+  The ``--indent`` option applies to JSON and YAML, and also to the output of ``--platform-info``.
 
 Fixes:
 
+- A requirement that has neither a matching wheel nor an sdist (for example, only a Windows wheel)
+  no longer ends in an obscure ``TypeError`` (#70).
+  The commandline interface now stops with a ``ValueError`` that names the package, its version and the platform.
+  ``FlatpakGenerator.build_module`` raises a ``ValueError`` if it receives a missing download (``None``).
 - The ``--cache`` option now fills the persistent cache. An empty cache file was replaced by an in-memory dict before, so nothing was ever stored.
 - The ``--outfile`` is only created once the output is ready. A failing run no longer leaves an empty file behind.
 
