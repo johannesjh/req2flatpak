@@ -5,7 +5,7 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
-v0.4.0 (2026-11-23)
+v0.4.0 (2026-11-28)
 -------------------
 
 Highlight: req2flatpak requires Python 3.11 or newer.
