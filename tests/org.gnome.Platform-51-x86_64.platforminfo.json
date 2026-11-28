@@ -1,0 +1,31 @@
+{
+  "python_version": ["3", "14", "9"],
+  "python_tags": [
+    "cp314-cp314-linux_x86_64",
+    "cp314-cp314-manylinux_2_44_x86_64",
+    "cp314-cp314-manylinux_2_28_x86_64",
+    "cp314-cp314-manylinux_2_17_x86_64",
+    "cp314-cp314-manylinux2014_x86_64",
+    "cp314-abi3-linux_x86_64",
+    "cp314-abi3-manylinux_2_44_x86_64",
+    "cp314-abi3-manylinux_2_28_x86_64",
+    "cp314-abi3-manylinux_2_17_x86_64",
+    "cp314-abi3-manylinux2014_x86_64",
+    "py314-none-any",
+    "py3-none-any"
+  ],
+  "arch": "x86_64",
+  "glibc_version": "2.44",
+  "runtime": "org.gnome.Platform//51",
+  "installed_packages": {
+    "setuptools": "83.0.0",
+    "pycairo": "1.29.2",
+    "markdown": "3.11.1",
+    "markupsafe": "3.0.4",
+    "packaging": "26.3",
+    "attrs": "26.1.0",
+    "mako": "1.4.3.dev0",
+    "pygobject": "3.58.1",
+    "jinja2": "3.1.6"
+  }
+}

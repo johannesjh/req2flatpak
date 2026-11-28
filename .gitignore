@@ -1,10 +1,18 @@
-.flatpak-builder/
-.idea
+# python
+__pycache__
+.pytest_cache
 .python-version
+
+# build output
 _build
 _repo
 dist/
-pypi_cache
-__pycache__
-.pytest_cache
 docs/build
+.flatpak-builder/
+
+# runtime caches and local scratch files
+pypi_cache
+tmp/
+
+# ide
+.idea

@@ -91,5 +91,52 @@ class RegressionTest(unittest.TestCase):
                 self.assertEqual(expected_tags, generated_tags)
 
 
+class ManylinuxMaxTest(unittest.TestCase):
+    """Tests for the ``manylinux_max`` parameter (issue #63)."""
+
+    def test_default_is_35(self):
+        """Ensure that the default stays at glibc 2.35."""
+        default = PlatformFactory.from_python_version_and_arch(minor_version=14)
+        explicit = PlatformFactory.from_python_version_and_arch(
+            minor_version=14, manylinux_max=35
+        )
+        self.assertEqual(default, explicit)
+        self.assertIn("cp314-cp314-manylinux_2_35_x86_64", default.python_tags)
+        self.assertNotIn("cp314-cp314-manylinux_2_36_x86_64", default.python_tags)
+
+    def test_larger_value_adds_newer_tags(self):
+        """Ensure that manylinux_2_44 down to manylinux_2_36 are added in order."""
+        default = PlatformFactory.from_python_version_and_arch(minor_version=14)
+        newer = PlatformFactory.from_python_version_and_arch(
+            minor_version=14, manylinux_max=44
+        )
+        tags = newer.python_tags
+        expected = [f"cp314-cp314-manylinux_2_{v}_x86_64" for v in range(44, 17, -1)]
+        self.assertEqual(tags[: len(expected)], expected)
+        self.assertEqual(len(tags), len(set(tags)))
+        self.assertEqual(
+            [t for t in tags if not re.search(r"manylinux_2_(3[6-9]|4\d)_", t)],
+            default.python_tags,
+        )
+
+    def test_value_below_17_is_rejected(self):
+        """Ensure that unsupported values raise ValueError."""
+        with self.assertRaises(ValueError):
+            PlatformFactory.from_python_version_and_arch(
+                minor_version=14, manylinux_max=16
+            )
+
+    def test_no_none_in_tags(self):
+        """Ensure that duplicates are skipped instead of yielded as None."""
+        for minor_version in (1, 2, 14):
+            tags = list(
+                PlatformFactory._cp3_linux_tags(
+                    minor_version=minor_version, manylinux_max=40
+                )
+            )
+            self.assertNotIn(None, tags)
+            self.assertEqual(len(tags), len(set(tags)))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

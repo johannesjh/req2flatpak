@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name        = "req2flatpak"
-version     = "0.4.0"
+version     = "0.5.0"
 description = "Generates a flatpak-builder build module for installing python packages defined in requirements.txt files."
 authors     = ["johannesjh <johannesjh@users.noreply.github.com>"]
 license     = "MIT"
@@ -72,7 +72,7 @@ convention = "pep257"
 python-version = "3.11"
 
 [tool.ty.src]
-include = ["req2flatpak.py", "tests"]
+include = ["req2flatpak.py", "tests", "tests_flatpak"]
 
 [[tool.ty.overrides]]
 # Why is this an exception configured here, and not a suppression comment in the code?

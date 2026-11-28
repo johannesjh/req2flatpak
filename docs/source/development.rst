@@ -12,7 +12,7 @@ pull requests are welcome, and so are bug reports and suggestions for improvemen
 Obtaining the Source Code
 -------------------------
 
-req2flatpak's original source code lives in this github repository:
+req2flatpak's source code lives in this github repository:
 https://github.com/johannesjh/req2flatpak.
 You can download the source code by cloning the git repository.
 
@@ -61,7 +61,7 @@ This will initialize pre-commit in your local development repository.
 Running a Development Version
 -----------------------------
 
-Have a look at the commands available in req2flatpak's ``makefile``.
+Have a look at the commands available in req2flatpak's ``Makefile``.
 These commands show how to run a local req2flatpak development version,
 as well as various other development-related tasks.
 
@@ -76,13 +76,15 @@ Understanding the Architecture and Design Goals
 req2flatpak's architecture implements the following design goals and design choices.
 
 req2flatpak consists of just a single python file.
-This allows req2flatpak to be installed by copy-pasting this file.
+The probe that reads the platform from a flatpak runtime is therefore a function inside this file:
+only the source code of this function is sent to the runtime, and it runs there
+with the python of the runtime, using nothing but the standard library.
 
 req2flatpak is packaged as a python package.
 This allows req2flatpak to be installed using pip, poetry, and other similar tools.
 Note, single-file python packages are not unusual:
 other popular python packages like `six <https://pypi.python.org/pypi/six>`__
-also consist of a a single file only,
+also consist of a single file only,
 as explained in this `stackoverflow answer <https://softwareengineering.stackexchange.com/a/243045>`__.
 
 req2flatpak requires minimal dependencies.
@@ -110,12 +112,46 @@ Running Tests
 -------------
 
 Use the ``make test`` command to run automated tests.
+Most tests run without flatpak installed.
+Only the tests in the directory ``tests_flatpak`` need flatpak and the GNOME 51 runtime;
+they are skipped if these are missing.
+Use ``make test-no-flatpak`` to run all other tests, without these.
+CI runs ``make test-no-flatpak``.
+
+
+Recording Reference Data
+------------------------
+
+The file ``tests/org.gnome.Platform-51-x86_64.platforminfo.json`` is an example of a platform info file
+that was read from a real flatpak runtime. It is used by tests and in the documentation.
+Record it once by hand, with the runtime installed, and check it in.
+The recorded file lists more than a thousand wheel tags.
+To keep the example small, shorten the list of tags by hand to a few representative ones,
+for example the ``cp314`` tags for ``manylinux_2_44`` and ``manylinux_2_17``, and ``py3-none-any``.
+
+.. code:: bash
+
+   flatpak install --user flathub org.gnome.Platform//51
+   req2flatpak --platform-info org.gnome.Platform//51 --user -o tests/org.gnome.Platform-51-x86_64.platforminfo.json
+
+Recording the same data for aarch64 on an x86_64 machine
+needs the aarch64 runtime and an emulation of the architecture, e.g., the package ``qemu-user-binfmt``
+(on Ubuntu or Debian). Without it, flatpak fails with ``Exec format error``.
+
+.. code:: bash
+
+   flatpak install --user flathub org.gnome.Platform/aarch64/51
+   req2flatpak --platform-info org.gnome.Platform/aarch64/51 --user -o tests/org.gnome.Platform-51-aarch64.platforminfo.json
+
+Name the files ``<runtime>-<version>-<architecture>.platforminfo.json``.
+The file names of the regression test of the platform tags start with ``cp3`` or ``py3``
+(for example ``cp310-x86_64.platforminfo.json``), so do not start the name of a recorded file like this.
 
 
 Ensuring Code quality
 ---------------------
 
-Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code before committing changes,
+Use `pre-commit <https://pre-commit.com/>`__ to prettify and lint the code before committing changes:
 
 
 .. code:: bash
@@ -172,14 +208,14 @@ whereas development tools (ruff and ty) are pinned tightly and bumped deliberate
 ty is a beta tool, so check every ty update for new findings.
 Sphinx is limited to the newest major version that still supports our lowest supported python version.
 
-First update poetry dependencies, 
+First, update the poetry dependencies:
 
 #. Manually bump the version constraints in the ``pyproject.toml`` file.
 #. Run ``poetry update --with docs`` to update installed packages (including the optional docs group) and write the lock file.
 #. Stage changes by running ``git add pyproject.toml poetry.lock``.
 
 
-Then update pre-commit dependencies,
+Then, update the pre-commit dependencies:
 
 #. Run ``pre-commit install`` just to be sure that pre-commit is properly initialized.
 #. Run ``pre-commit autoupdate --freeze`` to update pre-commit's packages.

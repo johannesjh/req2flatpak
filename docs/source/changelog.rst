@@ -5,6 +5,44 @@ Changelog
    This changelog is written by hand.
    Newest releases are added to the top of the file.
 
+v0.5.0 (unreleased)
+-------------------
+
+Highlight: req2flatpak can read the target platform from an installed flatpak runtime.
+
+Features:
+
+- ``req2flatpak --platform-info REF`` reads the python version, glibc version, architecture,
+  wheel tags and installed python packages from a flatpak runtime, e.g., ``org.gnome.Platform//51``.
+  The options ``--user``, ``--system`` and ``--installation`` choose the flatpak installation.
+  The runtime can be for another architecture if the system can run it (qemu-user emulation).
+  The python API provides ``PlatformFactory.from_flatpak_runtime`` (#99).
+- ``--target-platforms`` accepts platform info files in addition to short strings like ``314-x86_64``.
+  The python API provides ``PlatformFactory.from_file``.
+- The platform info format has the new optional fields ``arch``, ``glibc_version``, ``runtime`` and ``installed_packages``.
+  Existing files keep working.
+- The new methods ``FlatpakGenerator.write_build_module_as_json`` and ``FlatpakGenerator.write_build_module_as_yaml``
+  save a build module to a file or a stream. The commandline interface uses them.
+- ``Platform.without_installed(requirements)`` leaves out the requirements that are installed already in the same version.
+- The page about the commandline interface now describes the whole workflow, from pinning requirements to including the build module in a manifest.
+- The recipes page is dissolved: the commandline interface page (``cli``) and the python API page (``api``) each contain their own how-tos,
+  and the new FAQ page answers common questions and links to them.
+
+Fixes:
+
+- Wheel tags for glibc versions newer than 2.35 can be generated, using the new ``manylinux_max`` argument of
+  ``PlatformFactory.from_python_version_and_arch`` (#63). The default is unchanged.
+- Duplicate platform tags no longer result in ``None`` entries.
+- A target platform that cannot be parsed is now an error (exit code 2) instead of being skipped silently.
+
+Improvements for Development:
+
+- CI runs on ubuntu-26.04, the current Ubuntu LTS release.
+- Tests that need flatpak (and qemu for aarch64) live in ``tests_flatpak`` and are skipped if these are not available.
+  CI runs the other tests only, with the new ``make test-no-flatpak``.
+
+
+
 v0.4.0 (2026-11-28)
 -------------------
 
@@ -49,7 +87,6 @@ Improvements for Development:
 - Updated CI. It now uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.
 - Got rid of the unmaintained documentation dependency ``sphinx-rtd-theme-github-versions``.
 
-Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0
 
 
 v0.3.2 (2026-11-15)
@@ -65,7 +102,6 @@ Fixes:
 - Close output stream which was causing empty outfile files on Python 3.14, see #91
 
 
-Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.3.1...v0.3.2
 
 
 v0.3.1 (2025-03-30) "Python 3.12"
@@ -93,7 +129,6 @@ Maintenance and dependency updates:
 - Now using `packaging` instead of the deprecated `pkg_resources` package #76
 
 
-Full Changelog: https://github.com/johannesjh/req2flatpak/compare/v0.2...v0.3
 
 
 v0.2 (2023-06-04) "Yaml"
@@ -109,8 +144,8 @@ Features:
 
 Bugfixes:
 
-- Fixes sorting when architecture is None - `#34 <https://github.com/johannesjh/req2flatpak/pull/34>`_
-- Fixes exception handling with invalid platforms - `#39 <https://github.com/johannesjh/req2flatpak/pull/39>`_
+- Fixes sorting when architecture is None - #34
+- Fixes exception handling with invalid platforms - #39
 
 
 v0.1 (2022-12-23) "Initial Release"
