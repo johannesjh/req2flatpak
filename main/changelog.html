@@ -50,7 +50,7 @@
 <li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#v0-4-0-2026-11-16">v0.4.0 (2026-11-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-4-0-2026-11-28">v0.4.0 (2026-11-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-2-2026-11-15">v0.3.2 (2026-11-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2025-03-30-python-3-12">v0.3.1 (2025-03-30) “Python 3.12”</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-2-2023-06-04-yaml">v0.2 (2023-06-04) “Yaml”</a></li>
@@ -85,8 +85,8 @@
              
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
-<section id="v0-4-0-2026-11-16">
-<h2>v0.4.0 (2026-11-16)<a class="headerlink" href="#v0-4-0-2026-11-16" title="Link to this heading"></a></h2>
+<section id="v0-4-0-2026-11-28">
+<h2>v0.4.0 (2026-11-28)<a class="headerlink" href="#v0-4-0-2026-11-28" title="Link to this heading"></a></h2>
 <p>Highlight: req2flatpak requires Python 3.11 or newer.</p>
 <p>Breaking changes:</p>
 <ul class="simple">
@@ -94,11 +94,20 @@
 That’s because Python 3.10 reached end-of-life on 2026-10-01 and we upgraded dependencies.
 This applies to the Python that runs req2flatpak. Target platforms can still use other Python versions.</p></li>
 <li><p>Refactored assertions to raise a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> instead of an <code class="docutils literal notranslate"><span class="pre">AssertionError</span></code>.
-As a benefit, the assertions now also work when python runs with <code class="docutils literal notranslate"><span class="pre">-O</span></code>.</p></li>
+As a benefit, the assertions now also work when python runs with <code class="docutils literal notranslate"><span class="pre">-O</span></code> optimizations.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.pip_install_template</span></code> is renamed to <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.default_pip_install_template</span></code>.</p></li>
+<li><p>Made req2flatpak’s output compliant to the <code class="docutils literal notranslate"><span class="pre">.editorconfig</span></code> settings with two spaces for indentation.
+Specifically, the JSON output is now indented with 2 spaces instead of 4. The YAML output keeps its 2 spaces.
+To change the indentation, use the new <code class="docutils literal notranslate"><span class="pre">indent</span></code> argument of <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.build_module_as_str</span></code>
+and <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.build_module_as_yaml_str</span></code>, or the new <code class="docutils literal notranslate"><span class="pre">--indent</span></code> commandline option.
+The <code class="docutils literal notranslate"><span class="pre">--indent</span></code> option applies to JSON and YAML, and also to the output of <code class="docutils literal notranslate"><span class="pre">--platform-info</span></code>.</p></li>
 </ul>
 <p>Fixes:</p>
 <ul class="simple">
+<li><p>A requirement that has neither a matching wheel nor an sdist (for example, only a Windows wheel)
+no longer ends in an obscure <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> (#70).
+The commandline interface now stops with a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> that names the package, its version and the platform.
+<code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.build_module</span></code> raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if it receives a missing download (<code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">--cache</span></code> option now fills the persistent cache. An empty cache file was replaced by an in-memory dict before, so nothing was ever stored.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">--outfile</span></code> is only created once the output is ready. A failing run no longer leaves an empty file behind.</p></li>
 </ul>

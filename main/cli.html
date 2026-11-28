@@ -110,8 +110,8 @@ module.</p>
 <div class="highlight-default notranslate" id="req2flatpak"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">req2flatpak</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">requirements</span> <span class="p">[</span><span class="n">REQUIREMENTS</span> <span class="o">...</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">requirements</span><span class="o">-</span><span class="n">file</span> <span class="p">[</span><span class="n">REQUIREMENTS_FILE</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">target</span><span class="o">-</span><span class="n">platforms</span> <span class="n">TARGET_PLATFORMS</span> <span class="p">[</span><span class="n">TARGET_PLATFORMS</span> <span class="o">...</span><span class="p">]]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yaml</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yaml</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">indent</span> <span class="n">N</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="req2flatpak-named-arguments">
@@ -139,6 +139,10 @@ module.</p>
 <div><p>By default, writes JSON but specify a ‘.yaml’ extension and YAML
 will be written instead, provided you have the ‘pyyaml’ package.</p>
 </div></blockquote>
+</dd>
+<dt><kbd>--indent</kbd></dt>
+<dd><p>Number of spaces used for indentation in JSON and YAML output (default: 2).</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">2</span></code></p>
 </dd>
 <dt><kbd>--platform-info</kbd></dt>
 <dd><p>Prints information about the current platform.</p>
