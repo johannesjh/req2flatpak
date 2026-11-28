@@ -9,9 +9,10 @@ req2flatpak Documentation
 
    introduction
    installation
-   cli
    api
-   recipes
+   cli
+   faq
+   related-work
    development
    changelog
 

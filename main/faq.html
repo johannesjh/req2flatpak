@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frequently Asked Questions &mdash; req2flatpak 0.5.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Related Work" href="related-work.html" />
+    <link rel="prev" title="Commandline Interface (CLI)" href="cli.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            req2flatpak
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#should-i-use-the-cli-or-the-python-api">Should I use the CLI or the Python API?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-can-i-do-if-my-requirements-are-not-pinned">What can I do if my requirements are not pinned?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-choose-the-target-platform">How do I choose the target platform?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-read-the-platform-from-a-flatpak-runtime">How do I read the platform from a flatpak runtime?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-support-newer-glibc-manylinux-versions">How do I support newer glibc (manylinux) versions?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-prefer-source-packages-over-binary-wheels">How do I prefer source packages over binary wheels?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-skip-packages-for-example-those-that-the-runtime-provides">How do I skip packages, for example those that the runtime provides?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-pass-additional-options-to-pip-install">How do I pass additional options to pip install?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">req2flatpak</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Frequently Asked Questions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/faq.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading"></a></h1>
+<p>This page answers common questions briefly and points to the place in the documentation
+that explains the answer, for the commandline interface (CLI) and for the python API.
+Use the links for the way that you use req2flatpak.</p>
+<section id="should-i-use-the-cli-or-the-python-api">
+<h2>Should I use the CLI or the Python API?<a class="headerlink" href="#should-i-use-the-cli-or-the-python-api" title="Link to this heading"></a></h2>
+<p>Both work.
+The CLI is simple and covers the basic use case, the API lets you modify data and behavior in each step.
+Use only one of them. The default recommendation is to use the Python API because it provides greater flexibility.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html"><span class="doc">Commandline Interface (CLI)</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html"><span class="doc">Python API</span></a></p></li>
+</ul>
+</section>
+<section id="what-can-i-do-if-my-requirements-are-not-pinned">
+<h2>What can I do if my requirements are not pinned?<a class="headerlink" href="#what-can-i-do-if-my-requirements-are-not-pinned" title="Link to this heading"></a></h2>
+<p>The requirements are whatever python packages your app depends on.
+You want to pass your requirements to req2flatpak in order to create a flatpak build module
+(that you can then use to build your app using flatpak builder).
+You must fully resolve and pin your requirements before passing them to req2flatpak.
+This is done using other tools instead of req2flatpak, such as, e.g., <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">compile</span></code> or poetry export or the like.
+You can find further information here:</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html#pinning-requirements"><span class="std std-ref">Resolve and pin the requirements</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-requirements"><span class="std std-ref">Specifying package requirements</span></a></p></li>
+</ul>
+</section>
+<section id="how-do-i-choose-the-target-platform">
+<h2>How do I choose the target platform?<a class="headerlink" href="#how-do-i-choose-the-target-platform" title="Link to this heading"></a></h2>
+<p>The target platform describes the flatpak runtime for your app, such as, for example, GNOME 51,
+and more specifically, the python version and packages that are shipped as part of that runtime.
+You need to tell req2flatpak what platform you are targeting so it can do its work.
+The most precise way for you to specify the platform is to have req2flatpak read all the info it needs straight from the flatpak runtime.
+Alternatively, a short string such as <code class="docutils literal notranslate"><span class="pre">cp314-x86_64</span></code> (which in this example stands for for CPython 3.14 on x86_64 architecture) is often sufficient as a quick approximation.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html#choose-target-platform"><span class="std std-ref">Choose the target platform</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-choose-target-platform"><span class="std std-ref">Choosing the target platform</span></a></p></li>
+</ul>
+</section>
+<section id="how-do-i-read-the-platform-from-a-flatpak-runtime">
+<h2>How do I read the platform from a flatpak runtime?<a class="headerlink" href="#how-do-i-read-the-platform-from-a-flatpak-runtime" title="Link to this heading"></a></h2>
+<p>req2flatpak provides API and CLI methods for reading platform info straight from a given flatpak target platfrom.
+To do so, it runs a probe (a short python script) in the installed runtime, and the script returns infos about the platform
+such as python version, installed packages, etc.</p>
+<p>Reading platform info from a flatpak runtime works for both architectures, x86_64 as well as aarch64.
+You will need to have the flatpak runtimes installed, as well as quemu if you want work with a different platform than what your host is.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html#cli-platform-from-runtime"><span class="std std-ref">From a flatpak runtime</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-choose-target-platform"><span class="std std-ref">Choosing the target platform</span></a></p></li>
+</ul>
+</section>
+<section id="how-do-i-support-newer-glibc-manylinux-versions">
+<h2>How do I support newer glibc (manylinux) versions?<a class="headerlink" href="#how-do-i-support-newer-glibc-manylinux-versions" title="Link to this heading"></a></h2>
+<p>Some python wheels are built for specific glibc (manylinux) versions.
+In this case, req2flatpak needs to know the glibc (manylinux) version of your target platform in order to choose the right wheels.
+The best way for you to specify this information is to read this platform info from the flatpak runtime.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html#cli-platform-from-runtime"><span class="std std-ref">From a flatpak runtime</span></a> and <a class="reference internal" href="cli.html#cli-platform-from-file"><span class="std std-ref">from a platform info file</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-manylinux-max"><span class="std std-ref">Argument manylinux_max</span></a>, or read the platform from the runtime</p></li>
+</ul>
+</section>
+<section id="how-do-i-prefer-source-packages-over-binary-wheels">
+<h2>How do I prefer source packages over binary wheels?<a class="headerlink" href="#how-do-i-prefer-source-packages-over-binary-wheels" title="Link to this heading"></a></h2>
+<p>The CLI always prefers wheels and uses a source package only if no suitable wheel exists; this is by design.
+With the API, you have more flexibility, e.g., you can choose downloads with <code class="docutils literal notranslate"><span class="pre">sdist_or_wheel</span></code>, or write a download chooser of your own.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> not available, use the API</p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-source-packages"><span class="std std-ref">Preferring source packages</span></a> and <a class="reference internal" href="api.html#api-custom-chooser"><span class="std std-ref">except for some packages</span></a></p></li>
+</ul>
+</section>
+<section id="how-do-i-skip-packages-for-example-those-that-the-runtime-provides">
+<h2>How do I skip packages, for example those that the runtime provides?<a class="headerlink" href="#how-do-i-skip-packages-for-example-those-that-the-runtime-provides" title="Link to this heading"></a></h2>
+<p>req2flatpak installs exactly the packages that you give it, so remove the unwanted ones first.
+You can use tools such as <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">pip</span> <span class="pre">compile</span></code> to do that.
+If you are using the API, you can also skip or filter packages in your script as you wish.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html#cli-skip-packages"><span class="std std-ref">Skipping packages</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-skip-packages"><span class="std std-ref">Skipping packages</span></a></p></li>
+</ul>
+</section>
+<section id="how-do-i-pass-additional-options-to-pip-install">
+<h2>How do I pass additional options to pip install?<a class="headerlink" href="#how-do-i-pass-additional-options-to-pip-install" title="Link to this heading"></a></h2>
+<p>The generated build module runs <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span></code> with a fixed set of options.
+You can change that command by post-processing the output of req2flatpak.
+If you are using the API, you can also change the command in your script.</p>
+<ul class="simple">
+<li><p><strong>CLI:</strong> <a class="reference internal" href="cli.html#cli-pip-options"><span class="std std-ref">Passing additional options to pip</span></a></p></li>
+<li><p><strong>API:</strong> <a class="reference internal" href="api.html#api-pip-options"><span class="std std-ref">Passing additional options to pip</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cli.html" class="btn btn-neutral float-left" title="Commandline Interface (CLI)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="related-work.html" class="btn btn-neutral float-right" title="Related Work" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022-2024, johannesjh.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+<div
+  id="other-versions-div"
+  class="rst-versions"
+  data-toggle="rst-versions"
+  role="note"
+  aria-label="Versions"
+  style="visibility: hidden"
+>
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl id="other-versions-dl"></dl>
+  </div>
+</div>
+<script>
+  function addVersion(name) {
+    var dd = document.createElement("dd");
+    var a = document.createElement("a");
+    a.href = "../" + name;
+    a.innerText = name;
+    dd.appendChild(a);
+    document.getElementById("other-versions-dl").appendChild(dd);
+  }
+  // Get versions.txt and add a version for each line
+  fetch("../versions.txt").then((response) => {
+    if (response.ok) {
+      document.getElementById("other-versions-div").style.visibility =
+        "visible";
+      return response
+        .text()
+        .then((text) =>
+          text.split(/\r?\n/).filter(Boolean).forEach(addVersion),
+        );
+    }
+  });
+</script>
+
+
+</body>
+</html>

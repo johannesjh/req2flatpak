@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Changelog &mdash; req2flatpak 0.4.0 documentation</title>
+  <title>Changelog &mdash; req2flatpak 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -45,11 +45,13 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-5-0-unreleased">v0.5.0 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-4-0-2026-11-28">v0.4.0 (2026-11-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-2-2026-11-15">v0.3.2 (2026-11-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#v0-3-1-2025-03-30-python-3-12">v0.3.1 (2025-03-30) “Python 3.12”</a></li>
@@ -85,6 +87,41 @@
              
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<section id="v0-5-0-unreleased">
+<h2>v0.5.0 (unreleased)<a class="headerlink" href="#v0-5-0-unreleased" title="Link to this heading"></a></h2>
+<p>Highlight: req2flatpak can read the target platform from an installed flatpak runtime.</p>
+<p>Features:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">req2flatpak</span> <span class="pre">--platform-info</span> <span class="pre">REF</span></code> reads the python version, glibc version, architecture,
+wheel tags and installed python packages from a flatpak runtime, e.g., <code class="docutils literal notranslate"><span class="pre">org.gnome.Platform//51</span></code>.
+The options <code class="docutils literal notranslate"><span class="pre">--user</span></code>, <code class="docutils literal notranslate"><span class="pre">--system</span></code> and <code class="docutils literal notranslate"><span class="pre">--installation</span></code> choose the flatpak installation.
+The runtime can be for another architecture if the system can run it (qemu-user emulation).
+The python API provides <code class="docutils literal notranslate"><span class="pre">PlatformFactory.from_flatpak_runtime</span></code> (#99).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--target-platforms</span></code> accepts platform info files in addition to short strings like <code class="docutils literal notranslate"><span class="pre">314-x86_64</span></code>.
+The python API provides <code class="docutils literal notranslate"><span class="pre">PlatformFactory.from_file</span></code>.</p></li>
+<li><p>The platform info format has the new optional fields <code class="docutils literal notranslate"><span class="pre">arch</span></code>, <code class="docutils literal notranslate"><span class="pre">glibc_version</span></code>, <code class="docutils literal notranslate"><span class="pre">runtime</span></code> and <code class="docutils literal notranslate"><span class="pre">installed_packages</span></code>.
+Existing files keep working.</p></li>
+<li><p>The new methods <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.write_build_module_as_json</span></code> and <code class="docutils literal notranslate"><span class="pre">FlatpakGenerator.write_build_module_as_yaml</span></code>
+save a build module to a file or a stream. The commandline interface uses them.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Platform.without_installed(requirements)</span></code> leaves out the requirements that are installed already in the same version.</p></li>
+<li><p>The page about the commandline interface now describes the whole workflow, from pinning requirements to including the build module in a manifest.</p></li>
+<li><p>The recipes page is dissolved: the commandline interface page (<code class="docutils literal notranslate"><span class="pre">cli</span></code>) and the python API page (<code class="docutils literal notranslate"><span class="pre">api</span></code>) each contain their own how-tos,
+and the new FAQ page answers common questions and links to them.</p></li>
+</ul>
+<p>Fixes:</p>
+<ul class="simple">
+<li><p>Wheel tags for glibc versions newer than 2.35 can be generated, using the new <code class="docutils literal notranslate"><span class="pre">manylinux_max</span></code> argument of
+<code class="docutils literal notranslate"><span class="pre">PlatformFactory.from_python_version_and_arch</span></code> (#63). The default is unchanged.</p></li>
+<li><p>Duplicate platform tags no longer result in <code class="docutils literal notranslate"><span class="pre">None</span></code> entries.</p></li>
+<li><p>A target platform that cannot be parsed is now an error (exit code 2) instead of being skipped silently.</p></li>
+</ul>
+<p>Improvements for Development:</p>
+<ul class="simple">
+<li><p>CI runs on ubuntu-26.04, the current Ubuntu LTS release.</p></li>
+<li><p>Tests that need flatpak (and qemu for aarch64) live in <code class="docutils literal notranslate"><span class="pre">tests_flatpak</span></code> and are skipped if these are not available.
+CI runs the other tests only, with the new <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-no-flatpak</span></code>.</p></li>
+</ul>
+</section>
 <section id="v0-4-0-2026-11-28">
 <h2>v0.4.0 (2026-11-28)<a class="headerlink" href="#v0-4-0-2026-11-28" title="Link to this heading"></a></h2>
 <p>Highlight: req2flatpak requires Python 3.11 or newer.</p>
@@ -126,7 +163,6 @@ Install req2flatpak as a python package instead, so that its dependencies are in
 <li><p>Updated CI. It now uses actions that run on Node.js 24 and runs on ubuntu-24.04. The devcontainer uses Python 3.11.</p></li>
 <li><p>Got rid of the unmaintained documentation dependency <code class="docutils literal notranslate"><span class="pre">sphinx-rtd-theme-github-versions</span></code>.</p></li>
 </ul>
-<p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.3.2...v0.4.0">https://github.com/johannesjh/req2flatpak/compare/v0.3.2…v0.4.0</a></p>
 </section>
 <section id="v0-3-2-2026-11-15">
 <h2>v0.3.2 (2026-11-15)<a class="headerlink" href="#v0-3-2-2026-11-15" title="Link to this heading"></a></h2>
@@ -138,7 +174,6 @@ Install req2flatpak as a python package instead, so that its dependencies are in
 <ul class="simple">
 <li><p>Close output stream which was causing empty outfile files on Python 3.14, see #91</p></li>
 </ul>
-<p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.3.1...v0.3.2">https://github.com/johannesjh/req2flatpak/compare/v0.3.1…v0.3.2</a></p>
 </section>
 <section id="v0-3-1-2025-03-30-python-3-12">
 <h2>v0.3.1 (2025-03-30) “Python 3.12”<a class="headerlink" href="#v0-3-1-2025-03-30-python-3-12" title="Link to this heading"></a></h2>
@@ -159,7 +194,6 @@ Install req2flatpak as a python package instead, so that its dependencies are in
 <li><p>Improved docs in #77 #81 #86</p></li>
 <li><p>Now using <cite>packaging</cite> instead of the deprecated <cite>pkg_resources</cite> package #76</p></li>
 </ul>
-<p>Full Changelog: <a class="reference external" href="https://github.com/johannesjh/req2flatpak/compare/v0.2...v0.3">https://github.com/johannesjh/req2flatpak/compare/v0.2…v0.3</a></p>
 </section>
 <section id="v0-2-2023-06-04-yaml">
 <h2>v0.2 (2023-06-04) “Yaml”<a class="headerlink" href="#v0-2-2023-06-04-yaml" title="Link to this heading"></a></h2>
@@ -172,8 +206,8 @@ or by specifying the <code class="docutils literal notranslate"><span class="pre
 </ul>
 <p>Bugfixes:</p>
 <ul class="simple">
-<li><p>Fixes sorting when architecture is None - <a class="reference external" href="https://github.com/johannesjh/req2flatpak/pull/34">#34</a></p></li>
-<li><p>Fixes exception handling with invalid platforms - <a class="reference external" href="https://github.com/johannesjh/req2flatpak/pull/39">#39</a></p></li>
+<li><p>Fixes sorting when architecture is None - #34</p></li>
+<li><p>Fixes exception handling with invalid platforms - #39</p></li>
 </ul>
 </section>
 <section id="v0-1-2022-12-23-initial-release">

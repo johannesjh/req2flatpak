@@ -6,21 +6,21 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Using the Commandline Interface &mdash; req2flatpak 0.4.0 documentation</title>
+  <title>Commandline Interface (CLI) &mdash; req2flatpak 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using the Python API" href="api.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="next" title="Frequently Asked Questions" href="faq.html" />
+    <link rel="prev" title="Python API" href="api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,20 +46,31 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Using the Commandline Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Commandline Interface (CLI)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#resolve-and-pin-the-requirements">1. Resolve and pin the requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#specify-the-target-platform">2. Specify the target platform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#from-a-flatpak-runtime">From a flatpak runtime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-a-platform-info-file">From a platform info file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#as-a-string">As a string</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-the-build-module">3. Generate the build module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#include-the-build-module-in-your-manifest">4. Include the build module in your manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#update-when-a-new-runtime-is-released">5. Update when a new runtime is released</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tips">Tips</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#skipping-packages">Skipping packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#passing-additional-options-to-pip">Passing additional options to pip</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-of-commandline-options">Documentation of Commandline Options</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#req2flatpak-named-arguments">Named Arguments</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#specifying-python-package-requirements">Specifying Python Package Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#specifying-target-platforms">Specifying Target Platforms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#querying-information-about-the-current-platform">Querying Information about the Current Platform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#querying-installed-python-packages">Querying Installed Python Packages</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -78,7 +89,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Using the Commandline Interface</li>
+      <li class="breadcrumb-item active">Commandline Interface (CLI)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/cli.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,30 +99,239 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="using-the-commandline-interface">
-<h1>Using the Commandline Interface<a class="headerlink" href="#using-the-commandline-interface" title="Link to this heading"></a></h1>
+  <section id="commandline-interface-cli">
+<h1>Commandline Interface (CLI)<a class="headerlink" href="#commandline-interface-cli" title="Link to this heading"></a></h1>
 <p>req2flatpak comes with a simple commandline interface
 that covers basic usage
-and makes it easy to get started.</p>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
-<p>You can, for example, invoke req2flatpak’s commandline interface like this:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>req2flatpak<span class="w"> </span>--requirements-file<span class="w"> </span>requirements.txt<span class="w"> </span>--target-platforms<span class="w"> </span>cp314-x86_64<span class="w"> </span>cp314-aarch64
+and makes it easy to get started.
+For more flexibility, we recommend using the python API instead,
+see <a class="reference internal" href="api.html"><span class="doc">Python API</span></a>.
+With the python API, a script can automate several of the steps below,
+for example reading the platform from the runtime and generating the build module.</p>
+<p>This page describes how to use req2flatpak for a flatpak app,
+from your requirements to the build module in your manifest:</p>
+<ol class="arabic simple">
+<li><p>Resolve and pin the requirements.</p></li>
+<li><p>Specify the target platform, preferably by reading it from the flatpak runtime.</p></li>
+<li><p>Generate the build module.</p></li>
+<li><p>Include the build module in your manifest.</p></li>
+<li><p>Update when a new runtime is released.</p></li>
+</ol>
+<section id="resolve-and-pin-the-requirements">
+<span id="pinning-requirements"></span><h2>1. Resolve and pin the requirements<a class="headerlink" href="#resolve-and-pin-the-requirements" title="Link to this heading"></a></h2>
+<p>req2flatpak does not resolve dependencies.
+Before you run it, you need a list of requirements
+in which every package, including the dependencies of your dependencies,
+is pinned to its exact version, as in <code class="docutils literal notranslate"><span class="pre">package==version</span></code>.
+req2flatpak does not accept a version specification such as <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">&gt;=</span> <span class="pre">2.0</span></code>.
+Resolve the versions for the python version of the runtime that you build for,
+not for your development machine.</p>
+<p>You can use any tool that does this, for example uv, pip-tools or poetry.
+As an example, the following uv command resolves <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code>,
+a file with your direct and unpinned dependencies,
+into a pinned <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> for python 3.14.
+The other tools work as well:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># uv</span>
+uv<span class="w"> </span>pip<span class="w"> </span>compile<span class="w"> </span>requirements.in<span class="w"> </span>-o<span class="w"> </span>requirements.txt<span class="w"> </span>--python-version<span class="w"> </span><span class="m">3</span>.14
+
+<span class="c1"># pip-tools</span>
+pip-compile<span class="w"> </span>requirements.in<span class="w"> </span>-o<span class="w"> </span>requirements.txt
+
+<span class="c1"># poetry (needs the poetry-plugin-export plugin)</span>
+poetry<span class="w"> </span><span class="nb">export</span><span class="w"> </span>--without-hashes<span class="w"> </span>-o<span class="w"> </span>requirements.txt
 </pre></div>
 </div>
-<p>When invoked like this, req2flatpak will read the requirements file,
-query pypi about available downloads, choose appropriate downloads for
-the specified target platforms, and generate a flatpak-builder build
-module.</p>
+<p>All of these also include the dependencies of your dependencies.</p>
+<p>We recommend to check the pinned requirements into your repository.
+Then your app is built with the same package versions every time,
+until you decide to update them.</p>
+<p>req2flatpak reads the pinned requirements from a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file,
+which you specify using <code class="docutils literal notranslate"><span class="pre">--requirements-file</span></code> (<code class="docutils literal notranslate"><span class="pre">-r</span></code>).
+Use <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">-</span></code> to read the file from standard input.
+You can also specify individual packages using <code class="docutils literal notranslate"><span class="pre">--requirements</span></code>,
+for example <code class="docutils literal notranslate"><span class="pre">--requirements</span> <span class="pre">'requests==2.0'</span> <span class="pre">'idna==3.7'</span></code>.</p>
+</section>
+<section id="specify-the-target-platform">
+<span id="choose-target-platform"></span><h2>2. Specify the target platform<a class="headerlink" href="#specify-the-target-platform" title="Link to this heading"></a></h2>
+<p>The target platform describes the system on which the python packages will be used:
+the python version, the system architecture and the wheel tags that the system supports.
+req2flatpak uses it to choose downloads that are compatible with this system.
+Use the python version of the flatpak runtime that your app runs on.
+There are three ways to specify a target platform.
+You pass the result to req2flatpak in the next step, using the option <code class="docutils literal notranslate"><span class="pre">--target-platforms</span></code> (<code class="docutils literal notranslate"><span class="pre">-t</span></code>).
+Create one target platform for each architecture that you build for.</p>
+<section id="from-a-flatpak-runtime">
+<span id="cli-platform-from-runtime"></span><h3>From a flatpak runtime<a class="headerlink" href="#from-a-flatpak-runtime" title="Link to this heading"></a></h3>
+<p>This is the most exact way, and it is what we recommend.
+req2flatpak can read the python version, the wheel tags and the python packages
+from an installed runtime and save them to a platform info file.
+For this, run <code class="docutils literal notranslate"><span class="pre">req2flatpak</span> <span class="pre">--platform-info</span> <span class="pre">REF</span></code>, where <code class="docutils literal notranslate"><span class="pre">REF</span></code> is the ref of the runtime.
+The runtime must be installed already.
+The ref has the form <code class="docutils literal notranslate"><span class="pre">NAME/ARCH/BRANCH</span></code>, where an empty <code class="docutils literal notranslate"><span class="pre">ARCH</span></code> is the architecture of this machine.
+The options <code class="docutils literal notranslate"><span class="pre">--user</span></code>, <code class="docutils literal notranslate"><span class="pre">--system</span></code> and <code class="docutils literal notranslate"><span class="pre">--installation</span></code> choose the flatpak installation;
+they are required if the runtime is installed in more than one.</p>
+<p>As an example, the following commands install the GNOME runtime in branch <code class="docutils literal notranslate"><span class="pre">51</span></code>
+and read its platform information:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span>org.gnome.Platform//51
+req2flatpak<span class="w"> </span>--platform-info<span class="w"> </span>org.gnome.Platform//51<span class="w"> </span>--user<span class="w"> </span>-o<span class="w"> </span>org.gnome.Platform-51-x86_64.platforminfo.json
+</pre></div>
+</div>
+<p>To read the platform for another architecture than the one of your machine,
+for example aarch64 on an x86_64 machine, install the runtime for this architecture as well.
+Your machine must be able to run programs of the other architecture, which needs an emulator.
+Without an emulator, req2flatpak stops with an error (flatpak reports <code class="docutils literal notranslate"><span class="pre">Exec</span> <span class="pre">format</span> <span class="pre">error</span></code>).</p>
+<p>As an example, on Ubuntu and Debian the package <code class="docutils literal notranslate"><span class="pre">qemu-user-binfmt</span></code> provides such an emulator.
+After installing it, you can, for example, read the platform of the aarch64 runtime, even if you are on an x86 machine:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>qemu-user-binfmt
+flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span>org.gnome.Platform/aarch64/51
+req2flatpak<span class="w"> </span>--platform-info<span class="w"> </span>org.gnome.Platform/aarch64/51<span class="w"> </span>--user<span class="w"> </span>-o<span class="w"> </span>org.gnome.Platform-51-aarch64.platforminfo.json
+</pre></div>
+</div>
+<p>If the runtime does not provide the <code class="docutils literal notranslate"><span class="pre">packaging</span></code> package
+(neither directly nor in <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> or <code class="docutils literal notranslate"><span class="pre">pip</span></code>),
+then the tags cannot be read from the runtime.
+req2flatpak then derives the tags from the glibc version of the runtime and logs a warning.
+req2flatpak only supports runtimes with CPython and glibc.</p>
+<p>Without an argument, <code class="docutils literal notranslate"><span class="pre">--platform-info</span></code> describes the current platform instead,
+i.e., the python interpreter and system architecture used to run the req2flatpak script.</p>
+</section>
+<section id="from-a-platform-info-file">
+<span id="cli-platform-from-file"></span><h3>From a platform info file<a class="headerlink" href="#from-a-platform-info-file" title="Link to this heading"></a></h3>
+<p>A platform info file contains the python version, the wheel tags and the python packages of a runtime,
+and it describes exactly one architecture.
+The previous section creates such files.
+To use one, pass it as target platform, for example <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">org.gnome.Platform-51-x86_64.platforminfo.json</span></code>.
+A name is treated as a file if the file exists or if it ends with <code class="docutils literal notranslate"><span class="pre">.json</span></code>, <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">.yml</span></code>.
+YAML files can only be read if the <code class="docutils literal notranslate"><span class="pre">pyyaml</span></code> package is installed.</p>
+<p>A platform info file looks like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"python_version"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"14"</span><span class="p">,</span><span class="w"> </span><span class="s2">"9"</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"python_tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">"cp314-cp314-manylinux_2_44_x86_64"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"cp314-cp314-manylinux_2_43_x86_64"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"..."</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"arch"</span><span class="p">:</span><span class="w"> </span><span class="s2">"x86_64"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"glibc_version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.44"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"runtime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"org.gnome.Platform//51"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"installed_packages"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"jinja2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.1.6"</span><span class="p">,</span><span class="w"> </span><span class="nt">"packaging"</span><span class="p">:</span><span class="w"> </span><span class="s2">"26.3"</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>...note that the list of tags has been shortened in the above output
+because the list of tags is more than a thousand lines long.
+The fields <code class="docutils literal notranslate"><span class="pre">arch</span></code>, <code class="docutils literal notranslate"><span class="pre">glibc_version</span></code>, <code class="docutils literal notranslate"><span class="pre">runtime</span></code> and <code class="docutils literal notranslate"><span class="pre">installed_packages</span></code>
+are only present if they are known.
+Python packages that the runtime provides are listed with their normalized names.</p>
+<p>We recommend to check the platform info files into your repository.
+Then the platform information does not need to be re-generated every time that you run req2flatpak,
+and your build does not need the runtime to be installed.</p>
+</section>
+<section id="as-a-string">
+<span id="cli-platform-from-string"></span><h3>As a string<a class="headerlink" href="#as-a-string" title="Link to this heading"></a></h3>
+<p>The quickest way for specifying the target platform is a simple string format, <code class="docutils literal notranslate"><span class="pre">&lt;python_version&gt;-&lt;architecture&gt;</span></code>:</p>
+<ul class="simple">
+<li><p>The python version is specified as, e.g., <code class="docutils literal notranslate"><span class="pre">cp313</span></code> for cpython 3.13 or <code class="docutils literal notranslate"><span class="pre">cp314</span></code> for cpython 3.14, and so on.
+The prefix <code class="docutils literal notranslate"><span class="pre">cp</span></code> is optional, so <code class="docutils literal notranslate"><span class="pre">314-x86_64</span></code> works as well.
+Only cpython is supported.</p></li>
+<li><p>The system architecture can either be <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> or <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>.</p></li>
+</ul>
+<p>To specify several platforms, list them after <code class="docutils literal notranslate"><span class="pre">-t</span></code>, separated by spaces,
+as in, for example, <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">314-x86_64</span> <span class="pre">314-aarch64</span></code>.</p>
+<p>Note that such a platform is an approximation:
+req2flatpak will approximatly estimate the platform tags that the target platform likely supports.</p>
+</section>
+</section>
+<section id="generate-the-build-module">
+<span id="cli-generate-build-module"></span><h2>3. Generate the build module<a class="headerlink" href="#generate-the-build-module" title="Link to this heading"></a></h2>
+<p>Run req2flatpak with your requirements and your target platforms.
+req2flatpak queries PyPI about available downloads,
+chooses suitable downloads for each of the target platforms,
+and generates a flatpak-builder build module.
+The option <code class="docutils literal notranslate"><span class="pre">-o</span></code> writes the build module to a file.</p>
+<p>As an example, the following command uses the two platform info files from the previous step
+and writes the build module to <code class="docutils literal notranslate"><span class="pre">python3-packages.json</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>req2flatpak<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-t<span class="w"> </span>org.gnome.Platform-51-x86_64.platforminfo.json<span class="w"> </span>org.gnome.Platform-51-aarch64.platforminfo.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-o<span class="w"> </span>python3-packages.json
+</pre></div>
+</div>
+<p>Note that the commandline interface installs all packages of your requirements file,
+including packages that the runtime provides already.
+It does not filter them out automatically.
+To leave them out, see <a class="reference internal" href="#cli-skip-packages"><span class="std std-ref">Skipping packages</span></a>.</p>
+<p>We recommend to check the generated build module into your repository.
+Then the flatpak build of your app does not need to run req2flatpak
+(and does not need to query PyPI), which speeds up the builds.
+It is also required if you publish your app on Flathub,
+because Flathub requires static flatpak build manifests.</p>
+</section>
+<section id="include-the-build-module-in-your-manifest">
+<h2>4. Include the build module in your manifest<a class="headerlink" href="#include-the-build-module-in-your-manifest" title="Link to this heading"></a></h2>
+<p>Add the generated <code class="docutils literal notranslate"><span class="pre">python3-packages.json</span></code> to the <code class="docutils literal notranslate"><span class="pre">modules</span></code> of your flatpak-builder manifest.
+For example, in a YAML manifest:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">modules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python3-packages.json</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-app</span>
+<span class="w">    </span><span class="nt">buildsystem</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simple</span>
+<span class="w">    </span><span class="c1"># ...</span>
+</pre></div>
+</div>
+</section>
+<section id="update-when-a-new-runtime-is-released">
+<h2>5. Update when a new runtime is released<a class="headerlink" href="#update-when-a-new-runtime-is-released" title="Link to this heading"></a></h2>
+<p>When your app moves to a new runtime version,
+repeat steps 1 to 4 for the new runtime:
+resolve and pin the requirements for the python version of the new runtime,
+specify the target platform for the new runtime (read its platform info),
+generate the build module again, and update the manifest if necessary.
+Check the updated files into your repository.</p>
+<p>For example, if your app moves from the GNOME runtime 51 to a newer branch,
+install the new runtime and run <code class="docutils literal notranslate"><span class="pre">req2flatpak</span> <span class="pre">--platform-info</span></code> for its ref.
+Replace the old platform info files in your repository with the new ones.</p>
+</section>
+<section id="tips">
+<span id="cli-tips"></span><h2>Tips<a class="headerlink" href="#tips" title="Link to this heading"></a></h2>
+<section id="skipping-packages">
+<span id="cli-skip-packages"></span><h3>Skipping packages<a class="headerlink" href="#skipping-packages" title="Link to this heading"></a></h3>
+<p>There are several reasons why you may not want req2flatpak to install a package.
+For example, the flatpak runtime or the base app already provides it,
+you install it in another way, or you do not need it in your flatpak.
+(Check the runtime that your app runs on, not the SDK that it is built in, because the SDK contains more packages.)</p>
+<p>req2flatpak installs exactly the packages that are in your requirements.
+Remove the packages from the requirements file before you run req2flatpak.
+For example, to skip <code class="docutils literal notranslate"><span class="pre">jinja2</span></code> and <code class="docutils literal notranslate"><span class="pre">markupsafe</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>grep<span class="w"> </span>-v<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^(jinja2|markupsafe)=='</span><span class="w"> </span>requirements.txt<span class="w"> </span>&gt;<span class="w"> </span>requirements-flatpak.txt
+req2flatpak<span class="w"> </span>-r<span class="w"> </span>requirements-flatpak.txt<span class="w"> </span>-t<span class="w"> </span>org.gnome.Platform-51-x86_64.platforminfo.json
+</pre></div>
+</div>
+<p>A fully pinned <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> also lists the dependencies of your packages.
+If you skip a package, then check whether you also want to skip its dependencies.</p>
+</section>
+<section id="passing-additional-options-to-pip">
+<span id="cli-pip-options"></span><h3>Passing additional options to pip<a class="headerlink" href="#passing-additional-options-to-pip" title="Link to this heading"></a></h3>
+<p>The generated build module runs <code class="docutils literal notranslate"><span class="pre">pip3</span> <span class="pre">install</span></code> with a fixed set of options.
+Sometimes you need more options.
+A typical example is <code class="docutils literal notranslate"><span class="pre">--ignore-installed</span></code>,
+which makes pip install a package even if a package of the same name is already installed.
+The commandline interface has no option for this,
+but you can post-process the generated build module, for example with <code class="docutils literal notranslate"><span class="pre">sed</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>req2flatpak<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-t<span class="w"> </span>org.gnome.Platform-51-x86_64.platforminfo.json<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">'s/pip3 install/pip3 install --ignore-installed/'</span><span class="w"> </span>&gt;<span class="w"> </span>python3-packages.json
+</pre></div>
+</div>
+</section>
 </section>
 <section id="documentation-of-commandline-options">
 <h2>Documentation of Commandline Options<a class="headerlink" href="#documentation-of-commandline-options" title="Link to this heading"></a></h2>
-<p>req2flatpak’s commandline interface supports the following commands and options.</p>
+<p>req2flatpak’s commandline interface supports the following options.</p>
 <div class="highlight-default notranslate" id="req2flatpak"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">req2flatpak</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">requirements</span> <span class="p">[</span><span class="n">REQUIREMENTS</span> <span class="o">...</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">requirements</span><span class="o">-</span><span class="n">file</span> <span class="p">[</span><span class="n">REQUIREMENTS_FILE</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">target</span><span class="o">-</span><span class="n">platforms</span> <span class="n">TARGET_PLATFORMS</span> <span class="p">[</span><span class="n">TARGET_PLATFORMS</span> <span class="o">...</span><span class="p">]]</span>
                    <span class="p">[</span><span class="o">--</span><span class="n">cache</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">yaml</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span> <span class="p">[</span><span class="n">OUTFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">indent</span> <span class="n">N</span><span class="p">]</span>
-                   <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">platform</span><span class="o">-</span><span class="n">info</span> <span class="p">[</span><span class="n">REF</span><span class="p">]]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">user</span> <span class="o">|</span> <span class="o">--</span><span class="n">system</span> <span class="o">|</span> <span class="o">--</span><span class="n">installation</span> <span class="n">NAME</span><span class="p">]</span>
+                   <span class="p">[</span><span class="o">--</span><span class="n">installed</span><span class="o">-</span><span class="n">packages</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="req2flatpak-named-arguments">
@@ -124,7 +344,11 @@ module.</p>
 <dd><p>Requirements can be read from a specified requirements.txt file.</p>
 </dd>
 <dt><kbd>--target-platforms, -t</kbd></dt>
-<dd><p>Target platforms can be specified as, e.g., ‘313-x86_64’ or ‘314-aarch64’.</p>
+<dd><blockquote>
+<div><p>Target platforms can be specified as, e.g., ‘313-x86_64’ or ‘314-aarch64’,
+or as a platform info file, e.g., ‘gnome51.platforminfo.json’,
+as created by ‘–platform-info REF’.</p>
+</div></blockquote>
 </dd>
 <dt><kbd>--cache</kbd></dt>
 <dd><p>Uses a persistent cache when querying pypi.</p>
@@ -145,8 +369,24 @@ will be written instead, provided you have the ‘pyyaml’ package.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">2</span></code></p>
 </dd>
 <dt><kbd>--platform-info</kbd></dt>
-<dd><p>Prints information about the current platform.</p>
+<dd><blockquote>
+<div><p>Prints information about a platform: by default the current platform.
+If REF is given, the platform is read from this installed flatpak runtime,
+e.g., ‘org.gnome.Platform//51’ or ‘org.gnome.Platform/aarch64/51’
+(the format is NAME/ARCH/BRANCH, and an empty ARCH is the architecture
+of this machine).</p>
+</div></blockquote>
+</dd>
+<dt><kbd>--user</kbd></dt>
+<dd><p>Read the runtime given as REF from the flatpak user installation.</p>
 <p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><kbd>--system</kbd></dt>
+<dd><p>Read the runtime given as REF from the flatpak system installation.</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+</dd>
+<dt><kbd>--installation</kbd></dt>
+<dd><p>Read the runtime given as REF from the named flatpak installation.</p>
 </dd>
 <dt><kbd>--installed-packages</kbd></dt>
 <dd><p>Prints installed packages in requirements.txt format.</p>
@@ -155,84 +395,14 @@ will be written instead, provided you have the ‘pyyaml’ package.</p>
 </dl>
 </section>
 </section>
-<section id="specifying-python-package-requirements">
-<h2>Specifying Python Package Requirements<a class="headerlink" href="#specifying-python-package-requirements" title="Link to this heading"></a></h2>
-<p>You can specify python packages as individual commandline arguments or by providing a <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> file.
-As a result, req2flatpak will include these packages in the generated build module.</p>
-<p>It is important to note that req2flatpak expects all package versions to be fully specified.
-For example, req2flatpak will not accept a package version specification such as <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">&gt;=</span> <span class="pre">2.0</span></code>.
-Instead, req2flatpak expects all versions to be pinned using the <code class="docutils literal notranslate"><span class="pre">==</span></code> operator, such as, e.g., <code class="docutils literal notranslate"><span class="pre">requests</span> <span class="pre">==</span> <span class="pre">2.0</span></code>.</p>
-<p>The reason for this is that req2flatpak, by design, does not resolve or freeze dependencies.
-You can use other tools like
-<a class="reference external" href="https://pypi.org/project/pip-tools/">pip-compile</a> or
-<a class="reference external" href="https://pypi.org/project/poetry/">poetry export</a>
-to resolve and freeze dependencies and to export them into a requirements.txt file.</p>
-</section>
-<section id="specifying-target-platforms">
-<h2>Specifying Target Platforms<a class="headerlink" href="#specifying-target-platforms" title="Link to this heading"></a></h2>
-<p>One or more target platforms can be specified in a simple string format
-that includes the python version and system architecture.</p>
-<p>As a result, req2flatpak will include suitable package downloads
-for each of the specified target platforms
-in the flatpak-builder build module that it generates.</p>
-<p>The string format for specifying target platforms is <code class="docutils literal notranslate"><span class="pre">&lt;python_version&gt;-&lt;system-architecture&gt;</span></code>:</p>
-<ul class="simple">
-<li><p>The python version is specified as, e.g., <code class="docutils literal notranslate"><span class="pre">cp313</span></code> for cpython 3.13 or <code class="docutils literal notranslate"><span class="pre">cp314</span></code> for cpython 3.14, and so on.
-Other python interpreters instead of cpython are not supported.</p></li>
-<li><p>The system architecture can either be <code class="docutils literal notranslate"><span class="pre">x86_64</span></code> or <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>.</p></li>
-</ul>
-</section>
-<section id="querying-information-about-the-current-platform">
-<h2>Querying Information about the Current Platform<a class="headerlink" href="#querying-information-about-the-current-platform" title="Link to this heading"></a></h2>
-<p>req2flatpak provides a <code class="docutils literal notranslate"><span class="pre">platform-info</span></code> command for querying information
-about the current platform, i.e., about the python interpreter and system
-architecture used to run the req2flatpak script.</p>
-<p>You can run the <code class="docutils literal notranslate"><span class="pre">platform-info</span></code> command on your target platform to save
-information about this platform. You can later use the information about your
-target platform when generating a flatpak build module using req2flatpak’s
-python apis by reading the platform information from a file and by creating
-a platform object from it.</p>
-<p>Example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>req2flatpak<span class="w"> </span>--platform-info
-</pre></div>
-</div>
-<p>This will generate output like this:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">"python_version"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">     </span><span class="s2">"3"</span><span class="p">,</span>
-<span class="w">     </span><span class="s2">"14"</span><span class="p">,</span>
-<span class="w">     </span><span class="s2">"0"</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">"python_tags"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">     </span><span class="s2">"cp314-cp314-manylinux_2_41_x86_64"</span><span class="p">,</span>
-<span class="w">     </span><span class="s2">"cp314-cp314-manylinux_2_40_x86_64"</span><span class="p">,</span>
-<span class="w">     </span><span class="s2">"cp314-cp314-manylinux_2_39_x86_64"</span><span class="p">,</span>
-<span class="w">     </span><span class="s2">"..."</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>...note that the list of tags has been shortened in the above output
-because the list of tags is about 700 lines long.</p>
-</section>
-<section id="querying-installed-python-packages">
-<h2>Querying Installed Python Packages<a class="headerlink" href="#querying-installed-python-packages" title="Link to this heading"></a></h2>
-<p>req2flatpak provides a command <code class="docutils literal notranslate"><span class="pre">installed-packages</span></code> which allows to  query
-currently installed python packages.</p>
-<p>You can run the <code class="docutils literal notranslate"><span class="pre">installed-packages</span></code> command on your target platform to find
-out which packages are already installed on this platform. You can later use
-this information when resolving and pinning python packages in your python
-application or library, e.g., when using pip, pip-compile or poetry, in order
-to make sure that your package versions are compatible with your target platform.</p>
-</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="api.html" class="btn btn-neutral float-right" title="Using the Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api.html" class="btn btn-neutral float-left" title="Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

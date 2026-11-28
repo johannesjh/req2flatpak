@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>req2flatpak Documentation &mdash; req2flatpak 0.4.0 documentation</title>
+  <title>req2flatpak Documentation &mdash; req2flatpak 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -45,9 +45,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -84,49 +85,49 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#intended-use">Intended Use</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#getting-started">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#cli-or-python-api">CLI or Python API?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#contributing">Contributing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#related-work">Related Work</a></li>
 <li class="toctree-l2"><a class="reference internal" href="introduction.html#license">License</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installing-the-python-package">Installing the Python Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#running-without-installing">Running without Installing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#installing-from-git">Installing from Git</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#example">Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#documentation-of-commandline-options">Documentation of Commandline Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#specifying-python-package-requirements">Specifying Python Package Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#specifying-target-platforms">Specifying Target Platforms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#querying-information-about-the-current-platform">Querying Information about the Current Platform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cli.html#querying-installed-python-packages">Querying Installed Python Packages</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#example">Example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#specifying-target-platforms">Specifying Target Platforms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#specifying-package-requirements">Specifying Package Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#querying-package-indices-for-available-releases">Querying Package Indices for Available Releases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#choosing-compatible-downloads">Choosing Compatible Downloads</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#generating-a-build-module-for-flatpak-builder">Generating a Build Module for flatpak-builder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#saving-the-generated-build-module">Saving the Generated Build Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#customization-options">Customization Options</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#should-i-use-the-cli-or-the-python-api">Should I use the CLI or the Python API?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-get-started-using-the-cli">How do I get started using the CLI?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-get-started-using-the-python-api">How do I get started using the Python API?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#what-can-i-do-if-my-requirements-are-not-pinned">What can I do if my requirements are not pinned?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-choose-the-target-platform">How do I choose the target platform?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-use-source-packages-instead-of-binary-wheels">How do I use source packages instead of binary wheels?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-use-source-packages-except-for-some-packages">How do I use source packages, except for some packages?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-skip-packages">How do I skip packages?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="recipes.html#how-do-i-pass-additional-options-to-pip-for-example-ignore-installed">How do I pass additional options to pip, for example <code class="docutils literal notranslate"><span class="pre">--ignore-installed</span></code>?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#resolve-and-pin-the-requirements">1. Resolve and pin the requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#specify-the-target-platform">2. Specify the target platform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#generate-the-build-module">3. Generate the build module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#include-the-build-module-in-your-manifest">4. Include the build module in your manifest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#update-when-a-new-runtime-is-released">5. Update when a new runtime is released</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#tips">Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cli.html#documentation-of-commandline-options">Documentation of Commandline Options</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#should-i-use-the-cli-or-the-python-api">Should I use the CLI or the Python API?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-can-i-do-if-my-requirements-are-not-pinned">What can I do if my requirements are not pinned?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-choose-the-target-platform">How do I choose the target platform?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-read-the-platform-from-a-flatpak-runtime">How do I read the platform from a flatpak runtime?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-support-newer-glibc-manylinux-versions">How do I support newer glibc (manylinux) versions?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-prefer-source-packages-over-binary-wheels">How do I prefer source packages over binary wheels?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-skip-packages-for-example-those-that-the-runtime-provides">How do I skip packages, for example those that the runtime provides?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-pass-additional-options-to-pip-install">How do I pass additional options to pip install?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="development.html#obtaining-the-source-code">Obtaining the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#installing-python">Installing Python</a></li>
@@ -135,6 +136,7 @@
 <li class="toctree-l2"><a class="reference internal" href="development.html#understanding-the-architecture-and-design-goals">Understanding the Architecture and Design Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="development.html#recording-reference-data">Recording Reference Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#ensuring-code-quality">Ensuring Code quality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#updating-dependencies">Updating Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="development.html#publishing-the-documentation">Publishing the Documentation</a></li>
@@ -142,6 +144,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-5-0-unreleased">v0.5.0 (unreleased)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-4-0-2026-11-28">v0.4.0 (2026-11-28)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-3-2-2026-11-15">v0.3.2 (2026-11-15)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#v0-3-1-2025-03-30-python-3-12">v0.3.1 (2025-03-30) “Python 3.12”</a></li>

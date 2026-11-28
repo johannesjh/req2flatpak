@@ -6,20 +6,20 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; req2flatpak 0.4.0 documentation</title>
+  <title>Installation &mdash; req2flatpak 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using the Commandline Interface" href="cli.html" />
+    <link rel="next" title="Python API" href="api.html" />
     <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
@@ -47,12 +47,14 @@
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-python-package">Installing the Python Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-without-installing">Running without Installing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-from-git">Installing from Git</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -88,9 +90,7 @@ Multiple installation methods are available.</p>
 <section id="installing-the-python-package">
 <h2>Installing the Python Package<a class="headerlink" href="#installing-the-python-package" title="Link to this heading"></a></h2>
 <p>You can install req2flatpak as a python package.
-This is the default and recommended installation method.
-The Python versions that req2flatpak supports are declared in its <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file
-and shown on PyPI.</p>
+This is the default and recommended installation method.</p>
 <p>For example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>req2flatpak
 req2flatpak<span class="w"> </span>--help
@@ -99,6 +99,53 @@ req2flatpak<span class="w"> </span>--help
 <p>The first command will install the latest release of req2flatpak.
 The second command will display req2flatpak’s help,
 allowing you to verify that req2flatpak was installed successfully.</p>
+</section>
+<section id="running-without-installing">
+<span id="id1"></span><h2>Running without Installing<a class="headerlink" href="#running-without-installing" title="Link to this heading"></a></h2>
+<p>You can also run req2flatpak without installing it first.
+Tools like <a class="reference external" href="https://docs.astral.sh/uv/">uv</a> and <a class="reference external" href="https://pipx.pypa.io/">pipx</a>
+download req2flatpak into a temporary environment and run it there.
+Use the same arguments as you would use for <code class="docutils literal notranslate"><span class="pre">req2flatpak</span></code>.</p>
+<p>For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uvx<span class="w"> </span>req2flatpak<span class="w"> </span>--help
+pipx<span class="w"> </span>run<span class="w"> </span>req2flatpak<span class="w"> </span>--help
+</pre></div>
+</div>
+<p>If you use req2flatpak’s python API in a script,
+you can declare req2flatpak as a dependency in a header at the top of the script
+(see <a class="reference external" href="https://packaging.python.org/en/latest/specifications/inline-script-metadata/">inline script metadata</a>).
+When you run the script with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code>, uv installs the declared dependencies first
+and then runs the script, so you do not need to install req2flatpak yourself.
+For example, this script declares req2flatpak as a dependency, and it generates a build module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># /// script</span>
+<span class="c1"># dependencies = ["req2flatpak"]</span>
+<span class="c1"># ///</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">req2flatpak</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DownloadChooser</span><span class="p">,</span>
+    <span class="n">FlatpakGenerator</span><span class="p">,</span>
+    <span class="n">PlatformFactory</span><span class="p">,</span>
+    <span class="n">PypiClient</span><span class="p">,</span>
+    <span class="n">RequirementsParser</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">platforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">PlatformFactory</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="s2">"cp314-x86_64"</span><span class="p">)]</span>
+<span class="n">requirements</span> <span class="o">=</span> <span class="n">RequirementsParser</span><span class="o">.</span><span class="n">parse_file</span><span class="p">(</span><span class="s2">"requirements.txt"</span><span class="p">)</span>
+<span class="n">releases</span> <span class="o">=</span> <span class="n">PypiClient</span><span class="o">.</span><span class="n">get_releases</span><span class="p">(</span><span class="n">requirements</span><span class="p">)</span>
+<span class="n">downloads</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">DownloadChooser</span><span class="o">.</span><span class="n">wheel_or_sdist</span><span class="p">(</span><span class="n">release</span><span class="p">,</span> <span class="n">platform</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">release</span> <span class="ow">in</span> <span class="n">releases</span>
+    <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">platforms</span>
+<span class="p">}</span>
+<span class="n">FlatpakGenerator</span><span class="o">.</span><span class="n">write_build_module_as_json</span><span class="p">(</span>
+    <span class="s2">"python3-packages.json"</span><span class="p">,</span> <span class="n">requirements</span><span class="p">,</span> <span class="n">downloads</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Save it as <code class="docutils literal notranslate"><span class="pre">build_module.py</span></code> and run it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>build_module.py
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="api.html"><span class="doc">Python API</span></a> for an explanation of this script.</p>
 </section>
 <section id="installing-from-git">
 <h2>Installing from Git<a class="headerlink" href="#installing-from-git" title="Link to this heading"></a></h2>
@@ -122,7 +169,7 @@ see <a class="reference external" href="https://pip.pypa.io/en/stable/topics/vcs
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="cli.html" class="btn btn-neutral float-right" title="Using the Commandline Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api.html" class="btn btn-neutral float-right" title="Python API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

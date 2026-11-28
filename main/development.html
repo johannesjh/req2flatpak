@@ -6,21 +6,21 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Development &mdash; req2flatpak 0.4.0 documentation</title>
+  <title>Development &mdash; req2flatpak 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Changelog" href="changelog.html" />
-    <link rel="prev" title="Recipes" href="recipes.html" /> 
+    <link rel="prev" title="Related Work" href="related-work.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,9 +46,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Development</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#obtaining-the-source-code">Obtaining the Source Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-python">Installing Python</a></li>
@@ -57,6 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#understanding-the-architecture-and-design-goals">Understanding the Architecture and Design Goals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#modifying-and-contributing-code">Modifying and Contributing Code</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#recording-reference-data">Recording Reference Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ensuring-code-quality">Ensuring Code quality</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#updating-dependencies">Updating Dependencies</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#ci-dependencies">CI dependencies</a></li>
@@ -103,7 +105,7 @@ All contributions are greatly appreciated…
 pull requests are welcome, and so are bug reports and suggestions for improvement.</p>
 <section id="obtaining-the-source-code">
 <h2>Obtaining the Source Code<a class="headerlink" href="#obtaining-the-source-code" title="Link to this heading"></a></h2>
-<p>req2flatpak’s original source code lives in this github repository:
+<p>req2flatpak’s source code lives in this github repository:
 <a class="reference external" href="https://github.com/johannesjh/req2flatpak">https://github.com/johannesjh/req2flatpak</a>.
 You can download the source code by cloning the git repository.</p>
 </section>
@@ -142,7 +144,7 @@ This will initialize pre-commit in your local development repository.</p>
 </section>
 <section id="running-a-development-version">
 <h2>Running a Development Version<a class="headerlink" href="#running-a-development-version" title="Link to this heading"></a></h2>
-<p>Have a look at the commands available in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">makefile</span></code>.
+<p>Have a look at the commands available in req2flatpak’s <code class="docutils literal notranslate"><span class="pre">Makefile</span></code>.
 These commands show how to run a local req2flatpak development version,
 as well as various other development-related tasks.</p>
 <div class="highlight-Makefile notranslate"><div class="highlight"><pre><span></span><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">run</span>
@@ -155,7 +157,12 @@ as well as various other development-related tasks.</p>
 
 <span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">test</span>
 <span class="nf">test</span><span class="o">:</span>
-<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>unittest
+<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>-v
+
+<span class="c"># Like "test", but without tests_flatpak/, which needs flatpak and an installed GNOME runtime.</span>
+<span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">test</span>-<span class="n">no</span>-<span class="n">flatpak</span>
+<span class="nf">test-no-flatpak</span><span class="o">:</span>
+<span class="w">	</span>poetry<span class="w"> </span>run<span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-v<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-t<span class="w"> </span>.
 
 <span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">docs</span>
 <span class="nf">docs</span><span class="o">:</span>
@@ -167,12 +174,14 @@ as well as various other development-related tasks.</p>
 <h2>Understanding the Architecture and Design Goals<a class="headerlink" href="#understanding-the-architecture-and-design-goals" title="Link to this heading"></a></h2>
 <p>req2flatpak’s architecture implements the following design goals and design choices.</p>
 <p>req2flatpak consists of just a single python file.
-This allows req2flatpak to be installed by copy-pasting this file.</p>
+The probe that reads the platform from a flatpak runtime is therefore a function inside this file:
+only the source code of this function is sent to the runtime, and it runs there
+with the python of the runtime, using nothing but the standard library.</p>
 <p>req2flatpak is packaged as a python package.
 This allows req2flatpak to be installed using pip, poetry, and other similar tools.
 Note, single-file python packages are not unusual:
 other popular python packages like <a class="reference external" href="https://pypi.python.org/pypi/six">six</a>
-also consist of a a single file only,
+also consist of a single file only,
 as explained in this <a class="reference external" href="https://softwareengineering.stackexchange.com/a/243045">stackoverflow answer</a>.</p>
 <p>req2flatpak requires minimal dependencies.
 The benefit is that req2flatpak runs on a variety of systems.
@@ -193,11 +202,39 @@ You are very welcome to contribute improvements back to the original req2flatpak
 </section>
 <section id="running-tests">
 <h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h2>
-<p>Use the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> command to run automated tests.</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test</span></code> command to run automated tests.
+Most tests run without flatpak installed.
+Only the tests in the directory <code class="docutils literal notranslate"><span class="pre">tests_flatpak</span></code> need flatpak and the GNOME 51 runtime;
+they are skipped if these are missing.
+Use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-no-flatpak</span></code> to run all other tests, without these.
+CI runs <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">test-no-flatpak</span></code>.</p>
+</section>
+<section id="recording-reference-data">
+<h2>Recording Reference Data<a class="headerlink" href="#recording-reference-data" title="Link to this heading"></a></h2>
+<p>The file <code class="docutils literal notranslate"><span class="pre">tests/org.gnome.Platform-51-x86_64.platforminfo.json</span></code> is an example of a platform info file
+that was read from a real flatpak runtime. It is used by tests and in the documentation.
+Record it once by hand, with the runtime installed, and check it in.
+The recorded file lists more than a thousand wheel tags.
+To keep the example small, shorten the list of tags by hand to a few representative ones,
+for example the <code class="docutils literal notranslate"><span class="pre">cp314</span></code> tags for <code class="docutils literal notranslate"><span class="pre">manylinux_2_44</span></code> and <code class="docutils literal notranslate"><span class="pre">manylinux_2_17</span></code>, and <code class="docutils literal notranslate"><span class="pre">py3-none-any</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span>org.gnome.Platform//51
+req2flatpak<span class="w"> </span>--platform-info<span class="w"> </span>org.gnome.Platform//51<span class="w"> </span>--user<span class="w"> </span>-o<span class="w"> </span>tests/org.gnome.Platform-51-x86_64.platforminfo.json
+</pre></div>
+</div>
+<p>Recording the same data for aarch64 on an x86_64 machine
+needs the aarch64 runtime and an emulation of the architecture, e.g., the package <code class="docutils literal notranslate"><span class="pre">qemu-user-binfmt</span></code>
+(on Ubuntu or Debian). Without it, flatpak fails with <code class="docutils literal notranslate"><span class="pre">Exec</span> <span class="pre">format</span> <span class="pre">error</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flatpak<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>flathub<span class="w"> </span>org.gnome.Platform/aarch64/51
+req2flatpak<span class="w"> </span>--platform-info<span class="w"> </span>org.gnome.Platform/aarch64/51<span class="w"> </span>--user<span class="w"> </span>-o<span class="w"> </span>tests/org.gnome.Platform-51-aarch64.platforminfo.json
+</pre></div>
+</div>
+<p>Name the files <code class="docutils literal notranslate"><span class="pre">&lt;runtime&gt;-&lt;version&gt;-&lt;architecture&gt;.platforminfo.json</span></code>.
+The file names of the regression test of the platform tags start with <code class="docutils literal notranslate"><span class="pre">cp3</span></code> or <code class="docutils literal notranslate"><span class="pre">py3</span></code>
+(for example <code class="docutils literal notranslate"><span class="pre">cp310-x86_64.platforminfo.json</span></code>), so do not start the name of a recorded file like this.</p>
 </section>
 <section id="ensuring-code-quality">
 <h2>Ensuring Code quality<a class="headerlink" href="#ensuring-code-quality" title="Link to this heading"></a></h2>
-<p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the code before committing changes,</p>
+<p>Use <a class="reference external" href="https://pre-commit.com/">pre-commit</a> to prettify and lint the code before committing changes:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># to install pre-commit on your system,</span>
 <span class="c1"># follow instructions from https://pre-commit.com/, for example:</span>
 pipx<span class="w"> </span>install<span class="w"> </span>pre-commit
@@ -241,13 +278,13 @@ runtime dependencies keep their lower bounds as low as the code allows and the l
 whereas development tools (ruff and ty) are pinned tightly and bumped deliberately.
 ty is a beta tool, so check every ty update for new findings.
 Sphinx is limited to the newest major version that still supports our lowest supported python version.</p>
-<p>First update poetry dependencies,</p>
+<p>First, update the poetry dependencies:</p>
 <ol class="arabic simple">
 <li><p>Manually bump the version constraints in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file.</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">update</span> <span class="pre">--with</span> <span class="pre">docs</span></code> to update installed packages (including the optional docs group) and write the lock file.</p></li>
 <li><p>Stage changes by running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span> <span class="pre">pyproject.toml</span> <span class="pre">poetry.lock</span></code>.</p></li>
 </ol>
-<p>Then update pre-commit dependencies,</p>
+<p>Then, update the pre-commit dependencies:</p>
 <ol class="arabic simple">
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> just to be sure that pre-commit is properly initialized.</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">autoupdate</span> <span class="pre">--freeze</span></code> to update pre-commit’s packages.</p></li>
@@ -295,7 +332,7 @@ and a version that has been uploaded to PyPI can never be uploaded again.</p></l
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="recipes.html" class="btn btn-neutral float-left" title="Recipes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="related-work.html" class="btn btn-neutral float-left" title="Related Work" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

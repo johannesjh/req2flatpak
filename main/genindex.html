@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; req2flatpak 0.4.0 documentation</title>
+  <title>Index &mdash; req2flatpak 0.5.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=6c02275b"></script>
+      <script src="_static/documentation_options.js?v=1dd76d02"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -43,9 +43,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cli.html">Using the Commandline Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api.html">Using the Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recipes.html">Recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli.html">Commandline Interface (CLI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="related-work.html">Related Work</a></li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -77,11 +78,13 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#B"><strong>B</strong></a>
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -90,6 +93,14 @@
  | <a href="#W"><strong>W</strong></a>
  
 </div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#req2flatpak.Platform.arch">arch (req2flatpak.Platform attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -135,8 +146,12 @@
 </li>
       <li><a href="api.html#req2flatpak.PlatformFactory.from_current_interpreter">from_current_interpreter() (req2flatpak.PlatformFactory class method)</a>
 </li>
+      <li><a href="api.html#req2flatpak.PlatformFactory.from_file">from_file() (req2flatpak.PlatformFactory class method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#req2flatpak.PlatformFactory.from_flatpak_runtime">from_flatpak_runtime() (req2flatpak.PlatformFactory class method)</a>
+</li>
       <li><a href="api.html#req2flatpak.PlatformFactory.from_python_version_and_arch">from_python_version_and_arch() (req2flatpak.PlatformFactory class method)</a>
 </li>
       <li><a href="api.html#req2flatpak.PlatformFactory.from_string">from_string() (req2flatpak.PlatformFactory class method)</a>
@@ -152,6 +167,16 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.PypiClient.get_releases">get_releases() (req2flatpak.PypiClient class method)</a>
+</li>
+      <li><a href="api.html#req2flatpak.Platform.glibc_version">glibc_version (req2flatpak.Platform attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#req2flatpak.Platform.installed_packages">installed_packages (req2flatpak.Platform attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -177,11 +202,13 @@
 </li>
       <li><a href="api.html#req2flatpak.RequirementsParser.parse_string">parse_string() (req2flatpak.RequirementsParser class method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.Platform">Platform (class in req2flatpak)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.PlatformFactory">PlatformFactory (class in req2flatpak)</a>
+</li>
+      <li><a href="api.html#req2flatpak.PlatformProbeError">PlatformProbeError</a>
 </li>
       <li><a href="api.html#req2flatpak.PypiClient">PypiClient (class in req2flatpak)</a>
 </li>
@@ -197,11 +224,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.Release">Release (class in req2flatpak)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.Requirement">Requirement (class in req2flatpak)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.RequirementsParser">RequirementsParser (class in req2flatpak)</a>
+</li>
+      <li><a href="api.html#req2flatpak.Platform.runtime">runtime (req2flatpak.Platform attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -235,9 +264,15 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#req2flatpak.DownloadChooser.wheel">wheel() (req2flatpak.DownloadChooser class method)</a>
 </li>
+      <li><a href="api.html#req2flatpak.DownloadChooser.wheel_or_sdist">wheel_or_sdist() (req2flatpak.DownloadChooser class method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#req2flatpak.DownloadChooser.wheel_or_sdist">wheel_or_sdist() (req2flatpak.DownloadChooser class method)</a>
+      <li><a href="api.html#req2flatpak.Platform.without_installed">without_installed() (req2flatpak.Platform method)</a>
+</li>
+      <li><a href="api.html#req2flatpak.FlatpakGenerator.write_build_module_as_json">write_build_module_as_json() (req2flatpak.FlatpakGenerator class method)</a>
+</li>
+      <li><a href="api.html#req2flatpak.FlatpakGenerator.write_build_module_as_yaml">write_build_module_as_yaml() (req2flatpak.FlatpakGenerator class method)</a>
 </li>
   </ul></td>
 </tr></table>
