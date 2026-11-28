@@ -15,7 +15,11 @@ from pathlib import Path
 from req2flatpak import PlatformFactory, PlatformProbeError
 
 RUNTIME = "org.gnome.Platform//51"
-RECORDED = Path(__file__).parent / "org.gnome.Platform-51-x86_64.platforminfo.json"
+RECORDED = (
+    Path(__file__).parent.parent
+    / "tests"
+    / "org.gnome.Platform-51-x86_64.platforminfo.json"
+)
 
 
 def runtime_installed(ref: str, installation: str = "user") -> bool:

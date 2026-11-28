@@ -38,7 +38,8 @@ Fixes:
 Improvements for Development:
 
 - CI runs on ubuntu-26.04, the current Ubuntu LTS release.
-- Tests that need flatpak (and qemu for aarch64) are skipped if these are not available, e.g., in CI.
+- Tests that need flatpak (and qemu for aarch64) live in ``tests_flatpak`` and are skipped if these are not available.
+  CI runs the other tests only, with the new ``make test-no-flatpak``.
 
 
 

@@ -74,7 +74,7 @@ jobs:
           install-options: --without lint ${{ matrix.extras && format('--extras "{0}"', matrix.extras) || '' }}
 
       - name: Run Tests
-        run: make test
+        run: make test-no-flatpak
 
   docs:
     runs-on: ubuntu-26.04

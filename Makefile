@@ -10,6 +10,11 @@ lint:
 test:
 	poetry run python3 -m unittest
 
+# Like "test", but without tests_flatpak/, which needs flatpak and an installed GNOME runtime.
+.PHONY: test-no-flatpak
+test-no-flatpak:
+	poetry run python3 -m unittest discover -s tests -t .
+
 .PHONY: docs
 docs:
 	poetry run sphinx-build -v -b html docs/source docs/build/html

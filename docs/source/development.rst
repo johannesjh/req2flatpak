@@ -113,8 +113,10 @@ Running Tests
 
 Use the ``make test`` command to run automated tests.
 Most tests run without flatpak installed.
-Only the tests in ``tests/test_flatpak_integration.py`` need flatpak and the GNOME 51 runtime;
+Only the tests in the directory ``tests_flatpak`` need flatpak and the GNOME 51 runtime;
 they are skipped if these are missing.
+Use ``make test-no-flatpak`` to run all other tests, without these.
+CI runs ``make test-no-flatpak``.
 
 
 Recording Reference Data
